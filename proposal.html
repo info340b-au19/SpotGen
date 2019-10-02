@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="Kha Nguyen">
+    <meta name="description" content="Project Proposal Webpage">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="proposal.css">
+    <title>Kha Project Proposal</title>
+</head>
+
+<body>
+    <div class="wrapper">
+        <h1>Kha Project Proposal</h1>
+        <h2>Spotify Auto-Generate Playlist </br>Based On User's Existing Libraries & Playlists</h2>
+        <section>
+            <h3>Problem Description</h3>
+            <ol>
+                <li>The general topic that I will be addressing is the topic of music and our individual personal
+                    connections with it.</li>
+                <li> The main information technology problem in this space, which I have personally found throughout my
+                    years using the best-selling music streaming application Spotify, is that it is difficult to
+                    automatically curate playlists based on your own library. By curation, I mean being able to create
+                    playlists using songs that you have already liked / added to you playlist / and thus enjoy. This
+                    missing functionality was most apparent to me while on a long car ride where I had over 900 songs in
+                    an
+                    electronic music playlist, but I really wanted to just play a subset of that large playlist -
+                    softer,
+                    relaxed songs by a specific artist. Because there was no quick, automated way of doing this, I had
+                    to
+                    queue up songs by manually picking each one out.</li>
+                <li>With the current functionality of Spotify, there is plentiful array of options to suggest you
+                    Spotify-curated playlists, suggest you new songs based on your older songs, but there really is no
+                    great
+                    automated way of creating playlists using the songs you already know for sure you like. Taking a
+                    look at
+                    <a href="https://developer.spotify.com/discover/">other user-created 3rd-party applications that
+                        utilize
+                        the Spotify Web API</a>, I was unable to find any
+                    other applications that strive to automate playlist creation using your <em>own</em> music, so I
+                    believe
+                    that
+                    my application will fill this niche.</li>
+            </ol>
+
+        </section>
+        <section>
+            <h3>Proposed Application</h3>
+            <div>
+                <h4>App Description</h4>
+                <ol>
+                    <li>
+                        The users of the application is intended for people currently using the Spotify music streaming
+                        service already, because the web app will be collecting data from the user’s Spotify account
+                        through
+                        the Spotify Web API and also creating and modifying playlists directly to their Spotify account.
+                        More specifically, the web app is geared towards users who already have a decent number of
+                        playlists
+                        and songs added to their own library and would like to create smaller playlists that are subsets
+                        or
+                        combinations of these playlists.
+                    </li>
+                    <li>
+                        Users will primarily use the web app to create these playlists when they would like to play a
+                        particular subset of their enjoyed songs. For example, a user may have 1000 songs in their
+                        library
+                        that range across a dozen different genres, tempo’s, volume’s, and moods. At a dinner party, the
+                        user may want to play just a selection of these 1000 songs, particularly those that are
+                        acoustic,
+                        soft, and at a slower tempo, for example.
+                    </li>
+                    <li>
+                        Using this web application will solve the problem of having to manually curate your playlists by
+                        automating this process. It will do this by taking in certain user input such as what artists
+                        they
+                        want in the new playlist, what genres, acoustic level, loudness, danceability, and more.
+
+                    </li>
+                </ol>
+            </div>
+            <div>
+                <h4>App Functionality</h4>
+                <span><b>Step 1: Log In</b></span>
+                <ol>
+                    <li>
+                        User clicks Login button
+                    </li>
+                    <li>
+                        On the Spotify authorization login screen, the user inputs username and password to their
+                        Spotify
+                        account
+                    </li>
+                    <li>
+                        User clicks Login button
+                    </li>
+                </ol>
+                <span><b>Step 2: Input parameters for new generated playlist</b></span>
+                <ol>
+                    <li>User selects the playlists or songs in their library that they would like to take songs from
+                    </li>
+                    <li>User selects from various multi-select dropdown for genres, artists, etc. that they would like
+                        the
+                        new generated playlist to have</li>
+                    <li>User inputs name of the new generated playlist</li>
+                </ol>
+            </div>
+        </section>
+    </div>
+</body>
+
+</html>
