@@ -19,7 +19,8 @@
       "browser": true,
       "node": true,
       "shared-node-browser": true,
-      "jquery": true
+      "jquery": true,
+      "jest": true
     },
     "extends": "eslint:recommended",
     "rules": {
@@ -35,5 +36,8 @@
         "error"
       ]
     }
+  },
+  "dependencies": {
+    "eslint": "^6.5.1"
   }
 }
