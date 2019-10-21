@@ -1,0 +1,119 @@
+#create-page {
+}
+
+#create-page {
+  padding: 16px;
+  display: grid;
+  grid-template-areas: "select-playlists" "filter-songs" "name-playlist";
+  grid-auto-rows: min-content;
+  grid-row-gap: 16px;
+}
+
+h3 {
+  font-weight: 500;
+}
+
+#select-playlists {
+  grid-area: select-playlists;
+}
+
+#filter-songs {
+  grid-area: filter-songs;
+}
+
+#name-playlist {
+  grid-area: name-playlist;
+}
+
+.section-header {
+  margin-bottom: 8px;
+}
+
+.section-description {
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 0px;
+  margin-bottom: 24px !important;
+}
+
+#playlists-wrapper {
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 16px;
+  padding-bottom: 0px;
+  display: flex;
+  flex-direction: column;
+}
+
+.playlist-checkbox-wrapper {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 16px;
+}
+
+/* Customize checkboxes */
+.check-svg {
+  width: 26px !important;
+  height: 26px !important;
+}
+
+.state svg {
+  padding: 3px !important;
+}
+
+/* Input rows */
+.input-row-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.input-row-wrapper:not(:last-child) {
+  margin-bottom: 18px;
+}
+
+.input-row-label {
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 1.25em;
+}
+
+.text-input {
+  background-color: transparent;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 16px;
+  color: rgba(255, 255, 255, 0.97);
+  outline: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.text-input:focus,
+.text-input:hover {
+  border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.slider {
+  border-radius: 8px;
+  width: 100%;
+  outline: none;
+  background: rgba(255, 255, 255, 0.3);
+  height: 2px;
+  -webkit-appearance: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #4caf50;
+  cursor: pointer;
+}
+
+.range-labels-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.75);
+}

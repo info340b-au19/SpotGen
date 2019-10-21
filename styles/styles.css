@@ -79,7 +79,7 @@ main {
     #404040 0%,
     rgba(48, 48, 48, 0.75) 100%
   );
-  box-shadow: 0px 3px 25px rgba(50, 50, 50, 0.25);
+  box-shadow: 0px 3px 15px rgba(50, 50, 50, 0.25);
   border-radius: 8px;
 }
 
@@ -95,7 +95,7 @@ main {
   width: 100%;
   filter: brightness(75%);
   border-radius: 8px;
-  box-shadow: 0px 3px 25px rgba(40, 40, 40, 0.75);
+  box-shadow: 0px 3px 20px rgba(50, 50, 50, 0.85);
 }
 
 .music-control-button {
