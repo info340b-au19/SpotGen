@@ -9,7 +9,7 @@ body {
   box-sizing: border-box;
 }
 
-#explore-page {
+#explore-before-page {
 }
 
 #top-bar {
@@ -37,8 +37,10 @@ body {
   width: 100%;
   padding: 0px 24px;
   height: 55px;
-  border-top: 1px solid rgba(56, 56, 56, 0.75);
-  background-color: #1a1a1a;
+  background-color: rgba(56, 56, 56, 0.95);
+  border-top: 1px solid rgba(56, 56, 56, 0.95);
+  backdrop-filter: blur(16px);
+  z-index: 2;
 }
  
 #bottom-bar h1 {
