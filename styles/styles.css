@@ -28,6 +28,25 @@ body {
   z-index: 2;
 }
 
+#bottom-bar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 0px 24px;
+  height: 55px;
+  border-top: 1px solid rgba(56, 56, 56, 0.75);
+  background-color: #1a1a1a;
+}
+ 
+#bottom-bar h1 {
+  font-size: 1em;
+  text-align: center;
+}
+
+
 main {
   height: calc(100vh - 110px);
   margin-top: 55px;
