@@ -7,6 +7,19 @@
 }
 
 @media (min-width: 600px) {
+  #create-page-main {
+    grid-template-areas: "select-playlists filter-songs" "name-playlist name-playlist";
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 24px;
+  }
+}
+
+@media (min-width: 850px) {
+  #create-page-main {
+    grid-template-areas: "select-playlists filter-songs name-playlist";
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-column-gap: 24px;
+  }
 }
 
 h3 {
@@ -15,10 +28,12 @@ h3 {
 
 #select-playlists {
   grid-area: select-playlists;
+  /* border: 2px solid red; */
 }
 
 #filter-songs {
   grid-area: filter-songs;
+  /* border: 2px solid yellow; */
 }
 
 #name-playlist {
