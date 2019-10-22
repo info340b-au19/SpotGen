@@ -1,13 +1,10 @@
 .genre-cards-wrapper {
   display: grid;
   grid-template-columns: 1fr;
-  height: 100%;
-  width: 100%;
   padding: 24px;
   grid-row-gap: 24px;
   grid-column-gap: 24px;
   grid-auto-rows: min-content;
-  overflow: scroll;
 }
 
 @media (min-width: 992px) {
@@ -59,17 +56,23 @@
 }
 
 .music-control-button {
+  border: none !important;
+  outline: none !important;
+  background: none !important;
+  cursor: pointer;
+  width: 38px;
+  height: 38px;
+  position: absolute;
+  left: calc(50% - 19px);
+  top: calc(50% - 19px);
+  padding: 0;
+  transition: all 0.15s ease-in-out;
+}
+
+.music-control-button:focus {
   border: none;
   outline: none;
   background: none;
-  cursor: pointer;
-  width: 36px;
-  height: 36px;
-  position: absolute;
-  left: calc(50% - 18px);
-  top: calc(50% - 18px);
-  padding: 0;
-  transition: all 0.15s ease-in-out;
 }
 
 .music-control-button svg {
@@ -77,10 +80,14 @@
   height: 100%;
   filter: brightness(100%);
   transition: all 0.15s ease-in-out;
+  border: none;
+  outline: none;
+  background: none;
 }
 
 .music-control-button:hover svg {
   transform: translateY(-1.5px) scale(1.03);
+  filter: drop-shadow(3px 3px 15px rgba(0, 0, 0.6));
   filter: brightness(110%);
 }
 
