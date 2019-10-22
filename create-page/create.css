@@ -1,8 +1,5 @@
-#create-page {
-}
-
-#create-page {
-  padding: 16px;
+#create-page-main {
+  padding: 24px;
   display: grid;
   grid-template-areas: "select-playlists" "filter-songs" "name-playlist";
   grid-auto-rows: min-content;
@@ -67,7 +64,7 @@ h3 {
   width: 100%;
 }
 
-.input-row-wrapper:not(:last-child) {
+.input-row-wrapper {
   margin-bottom: 18px;
 }
 
