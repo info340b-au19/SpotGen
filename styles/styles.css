@@ -50,9 +50,12 @@ body {
   text-decoration: underline;
 }
 
+.tab.selected {
+  color: #00d361;
+}
+
 main {
   height: calc(100vh - 110px);
-  padding-bottom: 55px;
   margin-top: 55px;
   overflow: scroll;
 }
@@ -70,101 +73,4 @@ main {
 
 #profile-wrapper img {
   margin-left: 12px;
-}
-
-.genre-cards-wrapper {
-  display: grid;
-  grid-template-columns: 1fr;
-  height: 100%;
-  padding: 24px;
-  grid-row-gap: 24px;
-  grid-column-gap: 24px;
-  grid-auto-rows: min-content;
-}
-
-@media (min-width: 992px) {
-  .genre-cards-wrapper {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (min-width: 1600px) {
-  .genre-cards-wrapper {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-}
-
-.genre-card {
-  display: grid;
-  grid-template-columns: 175px auto;
-  height: 175px;
-  background: linear-gradient(
-    108.43deg,
-    #404040 0%,
-    rgba(48, 48, 48, 0.75) 100%
-  );
-  box-shadow: 0px 3px 15px rgba(50, 50, 50, 0.25);
-  border-radius: 8px;
-}
-
-.image-wrapper {
-  height: 175px;
-  width: 175px;
-  padding: 12px;
-  position: relative;
-}
-
-.image-wrapper img {
-  height: 100%;
-  width: 100%;
-  filter: brightness(75%);
-  border-radius: 8px;
-  box-shadow: 0px 3px 20px rgba(50, 50, 50, 0.85);
-}
-
-.music-control-button {
-  border: none;
-  outline: none;
-  background: none;
-  cursor: pointer;
-  width: 36px;
-  height: 36px;
-  position: absolute;
-  left: calc(50% - 18px);
-  top: calc(50% - 18px);
-  padding: 0;
-  transition: all 0.15s ease-in-out;
-}
-
-.music-control-button svg {
-  width: 100%;
-  height: 100%;
-  filter: brightness(100%);
-  transition: all 0.15s ease-in-out;
-}
-
-.music-control-button:hover svg {
-  transform: translateY(-1.5px) scale(1.03);
-  filter: brightness(110%);
-}
-
-.genre-card-description {
-  padding: 16px;
-  padding-left: 8px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  max-height: 150px;
-}
-
-.genre-card-description h2 {
-  margin: 0;
-  padding: 0;
-  margin-bottom: 8px;
-  font-size: 1em;
-}
-.genre-card-description p {
-  font-size: 1em;
-  margin: 0;
-  padding: 0;
 }
