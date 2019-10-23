@@ -1,3 +1,7 @@
+<!-- The create page shows the web application before the user clicks on the any button,
+as shown with the default sliders in the middle, blank text boxes for the "Artists"
+and "Name Your New Playlist", and unchecked "Select Playlist" boxes.-->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,7 +37,9 @@
             <section id="select-playlists">
                 <h2 class="section-header">Select Playlists</h2>
                 <p class="section-description">Select playlists to grab songs from for your new playlist</p>
+                <!-- Make check boxes for users to select playlists -->
                 <div id="playlists-wrapper">
+                    <!-- First check box -->
                     <div class="playlist-checkbox-wrapper">
                         <div class="pretty p-svg p-curve p-bigger">
                             <input type="checkbox" />
@@ -54,6 +60,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Second check box -->
                     <div class="playlist-checkbox-wrapper">
                         <div class="pretty p-svg p-curve p-bigger">
                             <input type="checkbox" />
@@ -74,6 +81,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Third check box -->
                     <div class="playlist-checkbox-wrapper">
                         <div class="pretty p-svg p-curve p-bigger">
                             <input type="checkbox" />
@@ -100,12 +108,14 @@
                 <h2 class="section-header">Filter</h2>
                 <p class="section-description">Adjust filters to fine tune what songs will be picked for your new
                     playlist</p>
+                <!-- Make text box for user to filter artists -->
                 <div class="input-row-wrapper">
                     <label class="input-row-label" for="artists">Artists</label>
                     <input class="text-input" type="text" id="artists" name="artists"
                         placeholder="Kygo, Avicii, Lady Gaga">
                 </div>
                 <div class="input-row-wrapper">
+                    <!-- Make slider for danceability -->
                     <label class="input-row-label" for="danceability-slider">Danceability</label>
                     <div class="slider-wrapper">
                         <input type="range" min="0" max="100" value="50" class="slider" id="danceability-slider">
@@ -116,6 +126,7 @@
                     </div>
                 </div>
                 <div class="input-row-wrapper">
+                    <!-- Make slider for loudness -->
                     <label class="input-row-label" for="loudness-slider">Loudness</label>
                     <div class="slider-wrapper">
                         <input type="range" min="0" max="100" value="50" class="slider" id="loudness-slider">
@@ -126,7 +137,8 @@
                     </div>
                 </div>
                 <div class="input-row-wrapper">
-                    <label class="input-row-label" for="loudness-slider">Tempo</label>
+                    <!-- Make slider for tempo -->
+                    <label class="input-row-label" for="tempo-slider">Tempo</label>
                     <div class="slider-wrapper">
                         <input type="range" min="0" max="100" value="50" class="slider" id="tempo-slider">
                     </div>
@@ -136,6 +148,7 @@
                     </div>
                 </div>
             </section>
+            <!-- Make text box for user to name playlist -->
             <section id="name-playlist">
                 <h2 class="section-header">Name Your New Playlist</h2>
                 <div class="input-row-wrapper">
