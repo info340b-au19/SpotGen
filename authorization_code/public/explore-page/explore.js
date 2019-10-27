@@ -1,13 +1,8 @@
+/* Retrieve the access token stored in the browser cookie */
+/* Credit: https://stackoverflow.com/questions/5639346/what-is-the-shortest-function-for-reading-a-cookie-by-name-in-javascript */
 function getAccessToken() {
-    var hashParams = {};
-    var e, r = /([^&;=]+)=?([^&;]*)/g,
-        q = window.location.hash.substring(1);
-    e = r.exec(q)
-    while (e) {
-        hashParams[e[1]] = decodeURIComponent(e[2]);
-        e = r.exec(q);
-    }
-    return hashParams.access_token;
+    var accessToken = document.cookie.match('(^|[^;]+)\\s*' + 'accessToken' + '\\s*=\\s*([^;]+)');
+    return accessToken ? accessToken.pop() : '';
 }
-console.log(getAccessToken());
 
+let accessToken = getAccessToken();
