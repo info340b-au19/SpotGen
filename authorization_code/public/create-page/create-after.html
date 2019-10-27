@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="David Chiang, Kha Nguyen">
+    <meta name="description" content="SpotGen Web Application Spotify Tool - Create Page">
+    <meta name="keywords" content="Spotify, Spot, Gen, Tool">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SpotGen</title>
+    <link rel="icon" type="image/png" href="https://cdn4.iconfinder.com/data/icons/green-shopper/1049/music.png">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700&amp;display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../styles/normalize.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/styles.css" />
+    <link rel="stylesheet" type="text/css" href="./create.css" />
+
+</head>
+
+<body>
+    <div>
+        <div id="top-bar">
+            <h1 id="app-title">SpotGen</h1>
+            <div id="profile-wrapper">
+                David
+                <img src="../images/profile.svg" alt="profile-icon" />
+            </div>
+        </div>
+        <main id="create-page-main">
+            <section id="select-playlists">
+                <h2 class="section-header">Select Playlists</h2>
+                <p class="section-description">Select playlists to grab songs from for your new playlist</p>
+                <div id="playlists-wrapper">
+                    <div class="playlist-checkbox-wrapper">
+                        <div class="pretty p-svg p-curve p-bigger">
+                            <input type="checkbox" />
+                            <div class="state">
+                                <svg class="svg svg-icon" viewBox="0 0 14 14">
+                                    <path
+                                        d="M10.8856,1.42401 C11.5365,0.77313 12.5917,0.77313 13.2427,1.42401 C13.8935,2.07488 13.8935,3.13016 13.2427,3.78103 L8.0237,9 L6.4477,10.576 C5.79687,11.2268 4.74157,11.2268 4.09069,10.576 C3.43982,9.9251 3.43982,8.8698 4.09069,8.2189 L9.7071,2.60252 L10.8856,1.42401 Z"
+                                        id="Path" fill="#00D361"></path>
+                                    <path
+                                        d="M1.06519,7.54884 C0.41432,6.89798 0.41432,5.84271 1.06519,5.19184 C1.71606,4.54095 2.77134,4.54095 3.42222,5.19184 L4.93406,6.70364 L6.4459,8.2155 C7.0968,8.8664 7.0968,9.9216 6.4459,10.5725 C5.795,11.2234 4.73976,11.2234 4.08888,10.5725 L3.22519,9.7088 L1.18299,7.66664 L1.06519,7.54884 Z"
+                                        id="Path" fill="#FFFFFF"></path>
+                                    <path
+                                        d="M1.06519,7.54884 C0.41432,6.89798 0.41432,5.84271 1.06519,5.19184 C1.71606,4.54095 2.77134,4.54095 3.42222,5.19184 L4.60072,6.37031 L6.4459,8.2155 C7.0968,8.8664 7.0968,9.9216 6.4459,10.5725 C5.795,11.2234 4.73976,11.2234 4.08888,10.5725 L3.84966,10.3333 L1.18299,7.66664 L1.06519,7.54884 Z"
+                                        id="Path" fill-opacity="0.01" fill="#000000"></path>
+
+                                </svg>
+                                <label>David's Jazz Playlist</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="playlist-checkbox-wrapper">
+                        <div class="pretty p-svg p-curve p-bigger">
+                            <input type="checkbox" checked />
+                            <div class="state">
+                                <svg class="svg svg-icon" viewBox="0 0 14 14">
+                                    <path
+                                        d="M10.8856,1.42401 C11.5365,0.77313 12.5917,0.77313 13.2427,1.42401 C13.8935,2.07488 13.8935,3.13016 13.2427,3.78103 L8.0237,9 L6.4477,10.576 C5.79687,11.2268 4.74157,11.2268 4.09069,10.576 C3.43982,9.9251 3.43982,8.8698 4.09069,8.2189 L9.7071,2.60252 L10.8856,1.42401 Z"
+                                        id="Path" fill="#00D361"></path>
+                                    <path
+                                        d="M1.06519,7.54884 C0.41432,6.89798 0.41432,5.84271 1.06519,5.19184 C1.71606,4.54095 2.77134,4.54095 3.42222,5.19184 L4.93406,6.70364 L6.4459,8.2155 C7.0968,8.8664 7.0968,9.9216 6.4459,10.5725 C5.795,11.2234 4.73976,11.2234 4.08888,10.5725 L3.22519,9.7088 L1.18299,7.66664 L1.06519,7.54884 Z"
+                                        id="Path" fill="#FFFFFF"></path>
+                                    <path
+                                        d="M1.06519,7.54884 C0.41432,6.89798 0.41432,5.84271 1.06519,5.19184 C1.71606,4.54095 2.77134,4.54095 3.42222,5.19184 L4.60072,6.37031 L6.4459,8.2155 C7.0968,8.8664 7.0968,9.9216 6.4459,10.5725 C5.795,11.2234 4.73976,11.2234 4.08888,10.5725 L3.84966,10.3333 L1.18299,7.66664 L1.06519,7.54884 Z"
+                                        id="Path" fill-opacity="0.01" fill="#000000"></path>
+
+                                </svg>
+                                <label>Hip Hop Beats</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="playlist-checkbox-wrapper">
+                        <div class="pretty p-svg p-curve p-bigger">
+                            <input type="checkbox" />
+                            <div class="state">
+                                <svg class="svg svg-icon" viewBox="0 0 14 14">
+                                    <path
+                                        d="M10.8856,1.42401 C11.5365,0.77313 12.5917,0.77313 13.2427,1.42401 C13.8935,2.07488 13.8935,3.13016 13.2427,3.78103 L8.0237,9 L6.4477,10.576 C5.79687,11.2268 4.74157,11.2268 4.09069,10.576 C3.43982,9.9251 3.43982,8.8698 4.09069,8.2189 L9.7071,2.60252 L10.8856,1.42401 Z"
+                                        id="Path" fill="#00D361"></path>
+                                    <path
+                                        d="M1.06519,7.54884 C0.41432,6.89798 0.41432,5.84271 1.06519,5.19184 C1.71606,4.54095 2.77134,4.54095 3.42222,5.19184 L4.93406,6.70364 L6.4459,8.2155 C7.0968,8.8664 7.0968,9.9216 6.4459,10.5725 C5.795,11.2234 4.73976,11.2234 4.08888,10.5725 L3.22519,9.7088 L1.18299,7.66664 L1.06519,7.54884 Z"
+                                        id="Path" fill="#FFFFFF"></path>
+                                    <path
+                                        d="M1.06519,7.54884 C0.41432,6.89798 0.41432,5.84271 1.06519,5.19184 C1.71606,4.54095 2.77134,4.54095 3.42222,5.19184 L4.60072,6.37031 L6.4459,8.2155 C7.0968,8.8664 7.0968,9.9216 6.4459,10.5725 C5.795,11.2234 4.73976,11.2234 4.08888,10.5725 L3.84966,10.3333 L1.18299,7.66664 L1.06519,7.54884 Z"
+                                        id="Path" fill-opacity="0.01" fill="#000000"></path>
+
+                                </svg>
+                                <label>David's Classical Tunes Playlist</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="filter-songs">
+                <h2 class="section-header">Filter</h2>
+                <p class="section-description">Adjust filters to fine tune what songs will be picked for your new
+                    playlist</p>
+                <div class="input-row-wrapper">
+                    <label class="input-row-label" for="artists">Artists</label>
+                    <input class="text-input" type="text" id="artists" name="artists" value="Kygo, Avicii, Lady Gaga"
+                        placeholder="Kygo, Avicii, Lady Gaga">
+                </div>
+                <div class="input-row-wrapper">
+                    <label class="input-row-label" for="danceability-slider">Danceability</label>
+                    <div class="slider-wrapper">
+                        <input type="range" min="0" max="100" value="25" class="slider" id="danceability-slider">
+                    </div>
+                    <div class="range-labels-wrapper">
+                        <div><span>Low</span></div>
+                        <div><span>High</span></div>
+                    </div>
+                </div>
+                <div class="input-row-wrapper">
+                    <label class="input-row-label" for="loudness-slider">Loudness</label>
+                    <div class="slider-wrapper">
+                        <input type="range" min="0" max="100" value="55" class="slider" id="loudness-slider">
+                    </div>
+                    <div class="range-labels-wrapper">
+                        <div><span>Low</span></div>
+                        <div><span>High</span></div>
+                    </div>
+                </div>
+                <div class="input-row-wrapper">
+                    <label class="input-row-label" for="loudness-slider">Tempo</label>
+                    <div class="slider-wrapper">
+                        <input type="range" min="0" max="100" value="15" class="slider" id="tempo-slider">
+                    </div>
+                    <div class="range-labels-wrapper">
+                        <div><span>Low</span></div>
+                        <div><span>High</span></div>
+                    </div>
+                </div>
+            </section>
+            <section id="name-playlist">
+                <h2 class="section-header">Name Your New Playlist</h2>
+                <div class="input-row-wrapper">
+                    <input class="text-input" type="text" id="artists" name="artists" value="Slow, smooth jazz beats"
+                        placeholder="Slow, smooth jazz beats">
+                </div>
+            </section>
+            <footer>
+                <p>2019 Kha & David ©</p>
+                <p>Contact at kha.vng@gmail.com or dchiang0@uw.edu</p>
+            </footer>
+        </main>
+        <div id="bottom-bar">
+            <div id="explore-tab">
+                <a href="../explore-page/explore-before.html" class="tab">Explore</a>
+            </div>
+            <div id="create-tab">
+                <a href="./create.html" class="tab selected">Create</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
