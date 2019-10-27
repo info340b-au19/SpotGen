@@ -16,10 +16,10 @@ async function getUserData() {
         }
     });
     let userData = await data.json();
-    console.log(userData);
+    // console.log(userData);
     $("#username").text(userData.display_name);
     let userID = userData.id;
-    console.log(userID);
+    // console.log(userID);
     getUserPlaylists(userID);
 }
 
@@ -57,7 +57,7 @@ async function getUserPlaylists(userID) {
     for (const playlist of playlists.items) {
         var playlistCheckboxRow = $(`<div class="playlist-checkbox-wrapper">
         <div class="pretty p-svg p-curve p-bigger">
-            <input type="checkbox" />
+            <input type="checkbox" class="playlistCheckbox" />
             <div class="state">
                 <svg class="svg svg-icon" viewBox="0 0 14 14">
                     <path
@@ -77,8 +77,20 @@ async function getUserPlaylists(userID) {
     </div>`);
         $(playlistCheckboxRow).find("label").text(playlist.name);
         $("#playlists-wrapper").append(playlistCheckboxRow);
-        console.log(playlist.name);
+        // console.log(playlist.name);
     }
+}
+
+function getSelectedPlaylists() {
+    let selectedPlaylists = [];
+    let checkedPlaylists = $('.playlistCheckbox:checkbox:checked');
+    for (let playlist of checkedPlaylists) {
+        let state = playlist.nextSibling.nextSibling;
+        let playlistName = $(state).find("label")[0].innerText;
+        selectedPlaylists.push(playlistName);
+    }
+    console.log(selectedPlaylists);
+    return selectedPlaylists;
 }
 
 loadData();
