@@ -1,7 +1,4 @@
-global.test = "hi";
-
-
-function getHashParams() {
+function getAccessToken() {
     var hashParams = {};
     var e, r = /([^&;=]+)=?([^&;]*)/g,
         q = window.location.hash.substring(1);
@@ -10,8 +7,7 @@ function getHashParams() {
         hashParams[e[1]] = decodeURIComponent(e[2]);
         e = r.exec(q);
     }
-    return hashParams;
+    return hashParams.access_token;
 }
-console.log(getHashParams().access_token);
+console.log(getAccessToken());
 
-console.log(body.access_token);

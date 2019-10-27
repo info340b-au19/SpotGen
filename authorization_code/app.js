@@ -121,7 +121,7 @@ app.get('/callback', function(req, res) {
         //     refresh_token: refresh_token
         //   }));
         //   console.log(__dirname);
-        res.redirect('/explore/#' +
+        res.redirect('/create/#' +
           querystring.stringify({
             access_token: access_token,
             refresh_token: refresh_token

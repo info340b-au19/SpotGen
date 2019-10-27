@@ -38,6 +38,11 @@
     }
   },
   "dependencies": {
-    "eslint": "^6.5.1"
+    "cookie-parser": "^1.4.4",
+    "cors": "^2.8.5",
+    "eslint": "^6.5.1",
+    "express": "^4.17.1",
+    "querystring": "^0.2.0",
+    "request": "^2.88.0"
   }
 }

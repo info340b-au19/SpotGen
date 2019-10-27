@@ -1,5 +1,8 @@
 # Course Project
 
-This repository contains code for an interactive web app, created for the _Client-Side Web Development_ course at the UW iSchool.
+## To Run the Project
 
-The site can be viewed at <https://info340a-au19.github.io/project-yourusername/>
+```
+cd authorization_code
+node app.js
+```
