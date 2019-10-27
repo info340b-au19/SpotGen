@@ -7,7 +7,6 @@
  * https://developer.spotify.com/web-api/authorization-guide/#authorization_code_flow
  */
 
-global.test = "hi";
 
 var express = require('express'); // Express web server framework
 var request = require('request'); // "Request" library
@@ -19,7 +18,6 @@ var client_id = 'afea90e6ba4f4e04bc13a841d21d1ddf'; // Your client id
 var client_secret = '8d09ae4d36a84f87975905974ddeebd1'; // Your secret
 var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
 
-var user_access_token = '';
 
 /**
  * Generates a random string containing numbers and letters
@@ -65,6 +63,11 @@ app.get('/login', function(req, res) {
 app.get('/explore', function(req, res) {
   res.sendFile('public/explore-page/explore.html', {root: './'});
 });
+
+app.get('/create', function(req, res) {
+  res.sendFile('public/create-page/create.html', {root: './'});
+});
+
 
 app.get('/callback', function(req, res) {
   // your application requests refresh and access tokens
@@ -118,7 +121,6 @@ app.get('/callback', function(req, res) {
         //     refresh_token: refresh_token
         //   }));
         //   console.log(__dirname);
-        user_access_token = access_token
         res.redirect('/explore/#' +
           querystring.stringify({
             access_token: access_token,

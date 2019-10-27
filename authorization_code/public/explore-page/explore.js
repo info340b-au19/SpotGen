@@ -1,4 +1,5 @@
-console.log("Running explore.js");
+global.test = "hi";
+
 
 function getHashParams() {
     var hashParams = {};
@@ -11,4 +12,6 @@ function getHashParams() {
     }
     return hashParams;
 }
-console.log(global.test);
+console.log(getHashParams().access_token);
+
+console.log(body.access_token);
