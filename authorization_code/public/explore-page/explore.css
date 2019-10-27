@@ -1,3 +1,5 @@
+/* CSS styling for the explore and before pages. */
+
 .genre-cards-wrapper {
   display: grid;
   grid-template-columns: 1fr;
@@ -7,12 +9,15 @@
   grid-auto-rows: min-content;
 }
 
+/* 2 columns, 1 genre each for medium screens */
+/* 1 column, 1 genre each for small screens */
 @media (min-width: 992px) {
   .genre-cards-wrapper {
     grid-template-columns: 1fr 1fr;
   }
 }
 
+/* 3 columns, 1 genre each for larger screens */
 @media (min-width: 1600px) {
   .genre-cards-wrapper {
     grid-template-columns: 1fr 1fr 1fr;
@@ -55,6 +60,7 @@
   box-shadow: 0px 3px 20px rgba(50, 50, 50, 0.85);
 }
 
+/* Provide feedback on hover over play button */
 .music-control-button {
   border: none !important;
   outline: none !important;
@@ -85,6 +91,7 @@
   background: none;
 }
 
+/* Customize play button transparency */
 .music-control-button:hover svg {
   transform: translateY(-1.5px) scale(1.03);
   filter: drop-shadow(3px 3px 15px rgba(0, 0, 0.6));
