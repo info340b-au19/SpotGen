@@ -22,7 +22,7 @@ async function getUserData(accessToken) {
     let userData = await data.json();
     $("#username").text(userData.display_name);
     let userID = userData.id;
-    getUserPlaylists(userID, accessToken);
+    state["userPlaylists"] = await getUserPlaylists(userID, accessToken);
 }
 
 
@@ -74,9 +74,9 @@ async function getUserPlaylists(userID, accessToken) {
     </div>`);
         $(playlistCheckboxRow).find("label").text(playlist.name);
         $("#playlists-wrapper").append(playlistCheckboxRow);
-        // console.log(playlist.name);
     }
     // console.log(playlistsMap);
+    return playlistsMap;
 }
 
 function getSelectedPlaylists() {
@@ -91,8 +91,55 @@ function getSelectedPlaylists() {
     return selectedPlaylists;
 }
 
+async function getSongsInPlaylist(playlistID, accessToken) {
+    let songsInPlaylist = [];
+    let firstHundred = await getHundredSongsFromPlaylist(playlistID, 0, accessToken);
+    songsInPlaylist.concat(firstHundred);
+    let numberOfSongsTotalInPlaylist = await getNumberOfSongsInPlaylist(playlistID, accessToken);
+    /* Get the rest of the songs based on the total number of songs in playlist */
+    let offset = 100;
+    while (offset < numberOfSongsTotalInPlaylist) {
+        let nextHundredSongs = await getHundredSongsFromPlaylist(playlistID, offset, accessToken);
+        songsInPlaylist = songsInPlaylist.concat(nextHundredSongs);
+        offset += 100;
+    }
+    return songsInPlaylist;
+}
+
+async function getHundredSongsFromPlaylist(playlistID, offset, accessToken) {
+    let hundredSongs = [];
+    var url = new URL("https://api.spotify.com/v1/playlists/" + playlistID + "/tracks");
+    params = { offset: 0 };
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+    let data = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        },
+    });
+    let response = await data.json();
+    return response.items;
+}
+
+async function getNumberOfSongsInPlaylist(playlistID, accessToken) {
+    var url = "https://api.spotify.com/v1/playlists/" + playlistID + "/tracks";
+    let data = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        },
+    });
+    let response = await data.json();
+    return response.total;
+}
+
 function loadData(accessToken) {
     getUserData(accessToken);
 }
 
 loadData(state["accessToken"]);
+async function test() {
+    let test = await getSongsInPlaylist("71xOvivxBXPlnpNdlNNiWw", state["accessToken"]);
+    console.log(test);
+}
+test();
