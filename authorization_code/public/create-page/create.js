@@ -1,13 +1,17 @@
+let state = {};
+
+
 /* Retrieve the access token stored in the browser cookie */
 /* Credit: https://stackoverflow.com/questions/5639346/what-is-the-shortest-function-for-reading-a-cookie-by-name-in-javascript */
+
 function getAccessToken() {
     var accessToken = document.cookie.match('(^|[^;]+)\\s*' + 'accessToken' + '\\s*=\\s*([^;]+)');
     return accessToken ? accessToken.pop() : '';
 }
 
-let accessToken = getAccessToken();
+state["accessToken"] = getAccessToken();
 
-async function getUserData() {
+async function getUserData(accessToken) {
     let url = 'https://api.spotify.com/v1/me';
     let data = await fetch(url, {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
@@ -16,15 +20,13 @@ async function getUserData() {
         }
     });
     let userData = await data.json();
-    // console.log(userData);
     $("#username").text(userData.display_name);
     let userID = userData.id;
-    // console.log(userID);
-    getUserPlaylists(userID);
+    getUserPlaylists(userID, accessToken);
 }
 
 
-async function testSearch() {
+async function testSearch(accessToken) {
     var url = new URL("https://api.spotify.com/v1/search"),
         params = { q: "lady gaga", type: "album" }
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
@@ -35,17 +37,10 @@ async function testSearch() {
         },
     });
     let jsonSearch = await search.json();
-    console.log(jsonSearch);
+    // console.log(jsonSearch);
 }
 
-function loadData() {
-    let accessToken = getAccessToken();
-    console.log(accessToken);
-    getUserData(accessToken);
-
-}
-
-async function getUserPlaylists(userID) {
+async function getUserPlaylists(userID, accessToken) {
     var url = "https://api.spotify.com/v1/users/" + userID + "/playlists"
     let data = await fetch(url, {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
@@ -54,7 +49,9 @@ async function getUserPlaylists(userID) {
         },
     });
     let playlists = await data.json();
+    let playlistsMap = {};
     for (const playlist of playlists.items) {
+        playlistsMap[playlist.name] = playlist.id;
         var playlistCheckboxRow = $(`<div class="playlist-checkbox-wrapper">
         <div class="pretty p-svg p-curve p-bigger">
             <input type="checkbox" class="playlistCheckbox" />
@@ -79,6 +76,7 @@ async function getUserPlaylists(userID) {
         $("#playlists-wrapper").append(playlistCheckboxRow);
         // console.log(playlist.name);
     }
+    // console.log(playlistsMap);
 }
 
 function getSelectedPlaylists() {
@@ -89,8 +87,12 @@ function getSelectedPlaylists() {
         let playlistName = $(state).find("label")[0].innerText;
         selectedPlaylists.push(playlistName);
     }
-    console.log(selectedPlaylists);
+    // console.log(selectedPlaylists);
     return selectedPlaylists;
 }
 
-loadData();
+function loadData(accessToken) {
+    getUserData(accessToken);
+}
+
+loadData(state["accessToken"]);
