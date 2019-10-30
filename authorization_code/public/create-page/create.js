@@ -1,6 +1,3 @@
-let state = {};
-
-
 /* Retrieve the access token stored in the browser cookie */
 /* Credit: https://stackoverflow.com/questions/5639346/what-is-the-shortest-function-for-reading-a-cookie-by-name-in-javascript */
 
@@ -9,7 +6,6 @@ function getAccessToken() {
     return accessToken ? accessToken.pop() : '';
 }
 
-state["accessToken"] = getAccessToken();
 
 async function getUserData(accessToken) {
     let url = 'https://api.spotify.com/v1/me';
@@ -75,7 +71,6 @@ async function getUserPlaylists(userID, accessToken) {
         $(playlistCheckboxRow).find("label").text(playlist.name);
         $("#playlists-wrapper").append(playlistCheckboxRow);
     }
-    // console.log(playlistsMap);
     return playlistsMap;
 }
 
@@ -87,14 +82,15 @@ function getSelectedPlaylists() {
         let playlistName = $(state).find("label")[0].innerText;
         selectedPlaylists.push(playlistName);
     }
-    // console.log(selectedPlaylists);
     return selectedPlaylists;
 }
 
 async function getSongsInPlaylist(playlistID, accessToken) {
+    console.log(accessToken);
     let songsInPlaylist = [];
     let firstHundred = await getHundredSongsFromPlaylist(playlistID, 0, accessToken);
-    songsInPlaylist.concat(firstHundred);
+    console.log(firstHundred);
+    songsInPlaylist = songsInPlaylist.concat(firstHundred);
     let numberOfSongsTotalInPlaylist = await getNumberOfSongsInPlaylist(playlistID, accessToken);
     /* Get the rest of the songs based on the total number of songs in playlist */
     let offset = 100;
@@ -133,13 +129,31 @@ async function getNumberOfSongsInPlaylist(playlistID, accessToken) {
     return response.total;
 }
 
-function loadData(accessToken) {
-    getUserData(accessToken);
+/* Returns an array containing all the songs in the playlists that the user
+selected. The new playlist will gather songs based on this pool of songs */
+async function getSongPool(accessToken) {
+    let songPool = [];
+    let selectedPlaylists = getSelectedPlaylists();
+    let playlistsMap = state["userPlaylists"];
+    for (let playlist of selectedPlaylists) {
+        let playlistID = playlistsMap[playlist];
+        console.log(accessToken);
+        let songsInPlaylist = await getSongsInPlaylist(playlistsMap[playlist], accessToken);
+        songPool = songPool.concat(songsInPlaylist);
+        console.log(songPool);
+    }
+    return songPool;
 }
 
-loadData(state["accessToken"]);
-async function test() {
-    let test = await getSongsInPlaylist("71xOvivxBXPlnpNdlNNiWw", state["accessToken"]);
-    console.log(test);
+async function getUserInputs(accessToken) {
+    let songPool = await getSongPool(accessToken);
+    console.log(songPool);
 }
-test();
+
+function loadData(accessToken) {
+    getUserData(accessToken);
+    $("#create-playlist-button").click(() => {getUserInputs(accessToken)});
+}
+let state = {};
+state["accessToken"] = getAccessToken();
+loadData(state["accessToken"]);
