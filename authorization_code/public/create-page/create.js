@@ -1,3 +1,4 @@
+
 /* Retrieve the access token stored in the browser cookie */
 /* Credit: https://stackoverflow.com/questions/5639346/what-is-the-shortest-function-for-reading-a-cookie-by-name-in-javascript */
 
@@ -18,6 +19,7 @@ async function getUserData(accessToken) {
     let userData = await data.json();
     $("#username").text(userData.display_name);
     let userID = userData.id;
+    state["userID"] = userID;
     state["userPlaylists"] = await getUserPlaylists(userID, accessToken);
 }
 
@@ -86,10 +88,8 @@ function getSelectedPlaylists() {
 }
 
 async function getSongsInPlaylist(playlistID, accessToken) {
-    console.log(accessToken);
     let songsInPlaylist = [];
     let firstHundred = await getHundredSongsFromPlaylist(playlistID, 0, accessToken);
-    console.log(firstHundred);
     songsInPlaylist = songsInPlaylist.concat(firstHundred);
     let numberOfSongsTotalInPlaylist = await getNumberOfSongsInPlaylist(playlistID, accessToken);
     /* Get the rest of the songs based on the total number of songs in playlist */
@@ -136,23 +136,99 @@ async function getSongPool(accessToken) {
     let selectedPlaylists = getSelectedPlaylists();
     let playlistsMap = state["userPlaylists"];
     for (let playlist of selectedPlaylists) {
-        let playlistID = playlistsMap[playlist];
-        console.log(accessToken);
         let songsInPlaylist = await getSongsInPlaylist(playlistsMap[playlist], accessToken);
         songPool = songPool.concat(songsInPlaylist);
-        console.log(songPool);
     }
     return songPool;
 }
 
 async function getUserInputs(accessToken) {
     let songPool = await getSongPool(accessToken);
-    console.log(songPool);
+    let desiredArtists = $("#artists-input")[0].value;
+    let desiredDanceability = $("#danceability-slider")[0].value;
+    let desiredLoudness = $("#loudness-slider")[0].value;
+    let desiredTempo = $("#tempo-slider")[0].value;
+    let newPlaylistName = $("#playlist-name-input")[0].value;
+    return {
+        songPool: songPool,
+        desiredArtists: desiredArtists,
+        desiredDanceability: desiredDanceability,
+        desiredLoudness: desiredLoudness,
+        desiredTempo: desiredTempo,
+        newPlaylistName: newPlaylistName
+    }
+}
+
+function getSongsMatchingArtist(desiredArtists, songPool) {
+    desiredArtists = desiredArtists.split(",");
+    desiredArtists = desiredArtists.map(artist => artist.trim().toLowerCase());
+    // console.log("Desired artists: " + desiredArtists);
+    let songsMatchingDesiredArtists = [];
+
+    for (let song of songPool) {
+        let songArtists = [];
+        for (let songArtist of song.track.artists) {
+            songArtists.push(songArtist.name.toLowerCase());
+        }
+        // console.log("This song's artists are: " + songArtists);
+        for (let artist of desiredArtists) {
+            if (songArtists.includes(artist)) {
+                songsMatchingDesiredArtists.push(song);
+                continue;
+            }
+        }
+    }
+    // console.log(songsMatchingDesiredArtists);
+    return songsMatchingDesiredArtists;
+}
+
+async function createNewPlaylist(accessToken) {
+    let userInputs = await getUserInputs(accessToken);
+    let newPlaylist = getSongsMatchingArtist(userInputs["desiredArtists"], userInputs["songPool"]);
+    let newPlaylistURIs = newPlaylist.map(song => song.track.uri);
+
+    /* Create the playlist */
+    let parameters = {
+        name: userInputs["newPlaylistName"],
+        public: false,
+        description: "Enjoy your new playlist made with Spotgen!"
+    }
+    var createPlaylistURL = "https://api.spotify.com/v1/users/" + state["userID"] + "/playlists";
+    let data = await fetch(createPlaylistURL, {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(parameters)
+    });
+    let playlist = await data.json();
+
+    /* Add songs to the playlist */
+    var addSongsToPlaylistURL = "https://api.spotify.com/v1/playlists/" + playlist.id + "/tracks";
+    let addSongsData = await fetch(addSongsToPlaylistURL, {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            uris: newPlaylistURIs
+        })
+    });
+    let generatedPlaylist = await addSongsData.json();
 }
 
 function loadData(accessToken) {
     getUserData(accessToken);
-    $("#create-playlist-button").click(() => {getUserInputs(accessToken)});
+    $("#danceability-checkbox").disabled = true;
+    $("#danceability-checkbox").change(function() {
+        console.log("Checked? : " + this.checked);
+        document.getElementById("danceability-slider").disabled = !this.checked;
+    });
+    $("#create-playlist-button").click(() => {
+        createNewPlaylist(accessToken);
+    });
 }
 let state = {};
 state["accessToken"] = getAccessToken();
