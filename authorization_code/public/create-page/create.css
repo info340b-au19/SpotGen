@@ -100,8 +100,8 @@ h3 {
 }
 
 .input-row-label .playlist-checkbox-wrapper {
-  margin-left: 12px;
-  margin-top: 3px;
+  margin-top: 4px;
+  margin-right: -8px;
 }
 
 .text-input {
@@ -116,7 +116,7 @@ h3 {
 
 .text-input:focus,
 .text-input:hover {
-  border: 2px solid rgba(255, 255, 255, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.7);
 }
 
 .slider {
@@ -128,7 +128,7 @@ h3 {
   -webkit-appearance: none;
 }
 
-.slider:disabled {
+input:disabled {
   filter: brightness(50%);
 }
 
@@ -146,5 +146,8 @@ h3 {
   display: flex;
   justify-content: space-between;
   margin-top: 6px;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.75);  
+}
+
+input[type='checkbox'] {
 }

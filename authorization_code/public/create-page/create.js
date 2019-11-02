@@ -162,15 +162,12 @@ async function getUserInputs(accessToken) {
 function getSongsMatchingArtist(desiredArtists, songPool) {
     desiredArtists = desiredArtists.split(",");
     desiredArtists = desiredArtists.map(artist => artist.trim().toLowerCase());
-    // console.log("Desired artists: " + desiredArtists);
     let songsMatchingDesiredArtists = [];
-
     for (let song of songPool) {
         let songArtists = [];
         for (let songArtist of song.track.artists) {
             songArtists.push(songArtist.name.toLowerCase());
         }
-        // console.log("This song's artists are: " + songArtists);
         for (let artist of desiredArtists) {
             if (songArtists.includes(artist)) {
                 songsMatchingDesiredArtists.push(song);
@@ -219,17 +216,32 @@ async function createNewPlaylist(accessToken) {
     let generatedPlaylist = await addSongsData.json();
 }
 
-function loadData(accessToken) {
-    getUserData(accessToken);
-    $("#danceability-checkbox").disabled = true;
+function setupCheckboxToggling() {
+    document.getElementById("artists-input").disabled = true;
+    document.getElementById("danceability-slider").disabled = true;
+    document.getElementById("loudness-slider").disabled = true;
+    document.getElementById("tempo-slider").disabled = true;
+    $("#artists-checkbox").change(function() {
+        document.getElementById("artists-input").disabled = !this.checked;
+    });
     $("#danceability-checkbox").change(function() {
-        console.log("Checked? : " + this.checked);
         document.getElementById("danceability-slider").disabled = !this.checked;
+    });
+    $("#loudness-checkbox").change(function() {
+        document.getElementById("loudness-slider").disabled = !this.checked;
+    });
+    $("#tempo-checkbox").change(function() {
+        document.getElementById("tempo-slider").disabled = !this.checked;
     });
     $("#create-playlist-button").click(() => {
         createNewPlaylist(accessToken);
     });
 }
+
+function loadData(accessToken) {
+    setupCheckboxToggling();
+    getUserData(accessToken);
+}   
 let state = {};
 state["accessToken"] = getAccessToken();
 loadData(state["accessToken"]);

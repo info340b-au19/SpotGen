@@ -99,3 +99,14 @@ footer {
   box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
   filter: brightness(110%);
 }
+
+/* Checkbox border */
+.pretty label:before {
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  transition: all 0.16s ease-in-out;
+}
+
+.pretty:hover label:before {
+  border: 1px solid rgba(255, 255, 255, 0.7) !important;
+  
+}
