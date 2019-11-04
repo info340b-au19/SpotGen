@@ -1,4 +1,3 @@
-
 /* Retrieve the access token stored in the browser cookie */
 /* Credit: https://stackoverflow.com/questions/5639346/what-is-the-shortest-function-for-reading-a-cookie-by-name-in-javascript */
 
@@ -24,22 +23,10 @@ async function getUserData(accessToken) {
 }
 
 
-async function testSearch(accessToken) {
-    var url = new URL("https://api.spotify.com/v1/search"),
-        params = { q: "lady gaga", type: "album" }
-    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-    let search = await fetch(url, {
-        method: 'GET', // *GET, POST, PUT, DELETE, etc.
-        headers: {
-            'Authorization': 'Bearer ' + accessToken
-        },
-    });
-    let jsonSearch = await search.json();
-    // console.log(jsonSearch);
-}
-
 async function getUserPlaylists(userID, accessToken) {
-    var url = "https://api.spotify.com/v1/users/" + userID + "/playlists"
+    var url = new URL("https://api.spotify.com/v1/users/" + userID + "/playlists");
+    params = { limit: 50 };
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
     let data = await fetch(url, {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
         headers: {
@@ -93,19 +80,18 @@ async function getSongsInPlaylist(playlistID, accessToken) {
     songsInPlaylist = songsInPlaylist.concat(firstHundred);
     let numberOfSongsTotalInPlaylist = await getNumberOfSongsInPlaylist(playlistID, accessToken);
     /* Get the rest of the songs based on the total number of songs in playlist */
-    let offset = 100;
-    while (offset < numberOfSongsTotalInPlaylist) {
-        let nextHundredSongs = await getHundredSongsFromPlaylist(playlistID, offset, accessToken);
-        songsInPlaylist = songsInPlaylist.concat(nextHundredSongs);
-        offset += 100;
+    for (let offset = 100; offset < numberOfSongsTotalInPlaylist; offset += 100) {
+        let nextChunkOfSongs = await getHundredSongsFromPlaylist(playlistID, offset, accessToken);
+        songsInPlaylist = songsInPlaylist.concat(nextChunkOfSongs);
     }
+
     return songsInPlaylist;
 }
 
 async function getHundredSongsFromPlaylist(playlistID, offset, accessToken) {
     let hundredSongs = [];
     var url = new URL("https://api.spotify.com/v1/playlists/" + playlistID + "/tracks");
-    params = { offset: 0 };
+    params = { offset: offset };
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
     let data = await fetch(url, {
         method: 'GET',
@@ -144,6 +130,11 @@ async function getSongPool(accessToken) {
 
 async function getUserInputs(accessToken) {
     let songPool = await getSongPool(accessToken);
+    let artistsFilteringEnabled = !$("#artists-input").is(':disabled');
+    let danceabilityFilteringEnabled = !$("#danceability-slider").is(':disabled');
+    let loudnessFilteringEnabled = !$("#loudness-slider").is(':disabled');
+    let tempoFilteringEnabled = !$("#tempo-slider").is(':disabled');
+
     let desiredArtists = $("#artists-input")[0].value;
     let desiredDanceability = $("#danceability-slider")[0].value;
     let desiredLoudness = $("#loudness-slider")[0].value;
@@ -151,6 +142,10 @@ async function getUserInputs(accessToken) {
     let newPlaylistName = $("#playlist-name-input")[0].value;
     return {
         songPool: songPool,
+        artistsFilteringEnabled: artistsFilteringEnabled,
+        danceabilityFilteringEnabled: danceabilityFilteringEnabled,
+        loudnessFilteringEnabled: loudnessFilteringEnabled,
+        tempoFilteringEnabled: tempoFilteringEnabled,
         desiredArtists: desiredArtists,
         desiredDanceability: desiredDanceability,
         desiredLoudness: desiredLoudness,
@@ -175,13 +170,102 @@ function getSongsMatchingArtist(desiredArtists, songPool) {
             }
         }
     }
-    // console.log(songsMatchingDesiredArtists);
     return songsMatchingDesiredArtists;
+}
+
+/* Helper function from: https://derickbailey.com/2014/09/21/calculating-standard-deviation-with-array-map-and-array-reduce-in-javascript/ */
+function standardDeviation(values) {
+    var avg = average(values);
+    var squareDiffs = values.map(function (value) {
+        var diff = value - avg;
+        var sqrDiff = diff * diff;
+        return sqrDiff;
+    });
+    var avgSquareDiff = average(squareDiffs);
+    var stdDev = Math.sqrt(avgSquareDiff);
+    return stdDev;
+}
+
+/* Helper function from: https://derickbailey.com/2014/09/21/calculating-standard-deviation-with-array-map-and-array-reduce-in-javascript/ */
+function average(data) {
+    var sum = data.reduce(function (sum, value) {
+        return sum + value;
+    }, 0);
+    var avg = sum / data.length;
+    return avg;
+}
+
+/* Loudness between -30 and 0 db, from loudest to quitest. */
+async function getSongsMatchingLoudness(desiredLoudness, songPool, accessToken) {
+    let loudnessValues = [];
+    let songsMatchingLoudness = [];
+    for (let songIndex = 0; songIndex < songPool.length; songIndex += 100) {
+        let hundredSongs = songPool.slice(songIndex, songIndex + 100);
+        let hundredSongIDs = hundredSongs.map(song => song.track.id);
+        let hundredSongFeatures = await getSongFeaturesMultiple(hundredSongIDs, accessToken);
+        for (let songFeature of hundredSongFeatures.audio_features) {
+            loudnessValues.push(songFeature.loudness);
+        }
+    }
+    let averageLoudness = average(loudnessValues);
+    let standardDevLoudness = standardDeviation(loudnessValues);
+    let low = averageLoudness - 3 * standardDevLoudness;
+    let high = averageLoudness + 3 * standardDevLoudness;
+    desiredLoudness = low + (desiredLoudness * (high - low));
+    console.log("Desired loudness: " + desiredLoudness);
+    for (let songIndex = 0; songIndex < songPool.length; songIndex++) {
+        /* Song passes filter if it's within a standard deviation in loudness of the average loudness of songs in the playlist */
+        if ((loudnessValues[songIndex] < desiredLoudness + standardDevLoudness) && (loudnessValues[songIndex] > desiredLoudness - standardDevLoudness)) {
+            songsMatchingLoudness.push(songPool[songIndex]);
+            console.log(loudnessValues[songIndex]);
+        }
+    }
+    return songsMatchingLoudness;
+}
+
+
+async function getSongFeatures(song, accessToken) {
+    var url = "https://api.spotify.com/v1/audio-features/" + song.track.id;
+    let data = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        },
+    });
+    let response = await data.json();
+    return response;
+}
+
+async function getSongFeaturesMultiple(songs, accessToken) {
+    var url = new URL("https://api.spotify.com/v1/audio-features"),
+        params = { ids: songs }
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+    let data = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        },
+    });
+    let response = await data.json();
+    return response;
 }
 
 async function createNewPlaylist(accessToken) {
     let userInputs = await getUserInputs(accessToken);
-    let newPlaylist = getSongsMatchingArtist(userInputs["desiredArtists"], userInputs["songPool"]);
+    let newPlaylist = userInputs["songPool"]
+    /* Filter out local songs */
+    newPlaylist = newPlaylist.filter(song => !song.track.uri.includes("local"));
+    /* Filter out duplicates */
+    newPlaylist = newPlaylist.filter((song, index, self) => self.findIndex(s => s.track.name === song.track.name) === index)
+
+    if (userInputs["artistsFilteringEnabled"]) {
+        newPlaylist = getSongsMatchingArtist(userInputs["desiredArtists"], newPlaylist);
+    }
+
+    if (userInputs["loudnessFilteringEnabled"]) {
+        newPlaylist = await getSongsMatchingLoudness(userInputs["desiredLoudness"] / 100.0, newPlaylist, accessToken);
+    }
+
     let newPlaylistURIs = newPlaylist.map(song => song.track.uri);
 
     /* Create the playlist */
@@ -190,7 +274,7 @@ async function createNewPlaylist(accessToken) {
         public: false,
         description: "Enjoy your new playlist made with Spotgen!"
     }
-    var createPlaylistURL = "https://api.spotify.com/v1/users/" + state["userID"] + "/playlists";
+    let createPlaylistURL = "https://api.spotify.com/v1/users/" + state["userID"] + "/playlists";
     let data = await fetch(createPlaylistURL, {
         method: 'POST',
         headers: {
@@ -200,9 +284,16 @@ async function createNewPlaylist(accessToken) {
         body: JSON.stringify(parameters)
     });
     let playlist = await data.json();
-
     /* Add songs to the playlist */
-    var addSongsToPlaylistURL = "https://api.spotify.com/v1/playlists/" + playlist.id + "/tracks";
+    for (let songIndex = 0; songIndex < newPlaylistURIs.length; songIndex += 100) {
+        /* Can only add 100 songs per request */
+        addTracksToPlaylist(playlist, newPlaylistURIs.slice(songIndex, songIndex + 100), accessToken);
+    }
+
+}
+
+async function addTracksToPlaylist(playlist, tracksToAdd, accessToken) {
+    let addSongsToPlaylistURL = "https://api.spotify.com/v1/playlists/" + playlist.id + "/tracks";
     let addSongsData = await fetch(addSongsToPlaylistURL, {
         method: 'POST',
         headers: {
@@ -210,27 +301,27 @@ async function createNewPlaylist(accessToken) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            uris: newPlaylistURIs
+            uris: tracksToAdd
         })
     });
-    let generatedPlaylist = await addSongsData.json();
 }
 
-function setupCheckboxToggling() {
+
+function setupCheckboxToggling(accessToken) {
     document.getElementById("artists-input").disabled = true;
     document.getElementById("danceability-slider").disabled = true;
     document.getElementById("loudness-slider").disabled = true;
     document.getElementById("tempo-slider").disabled = true;
-    $("#artists-checkbox").change(function() {
+    $("#artists-checkbox").change(function () {
         document.getElementById("artists-input").disabled = !this.checked;
     });
-    $("#danceability-checkbox").change(function() {
+    $("#danceability-checkbox").change(function () {
         document.getElementById("danceability-slider").disabled = !this.checked;
     });
-    $("#loudness-checkbox").change(function() {
+    $("#loudness-checkbox").change(function () {
         document.getElementById("loudness-slider").disabled = !this.checked;
     });
-    $("#tempo-checkbox").change(function() {
+    $("#tempo-checkbox").change(function () {
         document.getElementById("tempo-slider").disabled = !this.checked;
     });
     $("#create-playlist-button").click(() => {
@@ -239,9 +330,9 @@ function setupCheckboxToggling() {
 }
 
 function loadData(accessToken) {
-    setupCheckboxToggling();
+    setupCheckboxToggling(accessToken);
     getUserData(accessToken);
-}   
+}
 let state = {};
 state["accessToken"] = getAccessToken();
 loadData(state["accessToken"]);
