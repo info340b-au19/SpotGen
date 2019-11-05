@@ -170,7 +170,6 @@ function playPauseMusic(button, audio) {
     }
 }
 
-
 getUserData(accessToken); 
 
 let altRock = highestPopularity('alt-rock', accessToken);
@@ -180,4 +179,3 @@ let folk = highestPopularity('folk', accessToken);
 let hardRock = highestPopularity('hard-rock', accessToken);
 let classical = highestPopularity('classical', accessToken);
 let jazz = highestPopularity('jazz', accessToken);
-
