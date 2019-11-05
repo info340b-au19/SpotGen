@@ -6,9 +6,9 @@ function getAccessToken() {
 }
 let accessToken = getAccessToken();
 
-// Global variables to display state of audio and play button
-let currentlyPlaying = null;
-let currentAudio = null;
+let state = {};
+state['currentlyPlaying'] = null;
+state['currentAudio'] = null;
 
 // Gets all the genres from Spotify API
 async function getGenres(accessToken) {
@@ -135,29 +135,29 @@ function updateMusic(button, playUrl) {
 // To display the play or pause button 
 function playPauseMusic(button, audio) {
     // Play when nothing is playing
-    if (currentlyPlaying === null) {
-        currentlyPlaying = button;
-        currentAudio = audio;
-        currentAudio.play();
+    if (state['currentlyPlaying'] === null) {
+        state['currentlyPlaying'] = button;
+        state['currentAudio'] = audio;
+        state['currentAudio'].play();
         button.querySelector(".play").style.display = 'none';
         button.querySelector(".pause").style.display = 'block';
     }
     // Pause the one that is playing
-    else if (currentlyPlaying == button) {
-        currentAudio.pause();
-        currentlyPlaying = null;
-        currentAudio = null;
+    else if (state['currentlyPlaying'] == button) {
+        state['currentAudio'].pause();
+        state['currentlyPlaying'] = null;
+        state['currentAudio'] = null;
         button.querySelector(".play").style.display = 'block';
         button.querySelector(".pause").style.display = 'none';
     }
     // Pause the old audio and play the new one
     else {
-        currentAudio.pause();
-        currentlyPlaying.querySelector(".play").style.display = 'block';
-        currentlyPlaying.querySelector(".pause").style.display = 'none';
-        currentlyPlaying = button;
-        currentAudio = audio;
-        currentAudio.play();
+        state['currentAudio'].pause();
+        state['currentlyPlaying'].querySelector(".play").style.display = 'block';
+        state['currentlyPlaying'].querySelector(".pause").style.display = 'none';
+        state['currentlyPlaying'] = button;
+        state['currentAudio'] = audio;
+        state['currentAudio'].play();
         button.querySelector(".play").style.display = 'none';
         button.querySelector(".pause").style.display = 'block';
     }
