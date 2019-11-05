@@ -15,7 +15,7 @@ async function getUserData(accessToken) {
         }
     });
     let userData = await data.json();
-    $("#username").text(userData.display_name);
+    $(".username").text(userData.display_name);
     let userID = userData.id;
     state["userID"] = userID;
     state["userPlaylists"] = await getUserPlaylists(userID, accessToken);

@@ -10,6 +10,19 @@ let state = {};
 state['currentlyPlaying'] = null;
 state['currentAudio'] = null;
 
+// Get spotify user data
+async function getUserData(accessToken) {
+    let url = 'https://api.spotify.com/v1/me';
+    let data = await fetch(url, {
+        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        }
+    });
+    let userData = await data.json();
+    $(".username").text(userData.display_name);
+}
+
 // Gets all the genres from Spotify API
 async function getGenres(accessToken) {
     let url = "https://api.spotify.com/v1/recommendations/available-genre-seeds";
@@ -108,13 +121,6 @@ async function highestPopularity(genre, accessToken) {
     return index;
 }
 
-let altRock = highestPopularity('alt-rock', accessToken);
-let hipHop = highestPopularity('hip-hop', accessToken);
-let country = highestPopularity('country', accessToken);
-let folk = highestPopularity('folk', accessToken);
-let hardRock = highestPopularity('hard-rock', accessToken);
-let classical = highestPopularity('classical', accessToken);
-let jazz = highestPopularity('jazz', accessToken);
 
 // Changes the original img in html to img of top song of each genre
 async function getImg(index, allSongs, genre) {
@@ -162,3 +168,15 @@ function playPauseMusic(button, audio) {
         button.querySelector(".pause").style.display = 'block';
     }
 }
+
+
+getUserData(); 
+
+let altRock = highestPopularity('alt-rock', accessToken);
+let hipHop = highestPopularity('hip-hop', accessToken);
+let country = highestPopularity('country', accessToken);
+let folk = highestPopularity('folk', accessToken);
+let hardRock = highestPopularity('hard-rock', accessToken);
+let classical = highestPopularity('classical', accessToken);
+let jazz = highestPopularity('jazz', accessToken);
+
