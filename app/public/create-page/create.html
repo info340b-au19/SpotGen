@@ -27,7 +27,14 @@ and "Name Your New Playlist", and unchecked "Select Playlist" boxes.-->
 <body>
     <div>
         <div id="top-bar">
-            <h1 id="app-title">SpotGen</h1>
+            <div id="logo-wrapper">
+                <img src="../images/spotgen-logo.png" alt="spotgen-logo" />
+                 <a href="/explore" class="tab">Explore</a>
+            
+                 <a href="/create" class="tab selected">Create</a>
+               
+            </div>
+
             <div id="profile-wrapper">
                 <span id="username">Username</span>
                 <img src="../images/profile.svg" alt="profile-icon" />
@@ -178,12 +185,12 @@ and "Name Your New Playlist", and unchecked "Select Playlist" boxes.-->
             <!-- Make text box for user to name playlist -->
             <section id="name-playlist">
                 <h2 class="section-header">Name Your New Playlist</h2>
-                <div class="input-row-wrapper">
+                <div id="playlist-name-input-wrapper" class="input-row-wrapper">
                     <input id="playlist-name-input" class="text-input" type="text"
                         placeholder="Slow, smooth jazz beats">
                 </div>
                 <button id="create-playlist-button" class="button">Create New Playlist</button>
-                <div class="spinner hidden" >
+                <div class="spinner hidden">
                     <div class="rect1"></div>
                     <div class="rect2"></div>
                     <div class="rect3"></div>
@@ -199,14 +206,14 @@ and "Name Your New Playlist", and unchecked "Select Playlist" boxes.-->
                 <p>Contact at kha.vng@gmail.com or dchiang0@uw.edu</p>
             </footer>
         </main>
-        <div id="bottom-bar">
+        <!-- <div id="bottom-bar">
             <div id="explore-tab">
-                <a href="../explore-page/explore-before.html" class="tab">Explore</a>
+                <a href="/explore" class="tab">Explore</a>
             </div>
             <div id="create-tab">
-                <a href="./create-after.html" class="tab selected">Create</a>
+                <a href="/create" class="tab selected">Create</a>
             </div>
-        </div>
+        </div> -->
     </div>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>

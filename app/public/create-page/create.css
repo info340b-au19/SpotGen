@@ -96,6 +96,10 @@ h3 {
   margin-bottom: 16px;
 }
 
+#playlist-name-input-wrapper {
+  margin-top: 12px;
+}
+
 /* Customize checkboxes */
 .check-svg {
   width: 26px !important;

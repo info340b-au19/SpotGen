@@ -20,6 +20,9 @@
 <body>
   <div id="login-page">
     <div id="login-card">
+      <div id="logo">
+        <img src="./images/spotgen-logo.png" alt="spotgen-logo" />
+      </div>
       <h1>SpotGen</h1>
       <h2>Expand your musical horizons</h2>
       <button id="login-button" class="button">Login to Spotify</button>
@@ -29,7 +32,8 @@
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script>
   $("#login-button").click(() => {
-    window.location.href="/login";
+    window.location.href = "/login";
   })
 </script>
+
 </html>
