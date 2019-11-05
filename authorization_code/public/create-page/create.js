@@ -6,7 +6,6 @@ function getAccessToken() {
     return accessToken ? accessToken.pop() : '';
 }
 
-
 async function getUserData(accessToken) {
     let url = 'https://api.spotify.com/v1/me';
     let data = await fetch(url, {
@@ -136,16 +135,16 @@ async function getUserInputs(accessToken) {
     let tempoFilteringEnabled = !$("#tempo-slider").is(':disabled');
 
     let desiredArtists = $("#artists-input")[0].value;
-    let desiredDanceability = $("#danceability-slider")[0].value;
-    let desiredLoudness = $("#loudness-slider")[0].value;
-    let desiredTempo = $("#tempo-slider")[0].value;
+    let desiredDanceability = $("#danceability-slider")[0].value / 100.0;
+    let desiredLoudness = $("#loudness-slider")[0].value / 100.0;
+    let desiredTempo = $("#tempo-slider")[0].value / 100.0;
     let newPlaylistName = $("#playlist-name-input")[0].value;
     return {
         songPool: songPool,
         artistsFilteringEnabled: artistsFilteringEnabled,
-        danceabilityFilteringEnabled: danceabilityFilteringEnabled,
         loudnessFilteringEnabled: loudnessFilteringEnabled,
         tempoFilteringEnabled: tempoFilteringEnabled,
+        danceabilityFilteringEnabled: danceabilityFilteringEnabled,
         desiredArtists: desiredArtists,
         desiredDanceability: desiredDanceability,
         desiredLoudness: desiredLoudness,
@@ -196,31 +195,72 @@ function average(data) {
 }
 
 /* Loudness between -30 and 0 db, from loudest to quitest. */
-async function getSongsMatchingLoudness(desiredLoudness, songPool, accessToken) {
+async function getSongsMatchingFilters(desiredFilters, songPool, accessToken) {
+    let desiredLoudness = desiredFilters["desiredLoudness"];
+    let desiredTempo = desiredFilters["desiredTempo"];
+    let desiredDanceability = desiredFilters["desiredDanceability"];
+
     let loudnessValues = [];
-    let songsMatchingLoudness = [];
+    let tempoValues = [];
+    let danceabilityValues = [];
     for (let songIndex = 0; songIndex < songPool.length; songIndex += 100) {
         let hundredSongs = songPool.slice(songIndex, songIndex + 100);
         let hundredSongIDs = hundredSongs.map(song => song.track.id);
         let hundredSongFeatures = await getSongFeaturesMultiple(hundredSongIDs, accessToken);
         for (let songFeature of hundredSongFeatures.audio_features) {
             loudnessValues.push(songFeature.loudness);
+            tempoValues.push(songFeature.tempo);
+            danceabilityValues.push(songFeature.danceability);
         }
     }
+    console.log(danceabilityValues);
+
+    /* Convert our input values (from a 0.0 - 1.0 range) to their equivalents 
+    in terms of what we are measuring (loudness in db, tempo, etc.)  based on 
+    averages (relative to to other songs in the song pool */
+
     let averageLoudness = average(loudnessValues);
     let standardDevLoudness = standardDeviation(loudnessValues);
-    let low = averageLoudness - 3 * standardDevLoudness;
-    let high = averageLoudness + 3 * standardDevLoudness;
-    desiredLoudness = low + (desiredLoudness * (high - low));
-    console.log("Desired loudness: " + desiredLoudness);
+    let lowLoudness = averageLoudness - 3 * standardDevLoudness;
+    let highLoudness = averageLoudness + 3 * standardDevLoudness;
+    desiredLoudness = lowLoudness + (desiredLoudness * (highLoudness - lowLoudness));
+
+    let averageTempo = average(tempoValues);
+    let standardDevTempo = standardDeviation(tempoValues);
+    let lowTempo = averageTempo - 3 * standardDevTempo;
+    let highTempo = averageTempo + 3 * standardDevTempo;
+    desiredTempo = lowTempo + (desiredTempo * (highTempo - lowTempo));
+
+    let averageDanceability = average(danceabilityValues);
+    let standardDevDanceability = standardDeviation(danceabilityValues);
+    let lowDanceability = averageDanceability - 3 * standardDevDanceability;
+    let highDanceability = averageDanceability + 3 * standardDevDanceability;
+    desiredDanceability = lowDanceability + (desiredDanceability * (highDanceability - lowDanceability));
+    console.log("Desired danceability: " + desiredDanceability);
+
+    let songsMatchingFilters = [];
     for (let songIndex = 0; songIndex < songPool.length; songIndex++) {
-        /* Song passes filter if it's within a standard deviation in loudness of the average loudness of songs in the playlist */
-        if ((loudnessValues[songIndex] < desiredLoudness + standardDevLoudness) && (loudnessValues[songIndex] > desiredLoudness - standardDevLoudness)) {
-            songsMatchingLoudness.push(songPool[songIndex]);
-            console.log(loudnessValues[songIndex]);
+        /* Song passes filter if it's within a standard deviation in {filter value} of the average {filter value} of songs in the playlist */
+        let passesLoudnessFilter = true;
+        let passesTempoFilter = true;
+        let passesDanceabilityFilter = true;
+
+        /* Apply filters if the user checked the checkbox for the filter */
+        if (desiredFilters["loudnessFilteringEnabled"]) {
+            passesLoudnessFilter = (loudnessValues[songIndex] < desiredLoudness + standardDevLoudness) && (loudnessValues[songIndex] > desiredLoudness - standardDevLoudness);
+        }
+
+        if (desiredFilters["tempoFilteringEnabled"]) {
+            passesTempoFilter = (tempoValues[songIndex] < desiredTempo + standardDevTempo) && (tempoValues[songIndex] > desiredTempo - standardDevTempo);
+        }
+        if (desiredFilters["danceabilityFilteringEnabled"]) {
+            passesDanceabilityFilter = (danceabilityValues[songIndex] < desiredDanceability + standardDevDanceability) && (danceabilityValues[songIndex] > desiredDanceability - standardDevDanceability);
+        }
+        if (passesLoudnessFilter && passesTempoFilter && passesDanceabilityFilter) {
+            songsMatchingFilters.push(songPool[songIndex]);
         }
     }
-    return songsMatchingLoudness;
+    return songsMatchingFilters;
 }
 
 
@@ -251,6 +291,7 @@ async function getSongFeaturesMultiple(songs, accessToken) {
 }
 
 async function createNewPlaylist(accessToken) {
+    toggleSpinner();
     let userInputs = await getUserInputs(accessToken);
     let newPlaylist = userInputs["songPool"]
     /* Filter out local songs */
@@ -262,9 +303,7 @@ async function createNewPlaylist(accessToken) {
         newPlaylist = getSongsMatchingArtist(userInputs["desiredArtists"], newPlaylist);
     }
 
-    if (userInputs["loudnessFilteringEnabled"]) {
-        newPlaylist = await getSongsMatchingLoudness(userInputs["desiredLoudness"] / 100.0, newPlaylist, accessToken);
-    }
+    newPlaylist = await getSongsMatchingFilters(userInputs, newPlaylist, accessToken);
 
     let newPlaylistURIs = newPlaylist.map(song => song.track.uri);
 
@@ -289,7 +328,11 @@ async function createNewPlaylist(accessToken) {
         /* Can only add 100 songs per request */
         addTracksToPlaylist(playlist, newPlaylistURIs.slice(songIndex, songIndex + 100), accessToken);
     }
-
+    toggleSpinner();
+    toggleSuccessMessage();
+    setTimeout(function(){
+        toggleSuccessMessage();
+    }, 3000);
 }
 
 async function addTracksToPlaylist(playlist, tracksToAdd, accessToken) {
@@ -309,24 +352,34 @@ async function addTracksToPlaylist(playlist, tracksToAdd, accessToken) {
 
 function setupCheckboxToggling(accessToken) {
     document.getElementById("artists-input").disabled = true;
-    document.getElementById("danceability-slider").disabled = true;
     document.getElementById("loudness-slider").disabled = true;
     document.getElementById("tempo-slider").disabled = true;
+    document.getElementById("danceability-slider").disabled = true;
     $("#artists-checkbox").change(function () {
         document.getElementById("artists-input").disabled = !this.checked;
     });
-    $("#danceability-checkbox").change(function () {
-        document.getElementById("danceability-slider").disabled = !this.checked;
-    });
+
     $("#loudness-checkbox").change(function () {
         document.getElementById("loudness-slider").disabled = !this.checked;
     });
     $("#tempo-checkbox").change(function () {
         document.getElementById("tempo-slider").disabled = !this.checked;
     });
+    $("#danceability-checkbox").change(function () {
+        document.getElementById("danceability-slider").disabled = !this.checked;
+    });
     $("#create-playlist-button").click(() => {
         createNewPlaylist(accessToken);
     });
+}
+
+function toggleSpinner() {
+    $(".spinner").toggleClass("hidden");
+    console.log("Toggling");
+}
+
+function toggleSuccessMessage() {
+    $("#success-message-wrapper").toggleClass("hidden");
 }
 
 function loadData(accessToken) {
