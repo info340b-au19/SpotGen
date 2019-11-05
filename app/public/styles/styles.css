@@ -385,7 +385,7 @@ p {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  max-height: 150px;
+  max-height: 175px;
 }
 
 .genre-card-description h2 {
@@ -398,7 +398,26 @@ p {
   font-size: 1em;
   margin: 0;
   padding: 0;
-  overflow: scroll;
+  overflow-y: scroll;
+}
+
+.genre-card-description p::-webkit-scrollbar {
+  width: 10px;
+
+}
+
+.genre-card-description p::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 8px;
+  padding: 4px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.genre-card-description p::-webkit-scrollbar-thumb {
+  box-shadow: inset 2px 2px 2px 2px #00e66a;
+  border: solid 3px transparent;
+  border-radius: 8px;
 }
 
 

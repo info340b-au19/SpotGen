@@ -16,8 +16,8 @@ var cookieParser = require('cookie-parser');
 
 var client_id = '4095d5102d8940eeb9726e2eeb3c3378'; // Your client id
 var client_secret = '48c191868adc4e349dcb5e930f21fef7'; // Your secret
-// var redirect_uri = 'http://localhost:' + process.env.PORT + '/callback/'; // Your redirect uri
-var redirect_uri = 'https://spotgen-app.herokuapp.com/callback/'
+var redirect_uri = 'http://localhost:' + process.env.PORT + '/callback/'; // Your redirect uri
+// var redirect_uri = 'https://spotgen-app.herokuapp.com/callback/'
 
 /**
  * Generates a random string containing numbers and letters
