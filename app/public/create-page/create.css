@@ -8,6 +8,7 @@
   grid-row-gap: 16px;
 }
 
+
 #create-page-footer {
   grid-area: footer;
   margin-top: 48px;
@@ -16,7 +17,12 @@
   #create-page-main {
     grid-template-areas: "select-playlists filter-songs" "name-playlist name-playlist" "footer footer";
     grid-template-columns: 1fr 1fr;
-    grid-column-gap: 24px;
+    grid-column-gap: 48px;
+  }
+
+  #playlists-wrapper {
+    max-height: calc(100vh - 300px);
+    overflow-y: scroll;
   }
 }
 
@@ -24,7 +30,7 @@
   #create-page-main {
     grid-template-areas: "select-playlists filter-songs name-playlist" "footer footer footer";
     grid-template-columns: 1fr 1fr 1fr;
-    grid-column-gap: 24px;
+    grid-column-gap: 48px;
   }
 }
 
@@ -65,10 +71,33 @@ h3 {
   flex-direction: column;
 }
 
+/* Scroll bar customizations */
+#playlists-wrapper::-webkit-scrollbar {
+  width: 10px;
+
+}
+
+#playlists-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 8px;
+  padding: 4px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+#playlists-wrapper::-webkit-scrollbar-thumb {
+  box-shadow: inset 2px 2px 2px 2px #00e66a;
+  border: solid 3px transparent;
+  border-radius: 8px;
+}
+
 .playlist-checkbox-wrapper {
   display: flex;
   flex-direction: row;
   margin-bottom: 16px;
+}
+
+#playlist-name-input-wrapper {
+  margin-top: 12px;
 }
 
 /* Customize checkboxes */
@@ -89,13 +118,19 @@ h3 {
 }
 
 .input-row-wrapper {
-  margin-bottom: 18px;
+  margin-bottom: 36px;
 }
 
 .input-row-label {
-  margin-bottom: 10px;
+  margin-bottom: 0px;;
   font-weight: 600;
   font-size: 1.25em;
+  display: flex;
+}
+
+.input-row-label .playlist-checkbox-wrapper {
+  margin-top: 4px;
+  margin-right: -8px;
 }
 
 .text-input {
@@ -110,7 +145,7 @@ h3 {
 
 .text-input:focus,
 .text-input:hover {
-  border: 2px solid rgba(255, 255, 255, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.7);
 }
 
 .slider {
@@ -120,6 +155,10 @@ h3 {
   background: rgba(255, 255, 255, 0.3);
   height: 2px;
   -webkit-appearance: none;
+}
+
+input:disabled {
+  filter: brightness(50%);
 }
 
 .slider::-webkit-slider-thumb {
@@ -138,3 +177,4 @@ h3 {
   margin-top: 6px;
   color: rgba(255, 255, 255, 0.75);
 }
+
