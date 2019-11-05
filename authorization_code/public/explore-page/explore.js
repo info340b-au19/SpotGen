@@ -4,5 +4,161 @@ function getAccessToken() {
     var accessToken = document.cookie.match('(^|[^;]+)\\s*' + 'accessToken' + '\\s*=\\s*([^;]+)');
     return accessToken ? accessToken.pop() : '';
 }
-
 let accessToken = getAccessToken();
+
+// Global variables to display state of audio and play button
+let currentlyPlaying = null;
+let currentAudio = null;
+
+// Gets all the genres from Spotify API
+async function getGenres(accessToken) {
+    let url = "https://api.spotify.com/v1/recommendations/available-genre-seeds";
+    let data = await fetch(url, {
+        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        },
+    });
+    let genres = await data.json();
+    return genres;
+}
+let genre = getGenres(accessToken);
+
+// Retrieves the songs for given genre
+async function getSong(genre, accessToken) {
+    let endpoint = "https://api.spotify.com/v1/search";
+    let parameters = "?q=" + genre + "&type=track" + "&limit=50";
+    let url = endpoint + parameters;
+    let data = await fetch(url, {
+        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        },
+    });
+    let songs = await data.json();
+    return songs;
+}
+
+// Gets all the total songs for the given genre
+async function getAllSongs(accessToken, genre) {
+    let songsInGenre = [];
+    let first50 = await get50Songs(genre, 0, accessToken);
+    songsInGenre = songsInGenre.concat(first50);
+    let numberOfSongsTotalInGenre = await getNumberOfSongsInGenre(genre, accessToken);
+    let offset = 50;
+    while (offset < numberOfSongsTotalInGenre / 100) { // 1% of the songs
+        let next50Songs = await get50Songs(genre, offset, accessToken);
+        songsInGenre = songsInGenre.concat(next50Songs);
+        offset += 50;
+    }
+    return songsInGenre;
+}
+
+// Returns 50 songs at a time
+async function get50Songs(genre, offset, accessToken) {
+    let url = new URL("https://api.spotify.com/v1/search" + "?q=" + genre + "&type=track" + "&limit=50");
+    params = { offset: 0 };
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+    let data = await fetch(url, {
+        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        },
+    });
+    let response = await data.json();
+    return response.tracks.items;
+}
+
+// Returns the number of songs in that genre 
+async function getNumberOfSongsInGenre(genre, accessToken) {
+    let url = "https://api.spotify.com/v1/search" + "?q=" + genre + "&type=track" + "&limit=50";
+    let data = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        },
+    });
+    let response = await data.json();
+    return response.tracks.total;
+}
+
+// Returns the img of the song of highest popularity (top song) in given genre
+async function highestPopularity(genre, accessToken) {
+    let genres = ["alt-rock", "hip-hop", "country", "folk", "hard-rock", "classical", "jazz"];
+    let allSongs = await getAllSongs(accessToken, genre);
+    let index = 0;
+    let highestPop = 0;
+    for (let i = 0; i < allSongs.length; i++) {
+        if (allSongs[i].popularity > highestPop) {
+            if (allSongs[i].preview_url != null) {
+                highestPop = allSongs[i].popularity;
+                index = i;
+            }
+        }
+    }
+    associatedGenre(genres.indexOf(genre), index);
+
+    // Play the associating song of the genre that user clicks on
+    function associatedGenre(genreIndex, songIndex) {
+        let button = $('.music-control-button:eq(' + genreIndex + ')')[0];
+        updateMusic(button, allSongs[songIndex].preview_url)
+    }
+
+    let img = await getImg(index, allSongs, genre);
+    return index;
+}
+
+let altRock = highestPopularity('alt-rock', accessToken);
+let hipHop = highestPopularity('hip-hop', accessToken);
+let country = highestPopularity('country', accessToken);
+let folk = highestPopularity('folk', accessToken);
+let hardRock = highestPopularity('hard-rock', accessToken);
+let classical = highestPopularity('classical', accessToken);
+let jazz = highestPopularity('jazz', accessToken);
+
+// Changes the original img in html to img of top song of each genre
+async function getImg(index, allSongs, genre) {
+    let imgUrl = allSongs[index].album.images[0].url;
+    let img = document.querySelector('#' + genre);
+    img.src = imgUrl;
+}
+
+// Plays or pauses the music when user clicks play or pause
+function updateMusic(button, playUrl) {
+    let audio = new Audio(playUrl);
+
+    button.addEventListener('click', function () {
+        playPauseMusic(button, audio);
+    });
+}
+
+// To display the play or pause button 
+function playPauseMusic(button, audio) {
+    // Play when nothing is playing
+    if (currentlyPlaying === null) {
+        currentlyPlaying = button;
+        currentAudio = audio;
+        currentAudio.play();
+        button.querySelector(".play").style.display = 'none';
+        button.querySelector(".pause").style.display = 'block';
+    }
+    // Pause the one that is playing
+    else if (currentlyPlaying == button) {
+        currentAudio.pause();
+        currentlyPlaying = null;
+        currentAudio = null;
+        button.querySelector(".play").style.display = 'block';
+        button.querySelector(".pause").style.display = 'none';
+    }
+    // Pause the old audio and play the new one
+    else {
+        currentAudio.pause();
+        currentlyPlaying.querySelector(".play").style.display = 'block';
+        currentlyPlaying.querySelector(".pause").style.display = 'none';
+        currentlyPlaying = button;
+        currentAudio = audio;
+        currentAudio.play();
+        button.querySelector(".play").style.display = 'none';
+        button.querySelector(".pause").style.display = 'block';
+    }
+}
