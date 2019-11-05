@@ -98,22 +98,7 @@ body {
 #logo-wrapper a {
   margin-left: 24px;
 }
-
-#bottom-bar {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  padding: 0px 24px;
-  height: 55px;
-  background-color: rgba(56, 56, 56, 0.95);
-  border-top: 1px solid rgba(56, 56, 56, 0.95);
-  backdrop-filter: blur(16px);
-  z-index: 2;
-}
-
+ 
 .tab {
   text-decoration: none;
   color: white;
@@ -136,7 +121,7 @@ body {
 }
 
 main {
-  height: calc(100vh - 110px);
+  height: calc(100vh - 55px);
   margin-top: 55px;
   overflow-y: scroll;
 }
