@@ -86,6 +86,7 @@ body {
   width: 28px;
   height: 28px;
 }
+
 #logo-wrapper {
   display: flex;
   flex-direction: row;
@@ -394,6 +395,7 @@ p {
   margin-bottom: 8px;
   font-size: 1em;
 }
+
 .genre-card-description p {
   font-size: 1em;
   margin: 0;
@@ -435,6 +437,7 @@ p {
   grid-area: footer;
   margin-top: 48px;
 }
+
 @media (min-width: 600px) {
   #create-page-main {
     grid-template-areas: "select-playlists filter-songs" "name-playlist name-playlist" "footer footer";
