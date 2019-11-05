@@ -23,9 +23,15 @@ as shown with the play putton in the middle of the image in each genre.-->
 <body>
     <div id="explore-before-page">
         <div id="top-bar">
-            <h1 id="app-title">SpotGen</h1>
+            <div id="logo-wrapper">
+                <img src="../images/spotgen-logo.png" alt="spotgen-logo" />
+                <a href="/explore" class="tab selected">Explore</a>
+                <a href="/create" class="tab">Create</a>
+
+            </div>
+
             <div id="profile-wrapper">
-                David
+                <span id="username">Kha</span>
                 <img src="../images/profile.svg" alt="profile-icon" />
             </div>
         </div>
@@ -247,16 +253,10 @@ as shown with the play putton in the middle of the image in each genre.-->
             <footer>
                 <p>2019 Kha &amp; David ©</p>
                 <p>Contact at kha.vng@gmail.com or dchiang0@uw.edu</p>
+                <p>Data collected through Spotify Web API</p>
             </footer>
         </main>
-        <div id="bottom-bar">
-            <div id="explore-tab">
-                <a href="/explore" class="tab selected">Explore</a>
-            </div>
-            <div id="create-tab">
-                <a href="/create" class="tab">Create</a>
-            </div>
-        </div>
+
     </div>
     <script src="../explore-page/explore.js"></script>
 </body>

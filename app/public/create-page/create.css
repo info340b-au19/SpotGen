@@ -1,4 +1,4 @@
-/* Styling for the create before and after pages. */
+/* ---------- Styling for the create before  page. ------------ */
 
 #create-page-main {
   padding: 24px;
@@ -144,7 +144,7 @@ h3 {
 }
 
 .text-input:focus,
-.text-input:hover {
+.text-input:hover:not(:disabled) {
   border: 2px solid rgba(255, 255, 255, 0.7);
 }
 

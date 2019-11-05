@@ -29,10 +29,9 @@ and "Name Your New Playlist", and unchecked "Select Playlist" boxes.-->
         <div id="top-bar">
             <div id="logo-wrapper">
                 <img src="../images/spotgen-logo.png" alt="spotgen-logo" />
-                 <a href="/explore" class="tab">Explore</a>
-            
-                 <a href="/create" class="tab selected">Create</a>
-               
+                <a href="/explore" class="tab">Explore</a>
+                <a href="/create" class="tab selected">Create</a>
+
             </div>
 
             <div id="profile-wrapper">
@@ -42,7 +41,14 @@ and "Name Your New Playlist", and unchecked "Select Playlist" boxes.-->
         </div>
         <main id="create-page-main">
             <section id="select-playlists">
-                <h2 class="section-header">Select Playlists</h2>
+                <div class="step">
+                    <div class="step-number">
+                        1
+                    </div>
+                    <div>
+                        <h2>Select Playlists</h2>
+                    </div>
+                </div>
                 <p class="section-description">Select playlists to grab songs from for your new playlist</p>
                 <!-- Make check boxes for users to select playlists -->
                 <div id="playlists-wrapper">
@@ -50,7 +56,14 @@ and "Name Your New Playlist", and unchecked "Select Playlist" boxes.-->
                 </div>
             </section>
             <section id="filter-songs">
-                <h2 class="section-header">Filter</h2>
+                <div class="step">
+                    <div class="step-number">
+                        2
+                    </div>
+                    <div>
+                        <h2>Filter</h2>
+                    </div>
+                </div>
                 <p class="section-description">Select each checkbox to enable the corresponding filter. <br> Adjust
                     filters to fine tune what songs will be picked for your new
                     playlist.
@@ -184,7 +197,14 @@ and "Name Your New Playlist", and unchecked "Select Playlist" boxes.-->
             </section>
             <!-- Make text box for user to name playlist -->
             <section id="name-playlist">
-                <h2 class="section-header">Name Your New Playlist</h2>
+                <div class="step">
+                    <div class="step-number">
+                        3
+                    </div>
+                    <div>
+                        <h2>Name Your New Playlist</h2>
+                    </div>
+                </div>
                 <div id="playlist-name-input-wrapper" class="input-row-wrapper">
                     <input id="playlist-name-input" class="text-input" type="text"
                         placeholder="Slow, smooth jazz beats">

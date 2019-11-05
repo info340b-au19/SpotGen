@@ -2,7 +2,7 @@
 /* Credit: https://stackoverflow.com/questions/5639346/what-is-the-shortest-function-for-reading-a-cookie-by-name-in-javascript */
 
 function getAccessToken() {
-    var accessToken = document.cookie.match('(^|[^;]+)\\s*' + 'accessToken' + '\\s*=\\s*([^;]+)');
+    let accessToken = document.cookie.match('(^|[^;]+)\\s*' + 'accessToken' + '\\s*=\\s*([^;]+)');
     return accessToken ? accessToken.pop() : '';
 }
 
@@ -23,7 +23,7 @@ async function getUserData(accessToken) {
 
 
 async function getUserPlaylists(userID, accessToken) {
-    var url = new URL("https://api.spotify.com/v1/users/" + userID + "/playlists");
+    let url = new URL("https://api.spotify.com/v1/users/" + userID + "/playlists");
     params = { limit: 50 };
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
     let data = await fetch(url, {
@@ -36,7 +36,7 @@ async function getUserPlaylists(userID, accessToken) {
     let playlistsMap = {};
     for (const playlist of playlists.items) {
         playlistsMap[playlist.name] = playlist.id;
-        var playlistCheckboxRow = $(`<div class="playlist-checkbox-wrapper">
+        let playlistCheckboxRow = $(`<div class="playlist-checkbox-wrapper">
         <div class="pretty p-svg p-curve p-bigger">
             <input type="checkbox" class="playlistCheckbox" />
             <div class="state">
@@ -89,7 +89,7 @@ async function getSongsInPlaylist(playlistID, accessToken) {
 
 async function getHundredSongsFromPlaylist(playlistID, offset, accessToken) {
     let hundredSongs = [];
-    var url = new URL("https://api.spotify.com/v1/playlists/" + playlistID + "/tracks");
+    let url = new URL("https://api.spotify.com/v1/playlists/" + playlistID + "/tracks");
     params = { offset: offset };
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
     let data = await fetch(url, {
@@ -103,7 +103,7 @@ async function getHundredSongsFromPlaylist(playlistID, offset, accessToken) {
 }
 
 async function getNumberOfSongsInPlaylist(playlistID, accessToken) {
-    var url = "https://api.spotify.com/v1/playlists/" + playlistID + "/tracks";
+    let url = "https://api.spotify.com/v1/playlists/" + playlistID + "/tracks";
     let data = await fetch(url, {
         method: 'GET',
         headers: {
@@ -174,23 +174,23 @@ function getSongsMatchingArtist(desiredArtists, songPool) {
 
 /* Helper function from: https://derickbailey.com/2014/09/21/calculating-standard-deviation-with-array-map-and-array-reduce-in-javascript/ */
 function standardDeviation(values) {
-    var avg = average(values);
-    var squareDiffs = values.map(function (value) {
-        var diff = value - avg;
-        var sqrDiff = diff * diff;
+    let avg = average(values);
+    let squareDiffs = values.map(function (value) {
+        let diff = value - avg;
+        let sqrDiff = diff * diff;
         return sqrDiff;
     });
-    var avgSquareDiff = average(squareDiffs);
-    var stdDev = Math.sqrt(avgSquareDiff);
+    let avgSquareDiff = average(squareDiffs);
+    let stdDev = Math.sqrt(avgSquareDiff);
     return stdDev;
 }
 
 /* Helper function from: https://derickbailey.com/2014/09/21/calculating-standard-deviation-with-array-map-and-array-reduce-in-javascript/ */
 function average(data) {
-    var sum = data.reduce(function (sum, value) {
+    let sum = data.reduce(function (sum, value) {
         return sum + value;
     }, 0);
-    var avg = sum / data.length;
+    let avg = sum / data.length;
     return avg;
 }
 
@@ -213,7 +213,6 @@ async function getSongsMatchingFilters(desiredFilters, songPool, accessToken) {
             danceabilityValues.push(songFeature.danceability);
         }
     }
-    console.log(danceabilityValues);
 
     /* Convert our input values (from a 0.0 - 1.0 range) to their equivalents 
     in terms of what we are measuring (loudness in db, tempo, etc.)  based on 
@@ -236,7 +235,6 @@ async function getSongsMatchingFilters(desiredFilters, songPool, accessToken) {
     let lowDanceability = averageDanceability - 3 * standardDevDanceability;
     let highDanceability = averageDanceability + 3 * standardDevDanceability;
     desiredDanceability = lowDanceability + (desiredDanceability * (highDanceability - lowDanceability));
-    console.log("Desired danceability: " + desiredDanceability);
 
     let songsMatchingFilters = [];
     for (let songIndex = 0; songIndex < songPool.length; songIndex++) {
@@ -265,7 +263,7 @@ async function getSongsMatchingFilters(desiredFilters, songPool, accessToken) {
 
 
 async function getSongFeatures(song, accessToken) {
-    var url = "https://api.spotify.com/v1/audio-features/" + song.track.id;
+    let url = "https://api.spotify.com/v1/audio-features/" + song.track.id;
     let data = await fetch(url, {
         method: 'GET',
         headers: {
@@ -277,7 +275,7 @@ async function getSongFeatures(song, accessToken) {
 }
 
 async function getSongFeaturesMultiple(songs, accessToken) {
-    var url = new URL("https://api.spotify.com/v1/audio-features"),
+    let url = new URL("https://api.spotify.com/v1/audio-features"),
         params = { ids: songs }
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
     let data = await fetch(url, {
@@ -375,7 +373,6 @@ function setupCheckboxToggling(accessToken) {
 
 function toggleSpinner() {
     $(".spinner").toggleClass("hidden");
-    console.log("Toggling");
 }
 
 function toggleSuccessMessage() {
@@ -387,5 +384,6 @@ function loadData(accessToken) {
     getUserData(accessToken);
 }
 let state = {};
+
 state["accessToken"] = getAccessToken();
 loadData(state["accessToken"]);
