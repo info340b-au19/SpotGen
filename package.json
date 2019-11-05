@@ -4,12 +4,17 @@
   "private": true,
   "description": "",
   "scripts": {
-    "test": "jest"
+    "test": "jest", 
+    "start": "cd ./app && node app.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "jest-style-matchers": "^0.1.2"
+  },
+  "engines": {
+    "node": "12.10.0",
+    "npm": "6.10.3"
   },
   "eslintConfig": {
     "parserOptions": {
