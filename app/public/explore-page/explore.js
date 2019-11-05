@@ -1,3 +1,4 @@
+
 /* Retrieve the access token stored in the browser cookie */
 /* Credit: https://stackoverflow.com/questions/5639346/what-is-the-shortest-function-for-reading-a-cookie-by-name-in-javascript */
 function getAccessToken() {
@@ -170,7 +171,7 @@ function playPauseMusic(button, audio) {
 }
 
 
-getUserData(); 
+getUserData(accessToken); 
 
 let altRock = highestPopularity('alt-rock', accessToken);
 let hipHop = highestPopularity('hip-hop', accessToken);
