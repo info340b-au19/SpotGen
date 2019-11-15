@@ -1,0 +1,53 @@
+{
+  "name": "info340-project",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "scripts": {
+    "test": "jest", 
+    "start": "cd ./app && node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest-style-matchers": "^0.1.2"
+  },
+  "engines": {
+    "node": "12.10.0",
+    "npm": "6.10.3"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 6
+    },
+    "env": {
+      "browser": true,
+      "node": true,
+      "shared-node-browser": true,
+      "jquery": true,
+      "jest": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+      "no-console": "off",
+      "semi": [
+        "off",
+        "always",
+        {
+          "omitLastInOneLineBlock": true
+        }
+      ],
+      "camelcase": [
+        "error"
+      ]
+    }
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.4",
+    "cors": "^2.8.5",
+    "eslint": "^6.5.1",
+    "express": "^4.17.1",
+    "querystring": "^0.2.0",
+    "request": "^2.88.0"
+  }
+}
