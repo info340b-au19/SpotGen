@@ -14,27 +14,36 @@ state['currentAudio'] = null;
 // Get spotify user data
 async function getUserData(accessToken) {
     let url = 'https://api.spotify.com/v1/me';
-    let data = await fetch(url, {
-        method: 'GET', // *GET, POST, PUT, DELETE, etc.
-        headers: {
-            'Authorization': 'Bearer ' + accessToken
-        }
-    });
-    let userData = await data.json();
-    $(".username").text(userData.display_name);
+    try {
+        let data = await fetch(url, {
+            method: 'GET', // *GET, POST, PUT, DELETE, etc.
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            }
+        });
+        let userData = await data.json();
+        let username = document.querySelector('.username');
+        username.textContent = userData.display_name;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 // Gets all the genres from Spotify API
 async function getGenres(accessToken) {
     let url = "https://api.spotify.com/v1/recommendations/available-genre-seeds";
-    let data = await fetch(url, {
-        method: 'GET', // *GET, POST, PUT, DELETE, etc.
-        headers: {
-            'Authorization': 'Bearer ' + accessToken
-        },
-    });
-    let genres = await data.json();
-    return genres;
+    try {
+        let data = await fetch(url, {
+            method: 'GET', // *GET, POST, PUT, DELETE, etc.
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            },
+        });
+        let genres = await data.json();
+        return genres;
+    } catch (error) {
+        console.log(error)
+    }
 }
 let genre = getGenres(accessToken);
 
@@ -43,14 +52,18 @@ async function getSong(genre, accessToken) {
     let endpoint = "https://api.spotify.com/v1/search";
     let parameters = "?q=" + genre + "&type=track" + "&limit=50";
     let url = endpoint + parameters;
-    let data = await fetch(url, {
-        method: 'GET', // *GET, POST, PUT, DELETE, etc.
-        headers: {
-            'Authorization': 'Bearer ' + accessToken
-        },
-    });
-    let songs = await data.json();
-    return songs;
+    try {
+        let data = await fetch(url, {
+            method: 'GET', // *GET, POST, PUT, DELETE, etc.
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            },
+        });
+        let songs = await data.json();
+        return songs;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 // Gets all the total songs for the given genre
@@ -73,27 +86,36 @@ async function get50Songs(genre, offset, accessToken) {
     let url = new URL("https://api.spotify.com/v1/search" + "?q=" + genre + "&type=track" + "&limit=50");
     params = { offset: 0 };
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-    let data = await fetch(url, {
-        method: 'GET', // *GET, POST, PUT, DELETE, etc.
-        headers: {
-            'Authorization': 'Bearer ' + accessToken
-        },
-    });
-    let response = await data.json();
-    return response.tracks.items;
+    try {
+        let data = await fetch(url, {
+            method: 'GET', // *GET, POST, PUT, DELETE, etc.
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            },
+        });
+        let response = await data.json();
+        return response.tracks.items;
+    } catch (error) {
+        console.log(error);
+    }
+
 }
 
 // Returns the number of songs in that genre 
 async function getNumberOfSongsInGenre(genre, accessToken) {
     let url = "https://api.spotify.com/v1/search" + "?q=" + genre + "&type=track" + "&limit=50";
-    let data = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'Authorization': 'Bearer ' + accessToken
-        },
-    });
-    let response = await data.json();
-    return response.tracks.total;
+    try {
+        let data = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            },
+        });
+        let response = await data.json();
+        return response.tracks.total;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 // Returns the img of the song of highest popularity (top song) in given genre
@@ -135,6 +157,7 @@ function updateMusic(button, playUrl) {
     let audio = new Audio(playUrl);
 
     button.addEventListener('click', function () {
+        event.preventDefault();
         playPauseMusic(button, audio);
     });
 }
@@ -170,7 +193,7 @@ function playPauseMusic(button, audio) {
     }
 }
 
-getUserData(accessToken); 
+getUserData(accessToken);
 
 let altRock = highestPopularity('alt-rock', accessToken);
 let hipHop = highestPopularity('hip-hop', accessToken);
