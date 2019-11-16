@@ -21,7 +21,7 @@ async function getUserData(accessToken) {
         state["userID"] = userID;
         state["userPlaylists"] = await getUserPlaylists(userID, accessToken);
     } catch (error) {
-        console.log(error);
+        document.querySelector(".alert").style.display = 'block';
     }
 }
 
@@ -66,7 +66,7 @@ async function getUserPlaylists(userID, accessToken) {
         }
         return playlistsMap;
     } catch (error) {
-        console.log(error);
+        document.querySelector(".alert").style.display = 'block';
     }
 }
 
@@ -110,7 +110,7 @@ async function getHundredSongsFromPlaylist(playlistID, offset, accessToken) {
         let response = await data.json();
         return response.items;
     } catch (error) {
-        console.log(error)
+        document.querySelector(".alert").style.display = 'block';
     }
 }
 
@@ -126,7 +126,7 @@ async function getNumberOfSongsInPlaylist(playlistID, accessToken) {
         let response = await data.json();
         return response.total;
     } catch (error) {
-        console.log(error);
+        document.querySelector(".alert").style.display = 'block';
     }
 }
 
@@ -290,7 +290,7 @@ async function getSongFeatures(song, accessToken) {
         let response = await data.json();
         return response;
     } catch (error) {
-        console.log(error);
+        document.querySelector(".alert").style.display = 'block';
     }
 }
 
@@ -308,7 +308,7 @@ async function getSongFeaturesMultiple(songs, accessToken) {
         let response = await data.json();
         return response;
     } catch (error) {
-        console.log(error);
+        document.querySelector(".alert").style.display = 'block';
     }
 }
 
@@ -357,7 +357,7 @@ async function createNewPlaylist(accessToken) {
             toggleSuccessMessage();
         }, 3000);
     } catch (error) {
-        console.log(error);
+        document.querySelector(".alert").style.display = 'block';
     }
 }
 
@@ -375,7 +375,7 @@ async function addTracksToPlaylist(playlist, tracksToAdd, accessToken) {
             })
         });
     } catch (error) {
-        console.log(error)
+        document.querySelector(".alert").style.display = 'block';
     }
 }
 

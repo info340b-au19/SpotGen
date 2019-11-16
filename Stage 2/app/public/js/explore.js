@@ -25,7 +25,7 @@ async function getUserData(accessToken) {
         let username = document.querySelector('.username');
         username.textContent = userData.display_name;
     } catch (error) {
-        console.log(error);
+        document.querySelector(".alert").style.display = 'block';
     }
 }
 
@@ -42,7 +42,7 @@ async function getGenres(accessToken) {
         let genres = await data.json();
         return genres;
     } catch (error) {
-        console.log(error)
+        document.querySelector(".alert").style.display = 'block';
     }
 }
 let genre = getGenres(accessToken);
@@ -62,7 +62,7 @@ async function getSong(genre, accessToken) {
         let songs = await data.json();
         return songs;
     } catch (error) {
-        console.log(error);
+        document.querySelector(".alert").style.display = 'block';
     }
 }
 
@@ -96,7 +96,7 @@ async function get50Songs(genre, offset, accessToken) {
         let response = await data.json();
         return response.tracks.items;
     } catch (error) {
-        console.log(error);
+        document.querySelector(".alert").style.display = 'block';
     }
 
 }
@@ -114,7 +114,7 @@ async function getNumberOfSongsInGenre(genre, accessToken) {
         let response = await data.json();
         return response.tracks.total;
     } catch (error) {
-        console.log(error);
+        document.querySelector(".alert").style.display = 'block';
     }
 }
 
