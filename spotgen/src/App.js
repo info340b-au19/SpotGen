@@ -17,6 +17,7 @@ export default class App extends Component {
       loggedIn: token ? true : false,
     }
     console.log(this.state.loggedIn);
+    console.log("Acesss token: " + this.getAccessToken());
   }
 
   getHashParams() {
@@ -30,6 +31,11 @@ export default class App extends Component {
     }
     return hashParams;
   }
+
+  getAccessToken() {
+    let accessToken = document.cookie.match('(^|[^;]+)\\s*' + 'accessToken' + '\\s*=\\s*([^;]+)');
+    return accessToken ? accessToken.pop() : '';
+}
 
 
 
