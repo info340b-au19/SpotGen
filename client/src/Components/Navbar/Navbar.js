@@ -9,7 +9,7 @@ export default class Navbar extends Component {
         return (
             <div id="top-bar">
                 <div id="logo-wrapper">
-                    <img src="../images/spotgen-logo.png" alt="spotgen-logo" />
+                    <img src={process.env.PUBLIC_URL + "images/spotgen-logo.png"} alt="spotgen-logo" />
                     <a href="/explore" class="tab selected">Explore</a>
                     <a href="/create" class="tab">Create</a>
 
@@ -17,7 +17,7 @@ export default class Navbar extends Component {
 
                 <div id="profile-wrapper">
                     <span class="username"></span>
-                    <img src="../images/profile.svg" alt="profile-icon" />
+                    <img src={process.env.PUBLIC_URL + "images/profile.svg"} alt="profile-icon" />
                 </div>
             </div>);
     }
