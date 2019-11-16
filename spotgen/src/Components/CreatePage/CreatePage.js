@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import Navbar from "../Navbar/Navbar";
 
-
-export default class ExplorePage extends Component {
+export default class CreatePage extends Component {
     constructor() {
         super();
     }
@@ -11,7 +10,7 @@ export default class ExplorePage extends Component {
         return (
             <div className="page">
                 <Navbar />
-                <h1>Explore</h1>
+                <h1>Create</h1>
             </div>
         );
     }

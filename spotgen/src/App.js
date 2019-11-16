@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Route, Link, Redirect } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 
 
 import Login from "./Components/Login/Login";
 import Navbar from "./Components/Navbar/Navbar";
-import ExplorePage from "./Components/ExplorePage/ExplorePage"
+import ExplorePage from "./Components/ExplorePage/ExplorePage";
+import CreatePage from "./Components/CreatePage/CreatePage";
 
 
 export default class App extends Component {
@@ -12,12 +13,10 @@ export default class App extends Component {
     super();
     const params = this.getHashParams();
     const token = params.access_token;
-    // if (!token) {
-    //   this.props.history.push("/login")
-    // }
     this.state = {
       loggedIn: token ? true : false,
     }
+    console.log(this.state.loggedIn);
   }
 
   getHashParams() {
@@ -41,8 +40,10 @@ export default class App extends Component {
         {!this.state.loggedIn &&
           <Redirect to='/login' />
         }
-        <Route exact path='/' component={ExplorePage} />
         <Route exact path='/login' component={Login} />
+        <Route exact path='/' component={ExplorePage} />
+        <Route exact path='/explore' component={ExplorePage} />
+        <Route exact path='/create' component={CreatePage} />
       </div>
     );
   }
