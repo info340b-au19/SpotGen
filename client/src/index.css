@@ -7,9 +7,11 @@ body {
 
 * {
   box-sizing: border-box;
+
 }
 
 /* Login page */
+
 #login-page {
   display: flex;
   justify-content: center;
@@ -157,7 +159,8 @@ footer {
   padding: 12px;
   color: white;
   transition: all 0.16s ease-in-out;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 14px;
 }
 
 .button:hover {
