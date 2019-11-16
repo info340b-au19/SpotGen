@@ -15,7 +15,7 @@ export default class Navbar extends Component {
                         </div>
                         <h1>SpotGen</h1>
                         <h2>Expand your musical horizons</h2>
-                        <button id="login-button" class="button" onClick={() => {
+                        <button id="login-button" className="button" onClick={() => {
                             window.location="http://localhost:8888/spotify-login"
                         }}>Login to Spotify</button>
                     </div>
