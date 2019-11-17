@@ -16,7 +16,8 @@ var cookieParser = require('cookie-parser');
 
 var client_id = '4095d5102d8940eeb9726e2eeb3c3378'; // Your client id
 var client_secret = '48c191868adc4e349dcb5e930f21fef7'; // Your secret
-var redirect_uri = 'http://localhost:' + process.env.PORT + '/callback/'; // Your redirect uri
+// var redirect_uri = 'http://localhost:' + process.env.PORT + '/callback/'; // Your redirect uri
+var redirect_uri = 'http://localhost:5000/callback/'; // Your redirect uri
 // var redirect_uri = 'https://spotgen-app.herokuapp.com/callback/'
 
 /**
@@ -61,11 +62,11 @@ app.get('/login', function (req, res) {
 });
 
 app.get('/explore', function (req, res) {
-  res.sendFile('public/explore-page/explore.html', { root: './' });
+  res.sendFile('public/explore.html', { root: './' });
 });
 
 app.get('/create', function (req, res) {
-  res.sendFile('public/create-page/create.html', { root: './' });
+  res.sendFile('public/create.html', { root: './' });
 });
 
 
