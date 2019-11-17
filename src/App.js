@@ -15,9 +15,7 @@ export default class App extends Component {
       accessToken: token,
       userData: this.getUserData(token)
     };
-    // this.setState({
-    //   userData: this.getUserData(this.state.accessToken)
-    // });    
+    console.log(this.state);
   }
 
   getAccessToken() {
@@ -47,8 +45,26 @@ export default class App extends Component {
       <div className="App">
         {!this.state.loggedIn && <Redirect to="/login" />}
         <Route exact path="/login" component={Login} />
-        <Route exact path="/" component={ExplorePage} />
-        <Route exact path="/explore" component={ExplorePage} />
+        <Route
+          exact
+          path="/"
+          render={routerProps => (
+            <ExplorePage
+              {...routerProps}
+              accessToken={this.state.accessToken}
+            />
+          )}
+        />
+        <Route
+          exact
+          path="/explore"
+          render={routerProps => (
+            <ExplorePage
+              {...routerProps}
+              accessToken={this.state.accessToken}
+            />
+          )}
+        />
         <Route exact path="/create" component={CreatePage} />
       </div>
     );
