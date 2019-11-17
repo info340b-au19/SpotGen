@@ -1,12 +1,10 @@
-import React, { Component } from 'react';
-import { Route, Redirect } from 'react-router-dom';
-
+import React, { Component } from "react";
+import { Route, Redirect } from "react-router-dom";
 
 import Login from "./Components/Login/Login";
 import Navbar from "./Components/Navbar/Navbar";
 import ExplorePage from "./Components/ExplorePage/ExplorePage";
 import CreatePage from "./Components/CreatePage/CreatePage";
-
 
 export default class App extends Component {
   constructor() {
@@ -14,26 +12,27 @@ export default class App extends Component {
     const token = this.getAccessToken();
     this.state = {
       loggedIn: token ? true : false,
-      accessToken: token
-    }
-    this.setState(
-      {
-        userData: this.getUserData(this.state.accessToken)
-      }
-    );
+      accessToken: token,
+      userData: this.getUserData(token)
+    };
+    // this.setState({
+    //   userData: this.getUserData(this.state.accessToken)
+    // });    
   }
 
   getAccessToken() {
-    let accessToken = document.cookie.match('(^|[^;]+)\\s*' + 'accessToken' + '\\s*=\\s*([^;]+)');
-    return accessToken ? accessToken.pop() : '';
+    let accessToken = document.cookie.match(
+      "(^|[^;]+)\\s*" + "accessToken" + "\\s*=\\s*([^;]+)"
+    );
+    return accessToken ? accessToken.pop() : "";
   }
 
   async getUserData(accessToken) {
-    let url = 'https://api.spotify.com/v1/me';
+    let url = "https://api.spotify.com/v1/me";
     let data = await fetch(url, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Authorization': 'Bearer ' + accessToken
+        Authorization: "Bearer " + accessToken
       }
     });
     let userData = await data.json();
@@ -44,16 +43,13 @@ export default class App extends Component {
   }
 
   render() {
-
     return (
       <div className="App">
-        {!this.state.loggedIn &&
-          <Redirect to='/login' />
-        }
-        <Route exact path='/login' component={Login} />
-        <Route exact path='/' component={ExplorePage} />
-        <Route exact path='/explore' component={ExplorePage} />
-        <Route exact path='/create' component={CreatePage} />
+        {!this.state.loggedIn && <Redirect to="/login" />}
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/" component={ExplorePage} />
+        <Route exact path="/explore" component={ExplorePage} />
+        <Route exact path="/create" component={CreatePage} />
       </div>
     );
   }

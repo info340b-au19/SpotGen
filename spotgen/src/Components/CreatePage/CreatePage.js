@@ -11,8 +11,6 @@ export default class CreatePage extends Component {
         let accessToken = document.cookie.match('(^|[^;]+)\\s*' + 'accessToken' + '\\s*=\\s*([^;]+)');
         return accessToken ? accessToken.pop() : '';
     }
-
-   
     
 
     render() {
