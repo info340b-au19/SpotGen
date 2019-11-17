@@ -11,33 +11,37 @@ import CreatePage from "./Components/CreatePage/CreatePage";
 export default class App extends Component {
   constructor() {
     super();
-    const params = this.getHashParams();
-    const token = params.access_token;
+    const token = this.getAccessToken();
     this.state = {
       loggedIn: token ? true : false,
+      accessToken: token
     }
-    console.log(this.state.loggedIn);
-    console.log("Acesss token: " + this.getAccessToken());
-  }
-
-  getHashParams() {
-    var hashParams = {};
-    var e, r = /([^&;=]+)=?([^&;]*)/g,
-      q = window.location.hash.substring(1);
-    e = r.exec(q)
-    while (e) {
-      hashParams[e[1]] = decodeURIComponent(e[2]);
-      e = r.exec(q);
-    }
-    return hashParams;
+    this.setState(
+      {
+        userData: this.getUserData(this.state.accessToken)
+      }
+    );
   }
 
   getAccessToken() {
     let accessToken = document.cookie.match('(^|[^;]+)\\s*' + 'accessToken' + '\\s*=\\s*([^;]+)');
     return accessToken ? accessToken.pop() : '';
-}
+  }
 
-
+  async getUserData(accessToken) {
+    let url = 'https://api.spotify.com/v1/me';
+    let data = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + accessToken
+      }
+    });
+    let userData = await data.json();
+    return userData;
+    // let userID = userData.id;
+    // state["userID"] = userID;
+    // state["userPlaylists"] = await getUserPlaylists(userID, accessToken);
+  }
 
   render() {
 
