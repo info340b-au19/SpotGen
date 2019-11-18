@@ -1,6 +1,7 @@
 import React, { Component } from "react";
+import "../../../node_modules/pretty-checkbox/dist/pretty-checkbox.min.css";
 
-export default class SelectPlaylistCheckbox extends Component {
+export default class PlaylistCheckbox extends Component {
   render() {
     return (
       <div className="playlist-checkbox-wrapper">
@@ -25,7 +26,7 @@ export default class SelectPlaylistCheckbox extends Component {
                 fill="#000000"
               ></path>
             </svg>
-            <label></label>
+            <label>{this.props.playlistName}</label>
           </div>
         </div>
       </div>
