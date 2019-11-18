@@ -16,15 +16,19 @@ export default class CreatePage extends Component {
 
   async componentDidMount() {
     let userData = await getUserData(this.props.accessToken);
-    let userPlaylists = await getUserPlaylists(
-      userData.id,
-      this.props.accessToken
-    );
-    console.log(userPlaylists);
-    this.setState({
-      userData: userData,
-      userPlaylists: userPlaylists
-    });
+    if (userData === "Expired Token") {
+      this.props.history.push("/login");
+    } else {
+      let userPlaylists = await getUserPlaylists(
+        userData.id,
+        this.props.accessToken
+      );
+      console.log(userPlaylists);
+      this.setState({
+        userData: userData,
+        userPlaylists: userPlaylists
+      });
+    }
   }
 
   render() {

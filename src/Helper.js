@@ -16,6 +16,10 @@ export async function getUserData(accessToken) {
       Authorization: "Bearer " + accessToken
     }
   });
+  if (data.status === 401) {
+    console.log("Expired Token");
+    return "Expired Token";
+  }
   let userData = await data.json();
   return userData;
 }

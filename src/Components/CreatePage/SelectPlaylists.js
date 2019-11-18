@@ -4,16 +4,14 @@ import PlaylistCheckbox from "./PlaylistCheckbox";
 export default class SelectPlaylists extends Component {
   constructor() {
     super();
-    this.state = {
-      selectedCheckboxes: new Set()
-    };
+    this.selectedCheckboxes = new Set();
   }
 
   handleToggleCheckbox(playlistID) {
-    if (this.state.selectedCheckboxes.has(playlistID)) {
-      this.state.selectedCheckboxes.delete(playlistID);
+    if (this.selectedCheckboxes.has(playlistID)) {
+      this.selectedCheckboxes.delete(playlistID);
     } else {
-      this.state.selectedCheckboxes.add(playlistID);
+      this.selectedCheckboxes.add(playlistID);
     }
   }
 
