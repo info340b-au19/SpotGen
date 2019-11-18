@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import SongPool from "./SongPool";
 
 import {
   getNumberOfSongsInPlaylist,
@@ -114,10 +115,12 @@ export default class CreatePlaylist extends Component {
         <div className="step">
           <div className="step-number">3</div>
           <div>
-            <h2>Name Your New Playlist</h2>
+            <h2>Create Your New Playlist</h2>
           </div>
         </div>
+        <SongPool />
         <div id="playlist-name-input-wrapper" className="input-row-wrapper">
+          <label className="input-row-label">Playlist Name</label>
           <input
             id="playlist-name-input"
             className="text-input"

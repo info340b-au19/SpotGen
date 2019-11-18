@@ -30,7 +30,7 @@ export default class SelectPlaylists extends Component {
         <p className="section-description">
           Select playlists to grab songs from for your new playlist
         </p>
-        <div id="playlists-wrapper">{this.createPlaylistCheckboxes()}</div>
+        <div className="rows-wrapper">{this.createPlaylistCheckboxes()}</div>
       </div>
     );
   }
