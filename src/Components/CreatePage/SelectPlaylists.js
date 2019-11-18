@@ -8,11 +8,12 @@ export default class SelectPlaylists extends Component {
   }
 
   handleToggleCheckbox(playlistID) {
-    if (this.selectedCheckboxes.has(playlistID)) {
-      this.selectedCheckboxes.delete(playlistID);
-    } else {
+    if (!this.selectedCheckboxes.has(playlistID)) {
       this.selectedCheckboxes.add(playlistID);
+    } else {
+      this.selectedCheckboxes.delete(playlistID);
     }
+    console.log(this.selectedCheckboxes);
   }
 
   createPlaylistCheckboxes() {
