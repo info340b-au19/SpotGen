@@ -16,9 +16,13 @@ export default class CreatePage extends Component {
 
   async componentDidMount() {
     let userData = await getUserData(this.props.accessToken);
+    let userPlaylists = await getUserPlaylists(
+      userData.id,
+      this.props.accessToken
+    );
     this.setState({
       userData: userData,
-      userPlaylists: getUserPlaylists(userData.id, this.props.accessToken)
+      userPlaylists: userPlaylists
     });
   }
 

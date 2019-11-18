@@ -33,6 +33,10 @@ export async function getUserPlaylists(userID, accessToken) {
     }
   });
   let playlists = await data.json();
-  console.log(playlists);
-  return playlists;
+  let playlistsMap = {};
+  for (const playlist of playlists.items) {
+    playlistsMap[playlist.name] = playlist.id;
+  }
+  console.log(playlistsMap);
+  return playlistsMap;
 }
