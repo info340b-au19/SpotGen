@@ -2,30 +2,16 @@ import React, { Component } from "react";
 import PlaylistCheckbox from "./PlaylistCheckbox";
 
 export default class SelectPlaylists extends Component {
-  constructor() {
-    super();
-    this.selectedCheckboxes = new Set();
-  }
-
-  handleToggleCheckbox(playlistID) {
-    if (!this.selectedCheckboxes.has(playlistID)) {
-      this.selectedCheckboxes.add(playlistID);
-    } else {
-      this.selectedCheckboxes.delete(playlistID);
-    }
-    console.log(this.selectedCheckboxes);
-  }
-
   createPlaylistCheckboxes() {
     let userPlaylists = this.props.userPlaylists;
-    return Object.keys(userPlaylists).map(key => {
+    return Object.keys(userPlaylists).map(playlistID => {
       return (
         <PlaylistCheckbox
-          key={key}
-          playlistID={key}
-          playlistName={userPlaylists[key]}
+          key={playlistID}
+          playlistID={playlistID}
+          playlistName={userPlaylists[playlistID]}
           handleToggleCheckbox={() => {
-            this.handleToggleCheckbox(key);
+            this.props.handleToggleCheckbox(playlistID);
           }}
         />
       );
