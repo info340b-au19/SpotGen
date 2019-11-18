@@ -158,5 +158,5 @@ app.get("/refresh_token", function(req, res) {
   });
 });
 
-console.log("Listening on 8888");
+console.log("Client running on port 3000. Auth server running on port 8888");
 app.listen(8888);

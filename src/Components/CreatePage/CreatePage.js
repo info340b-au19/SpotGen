@@ -5,6 +5,7 @@ import CreatePlaylist from "./CreatePlaylist/CreatePlaylist";
 
 import { getUserData, getUserPlaylists } from "../../Helper";
 
+/* Page that allows users to create new playlists based on different inputs and filtering choices */
 export default class CreatePage extends Component {
   constructor() {
     super();
