@@ -9,11 +9,9 @@ export default class ExplorePage extends Component {
   render() {
     return (
       <div className="page">
-        <Navbar />
+        <Navbar userData={this.props.userData} />
         <h1>Explore</h1>
-        <span>
-          {this.props.userData ? this.props.userData.display_name : "User"}
-        </span>
+        <span></span>
       </div>
     );
   }
