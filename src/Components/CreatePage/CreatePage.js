@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Navbar from "../Navbar/Navbar";
 import SelectPlaylists from "./SelectPlaylists/SelectPlaylists";
+import CreatePlaylist from "./CreatePlaylist/CreatePlaylist";
 
 import { getUserData, getUserPlaylists } from "../../Helper";
 
@@ -11,7 +12,7 @@ export default class CreatePage extends Component {
       userData: {},
       userPlaylists: {}
     };
-    this.selectedCheckboxes = new Set();
+    this.selectedPlaylists = new Set();
   }
 
   async componentDidMount() {
@@ -32,12 +33,12 @@ export default class CreatePage extends Component {
   }
 
   handleToggleCheckbox(playlistID) {
-    if (!this.selectedCheckboxes.has(playlistID)) {
-      this.selectedCheckboxes.add(playlistID);
+    if (!this.selectedPlaylists.has(playlistID)) {
+      this.selectedPlaylists.add(playlistID);
     } else {
-      this.selectedCheckboxes.delete(playlistID);
+      this.selectedPlaylists.delete(playlistID);
     }
-    console.log(this.selectedCheckboxes);
+    console.log(this.selectedPlaylists);
   }
 
   render() {
@@ -50,6 +51,12 @@ export default class CreatePage extends Component {
             handleToggleCheckbox={playlistID => {
               this.handleToggleCheckbox(playlistID);
             }}
+          />
+          <div></div>
+          <CreatePlaylist
+            userData={this.state.userData}
+            selectedPlaylists={this.selectedPlaylists}
+            accessToken={this.props.accessToken}
           />
         </main>
       </div>
