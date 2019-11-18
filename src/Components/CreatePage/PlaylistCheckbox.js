@@ -2,11 +2,31 @@ import React, { Component } from "react";
 import "pretty-checkbox/dist/pretty-checkbox.min.css";
 
 export default class PlaylistCheckbox extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isChecked: false
+    };
+  }
+
+  checkboxChanged() {
+    this.setState({ isChecked: !this.state.isChecked });
+    this.props.handleToggleCheckbox(this.props.playlistID);
+  }
+
   render() {
     return (
       <div className="playlist-checkbox-wrapper">
         <div className="pretty p-svg p-curve p-bigger">
-          <input type="checkbox" className="playlistCheckbox" />
+          <input
+            type="checkbox"
+            className="playlistCheckbox"
+            value={this.props.playlistName}
+            checked={this.state.isChecked}
+            onChange={() => {
+              this.checkboxChanged();
+            }}
+          />
           <div className="state">
             <svg className="svg svg-icon" viewBox="0 0 14 14">
               <path

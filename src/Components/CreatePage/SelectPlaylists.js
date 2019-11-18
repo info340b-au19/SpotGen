@@ -2,6 +2,37 @@ import React, { Component } from "react";
 import PlaylistCheckbox from "./PlaylistCheckbox";
 
 export default class SelectPlaylists extends Component {
+  constructor() {
+    super();
+    this.state = {
+      selectedCheckboxes: new Set()
+    };
+  }
+
+  handleToggleCheckbox(playlistID) {
+    if (this.state.selectedCheckboxes.has(playlistID)) {
+      this.state.selectedCheckboxes.delete(playlistID);
+    } else {
+      this.state.selectedCheckboxes.add(playlistID);
+    }
+  }
+
+  createPlaylistCheckboxes() {
+    let userPlaylists = this.props.userPlaylists;
+    return Object.keys(userPlaylists).map(key => {
+      return (
+        <PlaylistCheckbox
+          key={key}
+          playlistID={key}
+          playlistName={userPlaylists[key]}
+          handleToggleCheckbox={() => {
+            this.handleToggleCheckbox(key);
+          }}
+        />
+      );
+    });
+  }
+
   render() {
     return (
       <div id="select-playlists">
@@ -14,11 +45,7 @@ export default class SelectPlaylists extends Component {
         <p className="section-description">
           Select playlists to grab songs from for your new playlist
         </p>
-        <div id="playlists-wrapper">
-          {Object.keys(this.props.userPlaylists).map(function(key, index) {
-            return <PlaylistCheckbox playlistName={key} />;
-          })}
-        </div>
+        <div id="playlists-wrapper">{this.createPlaylistCheckboxes()}</div>
       </div>
     );
   }
