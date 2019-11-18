@@ -1,20 +1,33 @@
 import React, { Component } from "react";
 import Navbar from "../Navbar/Navbar";
+import GenreCard from "./GenreCard";
 
 import { getUserData } from "../../Helper";
+import { getGenres } from "../../Helper";
+import { getSong } from "../../Helper";
+import { getAllSongs } from "../../Helper";
 
 export default class ExplorePage extends Component {
   constructor() {
     super();
     this.state = {
-      userData: {}
+      userData: {},
+      genres: {},
+      songs: {},
+      songsInGenre: {}
     };
   }
 
   async componentDidMount() {
     let userData = await getUserData(this.props.accessToken);
+    let genres = await getGenres(this.props.accessToken);
+    let songs = await getSong(genres, this.props.accessToken);
+    let songsInGenre = await getAllSongs(this.props.accessToken, genres);
     this.setState({
-      userData: userData
+      userData: userData,
+      genres: genres,
+      songs: songs,
+      songsInGenre: songsInGenre
     });
   }
 
@@ -22,8 +35,7 @@ export default class ExplorePage extends Component {
     return (
       <div className="page">
         <Navbar userData={this.state.userData} />
-        <h1>Explore</h1>
-        <span></span>
+        <main><GenreCard /></main>
       </div>
     );
   }
