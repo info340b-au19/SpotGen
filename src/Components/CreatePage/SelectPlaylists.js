@@ -1,10 +1,7 @@
 import React, { Component } from "react";
+import PlaylistCheckbox from "./PlaylistCheckbox";
 
 export default class SelectPlaylists extends Component {
-  constructor() {
-    super();
-  }
-
   render() {
     return (
       <div id="select-playlists">
@@ -17,7 +14,11 @@ export default class SelectPlaylists extends Component {
         <p className="section-description">
           Select playlists to grab songs from for your new playlist
         </p>
-        <div id="playlists-wrapper"></div>
+        <div id="playlists-wrapper">
+          {Object.keys(this.props.userPlaylists).map(function(key, index) {
+            return <PlaylistCheckbox playlistName={key} />;
+          })}
+        </div>
       </div>
     );
   }

@@ -10,7 +10,7 @@ export default class CreatePage extends Component {
     super();
     this.state = {
       userData: {},
-      userPlaylists: []
+      userPlaylists: {}
     };
   }
 
@@ -20,6 +20,7 @@ export default class CreatePage extends Component {
       userData.id,
       this.props.accessToken
     );
+    console.log(userPlaylists);
     this.setState({
       userData: userData,
       userPlaylists: userPlaylists
@@ -31,7 +32,7 @@ export default class CreatePage extends Component {
       <div className="page">
         <Navbar userData={this.state.userData} />
         <main id="create-page-main">
-          <SelectPlaylists />
+          <SelectPlaylists userPlaylists={this.state.userPlaylists} />
         </main>
       </div>
     );
