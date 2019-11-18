@@ -12,10 +12,13 @@ export default class App extends Component {
     const token = this.getAccessToken();
     this.state = {
       loggedIn: token ? true : false,
-      accessToken: token,
-      userData: this.getUserData(token)
+      accessToken: token
     };
-    console.log(this.state);
+  }
+
+  async componentDidMount() {
+    let userData = await this.getUserData(this.state.accessToken);
+    this.setState({ userData: userData });
   }
 
   getAccessToken() {
@@ -52,6 +55,7 @@ export default class App extends Component {
             <ExplorePage
               {...routerProps}
               accessToken={this.state.accessToken}
+              userData={this.state.userData}
             />
           )}
         />
@@ -62,10 +66,21 @@ export default class App extends Component {
             <ExplorePage
               {...routerProps}
               accessToken={this.state.accessToken}
+              userData={this.state.userData}
             />
           )}
         />
-        <Route exact path="/create" component={CreatePage} />
+        <Route
+          exact
+          path="/create"
+          render={routerProps => (
+            <CreatePage
+              {...routerProps}
+              accessToken={this.state.accessToken}
+              userData={this.state.userData}
+            />
+          )}
+        />
       </div>
     );
   }

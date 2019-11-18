@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Navbar from "../Navbar/Navbar";
-import { summarizers } from "istanbul-lib-report";
 
 export default class ExplorePage extends Component {
   constructor() {
@@ -12,7 +11,9 @@ export default class ExplorePage extends Component {
       <div className="page">
         <Navbar />
         <h1>Explore</h1>
-        <span>{this.props.accessToken}</span>
+        <span>
+          {this.props.userData ? this.props.userData.display_name : "User"}
+        </span>
       </div>
     );
   }
