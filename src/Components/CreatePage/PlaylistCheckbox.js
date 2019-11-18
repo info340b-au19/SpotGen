@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../../../node_modules/pretty-checkbox/dist/pretty-checkbox.min.css";
+import "pretty-checkbox/dist/pretty-checkbox.min.css";
 
 export default class PlaylistCheckbox extends Component {
   render() {
