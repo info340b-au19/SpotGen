@@ -8,7 +8,10 @@ import {
   getUserData,
   getUserPlaylists,
   getNumberOfSongsInPlaylist,
-  getHundredSongsFromPlaylist
+  getHundredSongsFromPlaylist,
+  getSongFeaturesMultiple,
+  standardDeviation,
+  average
 } from "../../Helper";
 
 /* Page that allows users to create new playlists based on different inputs and filtering choices */
@@ -22,7 +25,8 @@ export default class CreatePage extends Component {
       filterByArtistsEnabled: false,
       artists: "",
       filterByLoudnessEnabled: false,
-      loudness: 50
+      loudness: 50,
+      tempo: 50
     };
     this.selectedPlaylists = new Set();
   }
@@ -36,7 +40,6 @@ export default class CreatePage extends Component {
         userData.id,
         this.props.accessToken
       );
-      // console.log(userPlaylists);
       this.setState({
         userData: userData,
         userPlaylists: userPlaylists
@@ -78,8 +81,8 @@ export default class CreatePage extends Component {
   }
 
   async updateSongPool() {
-    /* Get songs from selected playlists */
-    let songPool = await this.getSongPool(
+    console.log("updating song pool");
+    let songPool = await this.getSongsFromSelectedPlaylists(
       this.selectedPlaylists,
       this.props.accessToken
     );
@@ -87,6 +90,21 @@ export default class CreatePage extends Component {
     songPool = this.filterOutDuplicateSongs(songPool);
     if (this.state.filterByArtistsEnabled) {
       songPool = this.getSongsMatchingArtist(this.state.artists, songPool);
+    }
+    let audioFilteringOptions = {
+      filterByLoudnessEnabled: this.state.filterByLoudnessEnabled,
+      // tempoFilteringEnabled: this.state.tempoFilteringEnabled,
+      // danceabilityFilteringEnabled: this.state.danceabilityFilteringEnabled,
+      desiredLoudness: this.state.loudness / 100.0
+      // desiredTempo: this.state.tempo,
+      // desiredDanceability: this.state.danceability
+    };
+    if (this.state.filterByLoudnessEnabled) {
+      songPool = await this.getSongsMatchingAudioFeatures(
+        audioFilteringOptions,
+        songPool,
+        this.props.accessToken
+      );
     }
     this.setState({
       songPool: songPool
@@ -104,7 +122,7 @@ export default class CreatePage extends Component {
     );
   }
 
-  async getSongPool(selectedPlaylists, accessToken) {
+  async getSongsFromSelectedPlaylists(selectedPlaylists, accessToken) {
     let songPool = [];
     let selectedPlaylistsArray = [...selectedPlaylists];
     for (let playlist of selectedPlaylistsArray) {
@@ -170,6 +188,94 @@ export default class CreatePage extends Component {
         }
       }
     }
+  }
+
+  async getSongsMatchingAudioFeatures(
+    audioFilteringOptions,
+    songPool,
+    accessToken
+  ) {
+    let desiredLoudness = audioFilteringOptions["desiredLoudness"];
+    let desiredTempo = audioFilteringOptions["desiredTempo"];
+    let desiredDanceability = audioFilteringOptions["desiredDanceability"];
+
+    let loudnessValues = [];
+    let tempoValues = [];
+    let danceabilityValues = [];
+    for (let songIndex = 0; songIndex < songPool.length; songIndex += 100) {
+      let hundredSongs = songPool.slice(songIndex, songIndex + 100);
+      let hundredSongIDs = hundredSongs.map(song => song.track.id);
+      let hundredSongFeatures = await getSongFeaturesMultiple(
+        hundredSongIDs,
+        accessToken
+      );
+      for (let songFeature of hundredSongFeatures.audio_features) {
+        loudnessValues.push(songFeature.loudness);
+        tempoValues.push(songFeature.tempo);
+        danceabilityValues.push(songFeature.danceability);
+      }
+    }
+
+    /* Convert our input values (from a 0.0 - 1.0 range) to their equivalents 
+    in terms of what we are measuring (loudness in db, tempo, etc.)  based on 
+    averages (relative to to other songs in the song pool */
+
+    let averageLoudness = average(loudnessValues);
+    let standardDevLoudness = standardDeviation(loudnessValues);
+    let lowLoudness = averageLoudness - 3 * standardDevLoudness;
+    let highLoudness = averageLoudness + 3 * standardDevLoudness;
+    desiredLoudness =
+      lowLoudness + desiredLoudness * (highLoudness - lowLoudness);
+
+    let averageTempo = average(tempoValues);
+    let standardDevTempo = standardDeviation(tempoValues);
+    let lowTempo = averageTempo - 3 * standardDevTempo;
+    let highTempo = averageTempo + 3 * standardDevTempo;
+    desiredTempo = lowTempo + desiredTempo * (highTempo - lowTempo);
+
+    let averageDanceability = average(danceabilityValues);
+    let standardDevDanceability = standardDeviation(danceabilityValues);
+    let lowDanceability = averageDanceability - 3 * standardDevDanceability;
+    let highDanceability = averageDanceability + 3 * standardDevDanceability;
+    desiredDanceability =
+      lowDanceability +
+      desiredDanceability * (highDanceability - lowDanceability);
+
+    let songsMatchingFilters = [];
+    for (let songIndex = 0; songIndex < songPool.length; songIndex++) {
+      /* Song passes filter if it's within a standard deviation in {filter value} of the average {filter value} of songs in the playlist */
+      let passesLoudnessFilter = true;
+      let passesTempoFilter = true;
+      let passesDanceabilityFilter = true;
+
+      /* Apply filters if the user checked the checkbox for the filter */
+      if (audioFilteringOptions["filterByLoudnessEnabled"]) {
+        passesLoudnessFilter =
+          loudnessValues[songIndex] < desiredLoudness + standardDevLoudness &&
+          loudnessValues[songIndex] > desiredLoudness - standardDevLoudness;
+      }
+
+      // if (audioFilteringOptions["tempoFilteringEnabled"]) {
+      //   passesTempoFilter =
+      //     tempoValues[songIndex] < desiredTempo + standardDevTempo &&
+      //     tempoValues[songIndex] > desiredTempo - standardDevTempo;
+      // }
+      // if (audioFilteringOptions["danceabilityFilteringEnabled"]) {
+      //   passesDanceabilityFilter =
+      //     danceabilityValues[songIndex] <
+      //       desiredDanceability + standardDevDanceability &&
+      //     danceabilityValues[songIndex] >
+      //       desiredDanceability - standardDevDanceability;
+      // }
+      if (
+        passesLoudnessFilter &&
+        passesTempoFilter &&
+        passesDanceabilityFilter
+      ) {
+        songsMatchingFilters.push(songPool[songIndex]);
+      }
+    }
+    return songsMatchingFilters;
   }
 
   render() {

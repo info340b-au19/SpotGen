@@ -44,6 +44,7 @@ export default class RangeFilter extends Component {
             type="range"
             min="0"
             max="100"
+            step="25"
             value={this.props.value}
             onChange={e => {
               this.props.setValue(e.target.value);

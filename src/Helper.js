@@ -1,5 +1,29 @@
 import CreatePlaylist from "./Components/CreatePage/CreatePlaylist/CreatePlaylist";
 
+/* -- Defines general helper methods -- */
+
+/* Helper function from: https://derickbailey.com/2014/09/21/calculating-standard-deviation-with-array-map-and-array-reduce-in-javascript/ */
+export function standardDeviation(values) {
+  let avg = average(values);
+  let squareDiffs = values.map(function(value) {
+    let diff = value - avg;
+    let sqrDiff = diff * diff;
+    return sqrDiff;
+  });
+  let avgSquareDiff = average(squareDiffs);
+  let stdDev = Math.sqrt(avgSquareDiff);
+  return stdDev;
+}
+
+/* Helper function from: https://derickbailey.com/2014/09/21/calculating-standard-deviation-with-array-map-and-array-reduce-in-javascript/ */
+export function average(data) {
+  let sum = data.reduce(function(sum, value) {
+    return sum + value;
+  }, 0);
+  let avg = sum / data.length;
+  return avg;
+}
+
 /* Defines methods we wrote to query the Spotify API for different 
  things (user playlists, username, etc.) */
 
@@ -107,4 +131,18 @@ export async function addTracksToPlaylist(playlist, tracksToAdd, accessToken) {
     })
   });
   return addSongsData;
+}
+
+export async function getSongFeaturesMultiple(songs, accessToken) {
+  let url = new URL("https://api.spotify.com/v1/audio-features"),
+    params = { ids: songs };
+  Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+  let data = await fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: "Bearer " + accessToken
+    }
+  });
+  let songFeatures = await data.json();
+  return songFeatures;
 }
