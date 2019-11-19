@@ -1,12 +1,7 @@
 import React, { Component } from "react";
 import SongPool from "./SongPool";
 
-import {
-  getNumberOfSongsInPlaylist,
-  getHundredSongsFromPlaylist,
-  createPlaylist,
-  addTracksToPlaylist
-} from "../../../Helper";
+import { createPlaylist, addTracksToPlaylist } from "../../../Helper";
 
 export default class CreatePlaylist extends Component {
   constructor() {
@@ -18,50 +13,7 @@ export default class CreatePlaylist extends Component {
     };
   }
 
-  async getSongPool(selectedPlaylists, accessToken) {
-    let songPool = [];
-    console.log(selectedPlaylists);
-    let selectedPlaylistsArray = [...selectedPlaylists];
-    for (let playlist of selectedPlaylistsArray) {
-      let songsInPlaylist = await this.getSongsInPlaylist(
-        playlist,
-        accessToken
-      );
-      songPool = songPool.concat(songsInPlaylist);
-    }
-    return songPool;
-  }
-
-  async getSongsInPlaylist(playlistID, accessToken) {
-    let songsInPlaylist = [];
-    let firstHundred = await getHundredSongsFromPlaylist(
-      playlistID,
-      0,
-      accessToken
-    );
-    songsInPlaylist = songsInPlaylist.concat(firstHundred);
-    let numberOfSongsTotalInPlaylist = await getNumberOfSongsInPlaylist(
-      playlistID,
-      accessToken
-    );
-    /* Get the rest of the songs based on the total number of songs in playlist */
-    for (
-      let offset = 100;
-      offset < numberOfSongsTotalInPlaylist;
-      offset += 100
-    ) {
-      let nextChunkOfSongs = await getHundredSongsFromPlaylist(
-        playlistID,
-        offset,
-        accessToken
-      );
-      songsInPlaylist = songsInPlaylist.concat(nextChunkOfSongs);
-    }
-
-    return songsInPlaylist;
-  }
-
-  async createPlaylist(selectedPlaylists, accessToken) {
+  async createPlaylist(songPool, accessToken) {
     this.setState({ isLoading: true });
     /* Create the playlist */
     let parameters = {
@@ -75,7 +27,6 @@ export default class CreatePlaylist extends Component {
       this.props.accessToken
     );
 
-    let songPool = await this.getSongPool(selectedPlaylists, accessToken);
     let songPoolURIs = songPool.map(song => song.track.uri);
 
     /* Add songs to the playlist */
@@ -118,7 +69,8 @@ export default class CreatePlaylist extends Component {
             <h2>Create Your New Playlist</h2>
           </div>
         </div>
-        <SongPool />
+        <label className="input-row-label">Songs In Your New Playlist</label>
+        <SongPool songPool={this.props.songPool} />
         <div id="playlist-name-input-wrapper" className="input-row-wrapper">
           <label className="input-row-label">Playlist Name</label>
           <input
@@ -136,13 +88,10 @@ export default class CreatePlaylist extends Component {
           id="create-playlist-button"
           className="button"
           onClick={() =>
-            this.createPlaylist(
-              this.props.selectedPlaylists,
-              this.props.accessToken
-            )
+            this.createPlaylist(this.props.songPool, this.props.accessToken)
           }
         >
-          Create New Playlist
+          Create
         </button>
         {this.state.isLoading && (
           <div className="spinner">

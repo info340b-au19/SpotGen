@@ -10,8 +10,8 @@ export default class SelectPlaylists extends Component {
           key={playlistID}
           playlistID={playlistID}
           playlistName={userPlaylists[playlistID]}
-          handleToggleCheckbox={() => {
-            this.props.handleToggleCheckbox(playlistID);
+          handleTogglePlaylistCheckbox={() => {
+            this.props.handleTogglePlaylistCheckbox(playlistID);
           }}
         />
       );
