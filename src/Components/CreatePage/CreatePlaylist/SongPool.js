@@ -5,15 +5,28 @@ export default class SongPool extends Component {
   render() {
     return (
       <div id="song-pool" className="rows-wrapper">
-        {this.props.songPool.map(song => {
-          return (
-            <div className="song-row" key={song.track.name}>
-              <span className="song-title">{song.track.name}</span>
-              {/* {" - "}
+        <div
+          className={
+            this.props.isLoadingSongs ? "spinner-songs-wrapper" : "hidden"
+          }
+        >
+          <div className="spinner-songs">
+            <div className="bounce1"></div>
+            <div className="bounce2"></div>
+            <div className="bounce3"></div>
+          </div>
+        </div>
+        <div className={this.props.isLoadingSongs ? "hidden" : ""}>
+          {this.props.songPool.map(song => {
+            return (
+              <div className="song-row" key={song.track.name}>
+                <span className="song-title">{song.track.name}</span>
+                {/* {" - "}
               <span className="song-artist">Artist Name 1</span> */}
-            </div>
-          );
-        })}
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   }

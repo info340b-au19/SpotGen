@@ -21,11 +21,11 @@ export default class CreatePage extends Component {
     this.state = {
       userData: {},
       userPlaylists: {},
-      selectedPlaylists: new Set(),
       songsFromSelectedPlaylists: [],
       songPool: [],
-      artists: "",
+      isLoadingSongs: false,
       filterByArtistsEnabled: false,
+      artists: "",
       filterByLoudnessEnabled: false,
       loudness: 50,
       filterByTempoEnabled: false,
@@ -33,6 +33,7 @@ export default class CreatePage extends Component {
       filterByDanceabilityEnabled: false,
       danceability: 50
     };
+    this.selectedPlaylists = new Set();
   }
 
   async componentDidMount() {
@@ -44,60 +45,75 @@ export default class CreatePage extends Component {
         userData.id,
         this.props.accessToken
       );
-      this.setState({
-        userData: userData,
-        userPlaylists: userPlaylists
-      });
+      this.setState({ userData: userData, userPlaylists: userPlaylists });
     }
   }
 
   async handleTogglePlaylistCheckbox(playlistID) {
-    if (!this.state.selectedPlaylists.has(playlistID)) {
-      this.state.selectedPlaylists.add(playlistID);
+    if (!this.selectedPlaylists.has(playlistID)) {
+      this.selectedPlaylists.add(playlistID);
     } else {
-      this.state.selectedPlaylists.delete(playlistID);
+      this.selectedPlaylists.delete(playlistID);
     }
+    this.setState({ isLoadingSongs: true });
     await this.updateSongsFromSelectedPlaylists();
+    this.setState({ isLoadingSongs: false });
     this.updateSongPool();
   }
 
   toggleFilteringByArtists(checked) {
-    this.setState({ filterByArtistsEnabled: checked });
-    this.updateSongPool(checked, this.state.artists);
+    this.setState({ filterByArtistsEnabled: checked }, this.updateSongPool);
   }
 
   handleInputArtists(artists) {
-    this.setState({ artists: artists });
-    this.updateSongPool(this.state.filterByArtistsEnabled, artists);
+    this.setState({ artists: artists }, this.updateSongPool);
   }
 
   toggleFilteringByLoudness(checked) {
-    this.setState({ filterByLoudnessEnabled: checked });
-    this.updateSongPool();
+    this.setState({ filterByLoudnessEnabled: checked }, this.updateSongPool);
   }
 
   handleInputLoudness(loudness) {
-    this.setState({
-      loudness: loudness
-    });
-    this.updateSongPool();
+    this.setState(
+      {
+        loudness: loudness
+      },
+      this.updateSongPool
+    );
   }
 
   toggleFilteringByTempo(checked) {
-    this.setState({ filterByTempoEnabled: checked });
-    this.updateSongPool();
+    this.setState({ filterByTempoEnabled: checked }, this.updateSongPool);
   }
 
   handleInputTempo(tempo) {
-    this.setState({
-      tempo: tempo
-    });
-    this.updateSongPool();
+    this.setState(
+      {
+        tempo: tempo
+      },
+      this.updateSongPool
+    );
+  }
+
+  toggleFilteringByDanceability(checked) {
+    this.setState(
+      { filterByDanceabilityEnabled: checked },
+      this.updateSongPool
+    );
+  }
+
+  handleInputDanceability(danceability) {
+    this.setState(
+      {
+        danceability: danceability
+      },
+      this.updateSongPool
+    );
   }
 
   async updateSongsFromSelectedPlaylists() {
     let songsFromSelectedPlaylists = await this.getSongsFromSelectedPlaylists(
-      this.state.selectedPlaylists,
+      this.selectedPlaylists,
       this.props.accessToken
     );
     songsFromSelectedPlaylists = this.filterOutLocalSongs(
@@ -110,14 +126,12 @@ export default class CreatePage extends Component {
   }
 
   /* Apply filters to the song pool */
-  async updateSongPool(filterByArtistsEnabled, artists) {
+  async updateSongPool() {
+    this.setState({ isLoadingSongs: true });
     console.log("Updating our song pool");
     let songPool = this.state.songsFromSelectedPlaylists;
-    if (filterByArtistsEnabled) {
-      console.log("Filtering by artist " + artists);
-      console.log(songPool);
-      songPool = this.getSongsMatchingArtist(artists, songPool);
-      console.log(songPool);
+    if (this.state.filterByArtistsEnabled) {
+      songPool = this.getSongsMatchingArtist(this.state.artists, songPool);
     }
     let audioFilteringOptions = {
       filterByLoudnessEnabled: this.state.filterByLoudnessEnabled,
@@ -127,6 +141,7 @@ export default class CreatePage extends Component {
       desiredTempo: this.state.tempo / 100.0,
       desiredDanceability: this.state.danceability / 100.0
     };
+    console.log(audioFilteringOptions);
     if (
       this.state.filterByLoudnessEnabled ||
       this.state.filterByTempoEnabled ||
@@ -137,8 +152,10 @@ export default class CreatePage extends Component {
         songPool,
         this.props.accessToken
       );
+      console.log(songPool);
     }
     this.setState({ songPool: songPool });
+    this.setState({ isLoadingSongs: false });
   }
 
   filterOutLocalSongs(songPool) {
@@ -312,13 +329,6 @@ export default class CreatePage extends Component {
     return (
       <div className="page">
         <Navbar userData={this.state.userData} />
-        <button
-          onClick={() => {
-            console.log(this.state);
-          }}
-        >
-          Test
-        </button>
         <main id="create-page-main">
           <SelectPlaylists
             userPlaylists={this.state.userPlaylists}
@@ -331,7 +341,7 @@ export default class CreatePage extends Component {
             toggleFilteringByArtists={checked => {
               this.toggleFilteringByArtists(checked);
             }}
-            artists={this.artists}
+            artists={this.state.artists}
             setArtists={artists => {
               this.handleInputArtists(artists);
             }}
@@ -351,9 +361,18 @@ export default class CreatePage extends Component {
             setTempo={tempo => {
               this.handleInputTempo(tempo);
             }}
+            filterByDanceabilityEnabled={this.state.filterByDanceabilityEnabled}
+            toggleFilteringByDanceability={checked => {
+              this.toggleFilteringByDanceability(checked);
+            }}
+            danceability={this.danceability}
+            setDanceability={danceability => {
+              this.handleInputDanceability(danceability);
+            }}
           />
           <CreatePlaylist
             userData={this.state.userData}
+            isLoadingSongs={this.state.isLoadingSongs}
             songPool={this.state.songPool}
             accessToken={this.props.accessToken}
           />

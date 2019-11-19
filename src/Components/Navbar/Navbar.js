@@ -2,10 +2,6 @@ import React, { Component } from "react";
 import { NavLink as Link } from "react-router-dom";
 
 export default class Navbar extends Component {
-  constructor() {
-    super();
-  }
-
   render() {
     return (
       <div id="top-bar">
