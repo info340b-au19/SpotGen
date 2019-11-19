@@ -103,7 +103,7 @@ body {
 #logo-wrapper a {
   margin-left: 24px;
 }
- 
+
 .tab {
   text-decoration: none;
   color: white;
@@ -398,7 +398,6 @@ p {
 
 .genre-card-description p::-webkit-scrollbar {
   width: 10px;
-
 }
 
 .genre-card-description p::-webkit-scrollbar-track {
@@ -414,7 +413,6 @@ p {
   border: solid 3px transparent;
   border-radius: 8px;
 }
-
 
 /* ------------- Styling for the create page. ------------- */
 
@@ -436,11 +434,6 @@ p {
     grid-template-areas: "select-playlists filter-songs" "name-playlist name-playlist" "footer footer";
     grid-template-columns: 1fr 1fr;
     grid-column-gap: 48px;
-  }
-
-  #playlists-wrapper {
-    max-height: calc(100vh - 300px);
-    overflow-y: scroll;
   }
 }
 
@@ -492,35 +485,35 @@ h3 {
   grid-area: name-playlist;
 }
 
-
 .section-description {
   color: rgba(255, 255, 255, 0.7);
   margin-top: 0px;
   margin-bottom: 24px !important;
 }
 
-#playlists-wrapper {
+.rows-wrapper {
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 8px;
   padding: 16px;
-  padding-bottom: 0px;
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
+  max-height: calc(100vh - 300px);
 }
 
 /* Scroll bar customizations */
-#playlists-wrapper::-webkit-scrollbar {
+.rows-wrapper::-webkit-scrollbar {
   width: 10px;
 }
 
-#playlists-wrapper::-webkit-scrollbar-track {
+.rows-wrapper::-webkit-scrollbar-track {
   background: transparent;
   border-radius: 8px;
   padding: 4px;
   margin-top: 12px;
   margin-bottom: 12px;
 }
-#playlists-wrapper::-webkit-scrollbar-thumb {
+.rows-wrapper::-webkit-scrollbar-thumb {
   box-shadow: inset 2px 2px 2px 2px #00e66a;
   border: solid 3px transparent;
   border-radius: 8px;
@@ -534,6 +527,29 @@ h3 {
 
 #playlist-name-input-wrapper {
   margin-top: 12px;
+}
+
+#playlist-name-input {
+  font-size: 0.9em;
+}
+
+#song-pool {
+  margin-bottom: 24px;
+  max-height: calc(100vh - 475px);
+}
+
+.song-row {
+  padding: 5px 0px;
+  font-size: 0.9em;
+  text-overflow: wrap;
+}
+
+.song-title {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.song-artist {
+  color: rgba(255, 255, 255, 0.85);
 }
 
 /* Customize checkboxes */
@@ -558,9 +574,10 @@ h3 {
 }
 
 .input-row-label {
-  margin-bottom: 0px;
+  /* margin-bottom: 0px; */
+  margin-bottom: 10px;
   font-weight: 600;
-  font-size: 1.25em;
+  font-size: 1.13em;
   display: flex;
 }
 
@@ -577,6 +594,7 @@ h3 {
   color: rgba(255, 255, 255, 0.97);
   outline: none;
   transition: all 0.2s ease-in-out;
+  font-size: 0.9em;
 }
 
 .text-input:focus,

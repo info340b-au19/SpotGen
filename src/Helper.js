@@ -1,3 +1,29 @@
+import CreatePlaylist from "./Components/CreatePage/CreatePlaylist/CreatePlaylist";
+
+/* -- Defines general helper methods -- */
+
+/* Helper function from: https://derickbailey.com/2014/09/21/calculating-standard-deviation-with-array-map-and-array-reduce-in-javascript/ */
+export function standardDeviation(values) {
+  let avg = average(values);
+  let squareDiffs = values.map(function(value) {
+    let diff = value - avg;
+    let sqrDiff = diff * diff;
+    return sqrDiff;
+  });
+  let avgSquareDiff = average(squareDiffs);
+  let stdDev = Math.sqrt(avgSquareDiff);
+  return stdDev;
+}
+
+/* Helper function from: https://derickbailey.com/2014/09/21/calculating-standard-deviation-with-array-map-and-array-reduce-in-javascript/ */
+export function average(data) {
+  let sum = data.reduce(function(sum, value) {
+    return sum + value;
+  }, 0);
+  let avg = sum / data.length;
+  return avg;
+}
+
 /* Defines methods we wrote to query the Spotify API for different 
  things (user playlists, username, etc.) */
 
@@ -96,4 +122,81 @@ export async function getUserPlaylists(userID, accessToken) {
     playlistsMap[playlist.id] = playlist.name;
   }
   return playlistsMap;
+}
+
+export async function getNumberOfSongsInPlaylist(playlistID, accessToken) {
+  let url = "https://api.spotify.com/v1/playlists/" + playlistID + "/tracks";
+  let data = await fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: "Bearer " + accessToken
+    }
+  });
+  let response = await data.json();
+  return response.total;
+}
+
+export async function getHundredSongsFromPlaylist(
+  playlistID,
+  offset,
+  accessToken
+) {
+  let url = new URL(
+    "https://api.spotify.com/v1/playlists/" + playlistID + "/tracks"
+  );
+  let params = { offset: offset };
+  Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+  let data = await fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: "Bearer " + accessToken
+    }
+  });
+  let response = await data.json();
+  return response.items;
+}
+
+export async function createPlaylist(userID, parameters, accessToken) {
+  let createPlaylistURL =
+    "https://api.spotify.com/v1/users/" + userID + "/playlists";
+  let data = await fetch(createPlaylistURL, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + accessToken,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(parameters)
+  });
+  let playlist = await data.json();
+  return playlist;
+}
+
+export async function addTracksToPlaylist(playlist, tracksToAdd, accessToken) {
+  let addSongsToPlaylistURL =
+    "https://api.spotify.com/v1/playlists/" + playlist.id + "/tracks";
+  let addSongsData = await fetch(addSongsToPlaylistURL, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + accessToken,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      uris: tracksToAdd
+    })
+  });
+  return addSongsData;
+}
+
+export async function getSongFeaturesMultiple(songs, accessToken) {
+  let url = new URL("https://api.spotify.com/v1/audio-features"),
+    params = { ids: songs };
+  Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+  let data = await fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: "Bearer " + accessToken
+    }
+  });
+  let songFeatures = await data.json();
+  return songFeatures;
 }

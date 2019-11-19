@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import "pretty-checkbox/dist/pretty-checkbox.min.css";
 
 export default class PlaylistCheckbox extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       isChecked: false
     };
@@ -11,7 +11,7 @@ export default class PlaylistCheckbox extends Component {
 
   checkboxChanged() {
     this.setState({ isChecked: !this.state.isChecked });
-    this.props.handleToggleCheckbox(this.props.playlistID);
+    this.props.handleTogglePlaylistCheckbox(this.props.playlistID);
   }
 
   render() {
