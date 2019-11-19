@@ -26,7 +26,10 @@ export default class CreatePage extends Component {
       artists: "",
       filterByLoudnessEnabled: false,
       loudness: 50,
-      tempo: 50
+      filterByTempoEnabled: false,
+      tempo: 50,
+      filterByDanceabilityEnabled: false,
+      danceability: 50
     };
     this.selectedPlaylists = new Set();
   }
@@ -80,6 +83,18 @@ export default class CreatePage extends Component {
     this.updateSongPool();
   }
 
+  toggleFilteringByTempo(checked) {
+    this.setState({ filterByTempoEnabled: checked });
+    this.updateSongPool();
+  }
+
+  handleInputTempo(tempo) {
+    this.setState({
+      tempo: tempo
+    });
+    this.updateSongPool();
+  }
+
   async updateSongPool() {
     console.log("updating song pool");
     let songPool = await this.getSongsFromSelectedPlaylists(
@@ -93,13 +108,17 @@ export default class CreatePage extends Component {
     }
     let audioFilteringOptions = {
       filterByLoudnessEnabled: this.state.filterByLoudnessEnabled,
-      // tempoFilteringEnabled: this.state.tempoFilteringEnabled,
-      // danceabilityFilteringEnabled: this.state.danceabilityFilteringEnabled,
-      desiredLoudness: this.state.loudness / 100.0
-      // desiredTempo: this.state.tempo,
-      // desiredDanceability: this.state.danceability
+      filterByTempoEnabled: this.state.filterByTempoEnabled,
+      filterByDanceabilityEnabled: this.state.filterByDanceabilityEnabled,
+      desiredLoudness: this.state.loudness / 100.0,
+      desiredTempo: this.state.tempo / 100.0,
+      desiredDanceability: this.state.danceability / 100.0
     };
-    if (this.state.filterByLoudnessEnabled) {
+    if (
+      this.state.filterByLoudnessEnabled ||
+      this.state.filterByTempoEnabled ||
+      this.state.filterByDanceabilityEnabled
+    ) {
       songPool = await this.getSongsMatchingAudioFeatures(
         audioFilteringOptions,
         songPool,
@@ -250,23 +269,25 @@ export default class CreatePage extends Component {
 
       /* Apply filters if the user checked the checkbox for the filter */
       if (audioFilteringOptions["filterByLoudnessEnabled"]) {
+        console.log("Filtering it by loudness");
         passesLoudnessFilter =
           loudnessValues[songIndex] < desiredLoudness + standardDevLoudness &&
           loudnessValues[songIndex] > desiredLoudness - standardDevLoudness;
       }
 
-      // if (audioFilteringOptions["tempoFilteringEnabled"]) {
-      //   passesTempoFilter =
-      //     tempoValues[songIndex] < desiredTempo + standardDevTempo &&
-      //     tempoValues[songIndex] > desiredTempo - standardDevTempo;
-      // }
-      // if (audioFilteringOptions["danceabilityFilteringEnabled"]) {
-      //   passesDanceabilityFilter =
-      //     danceabilityValues[songIndex] <
-      //       desiredDanceability + standardDevDanceability &&
-      //     danceabilityValues[songIndex] >
-      //       desiredDanceability - standardDevDanceability;
-      // }
+      if (audioFilteringOptions["filterByTempoEnabled"]) {
+        console.log("Filtering it by tempo");
+        passesTempoFilter =
+          tempoValues[songIndex] < desiredTempo + standardDevTempo &&
+          tempoValues[songIndex] > desiredTempo - standardDevTempo;
+      }
+      if (audioFilteringOptions["filterByDanceabilityEnabled"]) {
+        passesDanceabilityFilter =
+          danceabilityValues[songIndex] <
+            desiredDanceability + standardDevDanceability &&
+          danceabilityValues[songIndex] >
+            desiredDanceability - standardDevDanceability;
+      }
       if (
         passesLoudnessFilter &&
         passesTempoFilter &&
@@ -312,6 +333,14 @@ export default class CreatePage extends Component {
             loudness={this.loudness}
             setLoudness={loudness => {
               this.handleInputLoudness(loudness);
+            }}
+            filterByTempoEnabled={this.state.filterByTempoEnabled}
+            toggleFilteringByTempo={checked => {
+              this.toggleFilteringByTempo(checked);
+            }}
+            tempo={this.tempo}
+            setTempo={tempo => {
+              this.handleInputTempo(tempo);
             }}
           />
           <CreatePlaylist
