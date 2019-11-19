@@ -70,7 +70,11 @@ export default class CreatePlaylist extends Component {
           </div>
         </div>
         <label className="input-row-label">Songs In Your New Playlist</label>
-        <SongPool songPool={this.props.songPool} />
+
+        <SongPool
+          isLoadingSongs={this.props.isLoadingSongs}
+          songPool={this.props.songPool}
+        />
         <div id="playlist-name-input-wrapper" className="input-row-wrapper">
           <label className="input-row-label">Playlist Name</label>
           <input

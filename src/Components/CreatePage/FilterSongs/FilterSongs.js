@@ -59,6 +59,19 @@ export default class FilterSongs extends Component {
             this.props.setTempo(tempo);
           }}
         />
+        <RangeFilter
+          filterType="Danceability"
+          lowLabel="Low"
+          highLabel="High"
+          filterEnabled={this.props.filterByDanceabilityEnabled}
+          toggleFilter={checked => {
+            this.props.toggleFilteringByDanceability(checked);
+          }}
+          value={this.props.danceability}
+          setValue={danceability => {
+            this.props.setDanceability(danceability);
+          }}
+        />
       </div>
     );
   }
