@@ -3,8 +3,8 @@ import React, { Component } from "react";
 export default class PlayPause extends Component {
     render() {
         return (
-            <button class="music-control-button" aria-label="play-song-button">
-                <svg class="play">
+            <button className="music-control-button" aria-label="play-song-button">
+                <svg className="play">
                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                         <g transform="translate(-14.000000, -9.000000)">
                             <rect></rect>
@@ -21,7 +21,7 @@ export default class PlayPause extends Component {
                     </g>
                 </svg>
 
-                <svg class="pause" hidden="true">
+                <svg className="pause" hidden="true">
                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                         <g transform="translate(-14.000000, -11.000000)">
                             <rect></rect>

@@ -202,3 +202,9 @@ let folk = highestPopularity('folk', accessToken);
 let hardRock = highestPopularity('hard-rock', accessToken);
 let classical = highestPopularity('classical', accessToken);
 let jazz = highestPopularity('jazz', accessToken);
+
+// // ex
+// let genres = ["alt-rock", "hip-hop", "country", "folk", "hard-rock", "classical", "jazz"];
+// for (let i = 0 i < genres.length; i++) {
+//     let eachGenre = highestPopularity(genres[i], accessToken);
+// }
