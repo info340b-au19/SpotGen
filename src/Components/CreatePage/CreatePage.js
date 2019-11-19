@@ -21,9 +21,11 @@ export default class CreatePage extends Component {
     this.state = {
       userData: {},
       userPlaylists: {},
+      selectedPlaylists: new Set(),
+      songsFromSelectedPlaylists: [],
       songPool: [],
-      filterByArtistsEnabled: false,
       artists: "",
+      filterByArtistsEnabled: false,
       filterByLoudnessEnabled: false,
       loudness: 50,
       filterByTempoEnabled: false,
@@ -31,7 +33,6 @@ export default class CreatePage extends Component {
       filterByDanceabilityEnabled: false,
       danceability: 50
     };
-    this.selectedPlaylists = new Set();
   }
 
   async componentDidMount() {
@@ -50,25 +51,24 @@ export default class CreatePage extends Component {
     }
   }
 
-  handleTogglePlaylistCheckbox(playlistID) {
-    if (!this.selectedPlaylists.has(playlistID)) {
-      this.selectedPlaylists.add(playlistID);
+  async handleTogglePlaylistCheckbox(playlistID) {
+    if (!this.state.selectedPlaylists.has(playlistID)) {
+      this.state.selectedPlaylists.add(playlistID);
     } else {
-      this.selectedPlaylists.delete(playlistID);
+      this.state.selectedPlaylists.delete(playlistID);
     }
+    await this.updateSongsFromSelectedPlaylists();
     this.updateSongPool();
   }
 
   toggleFilteringByArtists(checked) {
     this.setState({ filterByArtistsEnabled: checked });
-    this.updateSongPool();
+    this.updateSongPool(checked, this.state.artists);
   }
 
   handleInputArtists(artists) {
-    this.setState({
-      artists: artists
-    });
-    this.updateSongPool();
+    this.setState({ artists: artists });
+    this.updateSongPool(this.state.filterByArtistsEnabled, artists);
   }
 
   toggleFilteringByLoudness(checked) {
@@ -95,16 +95,29 @@ export default class CreatePage extends Component {
     this.updateSongPool();
   }
 
-  async updateSongPool() {
-    console.log("updating song pool");
-    let songPool = await this.getSongsFromSelectedPlaylists(
-      this.selectedPlaylists,
+  async updateSongsFromSelectedPlaylists() {
+    let songsFromSelectedPlaylists = await this.getSongsFromSelectedPlaylists(
+      this.state.selectedPlaylists,
       this.props.accessToken
     );
-    songPool = this.filterOutLocalSongs(songPool);
-    songPool = this.filterOutDuplicateSongs(songPool);
-    if (this.state.filterByArtistsEnabled) {
-      songPool = this.getSongsMatchingArtist(this.state.artists, songPool);
+    songsFromSelectedPlaylists = this.filterOutLocalSongs(
+      songsFromSelectedPlaylists
+    );
+    songsFromSelectedPlaylists = this.filterOutDuplicateSongs(
+      songsFromSelectedPlaylists
+    );
+    this.setState({ songsFromSelectedPlaylists: songsFromSelectedPlaylists });
+  }
+
+  /* Apply filters to the song pool */
+  async updateSongPool(filterByArtistsEnabled, artists) {
+    console.log("Updating our song pool");
+    let songPool = this.state.songsFromSelectedPlaylists;
+    if (filterByArtistsEnabled) {
+      console.log("Filtering by artist " + artists);
+      console.log(songPool);
+      songPool = this.getSongsMatchingArtist(artists, songPool);
+      console.log(songPool);
     }
     let audioFilteringOptions = {
       filterByLoudnessEnabled: this.state.filterByLoudnessEnabled,
@@ -125,9 +138,7 @@ export default class CreatePage extends Component {
         this.props.accessToken
       );
     }
-    this.setState({
-      songPool: songPool
-    });
+    this.setState({ songPool: songPool });
   }
 
   filterOutLocalSongs(songPool) {
@@ -269,14 +280,12 @@ export default class CreatePage extends Component {
 
       /* Apply filters if the user checked the checkbox for the filter */
       if (audioFilteringOptions["filterByLoudnessEnabled"]) {
-        console.log("Filtering it by loudness");
         passesLoudnessFilter =
           loudnessValues[songIndex] < desiredLoudness + standardDevLoudness &&
           loudnessValues[songIndex] > desiredLoudness - standardDevLoudness;
       }
 
       if (audioFilteringOptions["filterByTempoEnabled"]) {
-        console.log("Filtering it by tempo");
         passesTempoFilter =
           tempoValues[songIndex] < desiredTempo + standardDevTempo &&
           tempoValues[songIndex] > desiredTempo - standardDevTempo;
