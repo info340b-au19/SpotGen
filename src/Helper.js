@@ -29,7 +29,7 @@ export function average(data) {
 
 export function getAccessToken() {
   let accessToken = document.cookie.match(
-    "(^|[^;]+)\\s*" + "accessToken" + "\\s*=\\s*([^;]+)"
+    "(^|[^;]+)\\s*accessToken\\s*=\\s*([^;]+)"
   );
   return accessToken ? accessToken.pop() : "";
 }

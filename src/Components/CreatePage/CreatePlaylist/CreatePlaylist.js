@@ -17,7 +17,7 @@ export default class CreatePlaylist extends Component {
     notifier.configure({
       autoClose: 3000,
       width: 375,
-      position: "bottom-right",
+      position: "bottom-center",
       delay: 0,
       closeOnClick: true,
       pauseOnHover: true,
@@ -62,27 +62,10 @@ export default class CreatePlaylist extends Component {
       "Your playlist has been created and added to your Spotify account! Enjoy!"
     );
   }
-  async test() {
-    console.log(
-      await this.getSongPool(
-        this.props.selectedPlaylists,
-        this.props.accessToken
-      )
-    );
-  }
 
   render() {
     return (
       <section id="name-playlist">
-        <button
-          onClick={() => {
-            notifier.success(
-              "Your playlist has been created and added to your Spotify account! Enjoy!"
-            );
-          }}
-        >
-          test
-        </button>
         <div className="step">
           <div className="step-number">3</div>
           <div>
@@ -126,13 +109,6 @@ export default class CreatePlaylist extends Component {
             <div className="rect5"></div>
           </div>
         )}
-        {/* {this.state.showingSuccessMessage && (
-          <div id="success-message-wrapper">
-            <span id="success-message">
-              Successfully created your playlist. Check Spotify!
-            </span>
-          </div>
-        )} */}
       </section>
     );
   }
