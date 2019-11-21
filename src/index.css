@@ -601,8 +601,24 @@ h3 {
 
 .song-row {
   padding: 5px 0px;
-  font-size: 0.9em;
+  font-size: 1em;
   text-overflow: wrap;
+}
+
+.remove-song-button {
+  background: none;
+  border: none;
+  outline: none;
+  color: #e50000;
+  margin-right: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.1s ease-out;
+}
+
+.remove-song-button:hover {
+  filter: brightness(115%);
+  transform: scale(1.25);
 }
 
 .song-title {

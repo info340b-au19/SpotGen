@@ -80,6 +80,9 @@ export default class CreatePlaylist extends Component {
         <SongPool
           isLoadingSongs={this.props.isLoadingSongs}
           songPool={this.props.songPool}
+          removeSongFromPool={song => {
+            this.props.removeSongFromPool(song);
+          }}
         />
         <div id="playlist-name-input-wrapper" className="input-row-wrapper">
           <label className="input-row-label">Playlist Name</label>

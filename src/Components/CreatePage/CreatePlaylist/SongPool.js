@@ -20,6 +20,14 @@ export default class SongPool extends Component {
           {this.props.songPool.map(song => {
             return (
               <div className="song-row" key={song.track.name}>
+                <button
+                  className="remove-song-button"
+                  onClick={() => {
+                    this.props.removeSongFromPool(song);
+                  }}
+                >
+                  ✖
+                </button>
                 <span className="song-title">{song.track.name}</span>
                 {/* {" - "}
               <span className="song-artist">Artist Name 1</span> */}

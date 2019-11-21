@@ -32,14 +32,6 @@ export default class Login extends Component {
             >
               Login to Spotify
             </button>
-            {/* <a
-              className="btn btn--loginApp-link"
-              href={`${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
-                "%20"
-              )}&response_type=token&show_dialog=true`}
-            >
-              Login to Spotify
-            </a> */}
           </div>
         </div>
       </div>
