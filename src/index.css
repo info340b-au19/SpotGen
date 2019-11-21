@@ -189,6 +189,11 @@ p {
 }
 
 /* Loading animation */
+.spinner-genres {
+  height: calc(100vh - 100px);
+  width: 100%;
+}
+
 .spinner-songs-wrapper {
   display: flex;
   justify-content: center;

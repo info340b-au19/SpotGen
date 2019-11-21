@@ -18,7 +18,7 @@ export default class PlayPause extends Component {
   getPlayOrPauseButton() {
     let playButton = (
       <svg className="play">
-        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           <g transform="translate(-14.000000, -9.000000)">
             <rect></rect>
             <path
@@ -27,7 +27,7 @@ export default class PlayPause extends Component {
             ></path>
             <path
               d="M15.1666667,13.6932133 C15.1666667,11.82958 17.2436833,10.7180033 18.7943,11.7517633 L40.2544333,26.0586667 C41.6399667,26.9822 41.6399667,29.0178 40.2544333,29.9415667 L18.7943,44.2481667 C17.24366,45.2820667 15.1666667,44.1704667 15.1666667,42.3068333 L15.1666667,13.6932133 Z"
-              fill-opacity="0.01"
+              fillOpacity="0.01"
               fill="#60A3BC"
             ></path>
             <path
@@ -40,7 +40,7 @@ export default class PlayPause extends Component {
     );
     let pauseButton = (
       <svg className="pause" hidden="true">
-        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           <g transform="translate(-14.000000, -11.000000)">
             <rect></rect>
             <path
@@ -49,7 +49,7 @@ export default class PlayPause extends Component {
             ></path>
             <path
               d="M15.1666667,17.5 C15.1666667,14.92267 17.2560033,12.8333333 19.8333333,12.8333333 C22.4106633,12.8333333 24.5,14.92267 24.5,17.5 L24.5,22.8050433 L24.5,38.5 C24.5,41.0774 22.4106633,43.1666667 19.8333333,43.1666667 C17.2560033,43.1666667 15.1666667,41.0774 15.1666667,38.5 L15.1666667,30.9311333 L15.1666667,17.5 Z"
-              fill-opacity="0.3"
+              fillOpacity="0.3"
               fill="#A4B0BE"
             ></path>
             <path
