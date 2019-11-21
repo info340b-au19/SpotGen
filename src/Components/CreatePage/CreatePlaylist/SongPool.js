@@ -5,11 +5,15 @@ export default class SongPool extends Component {
   render() {
     return (
       <div id="song-pool" className="rows-wrapper">
-        <div className="song-row">
-          <span className="song-title">Song 1</span>
-          {" - "}
-          <span className="song-artist">Artist Name 1</span>
-        </div>
+        {this.props.songPool.map(song => {
+          return (
+            <div className="song-row" key={song.track.name}>
+              <span className="song-title">{song.track.name}</span>
+              {/* {" - "}
+              <span className="song-artist">Artist Name 1</span> */}
+            </div>
+          );
+        })}
       </div>
     );
   }
