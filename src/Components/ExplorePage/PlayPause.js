@@ -3,25 +3,14 @@ import React, { Component } from "react";
 export default class PlayPause extends Component {
   // Plays or pauses the audio as state changes
   componentDidUpdate() {
-    // The currently playing doesn't match this card
-    // console.log(this.props.currentlyPlayingObj.previewUrl);
-    if (
-      this.props.currentlyPlayingObj === null ||
-      this.props.currentlyPlayingObj.genreAPI !==
-        this.props.genreObject.genreAPI
-    ) {
-      console.log("Not matching");
+    if (this.props.currentlyPlayingGenre === null) {
       this.props.genreObject.audio.pause();
+    } else if (
+      this.props.currentlyPlayingGenre === this.props.genreObject.genreName
+    ) {
+      this.props.genreObject.audio.play();
     } else {
-      // console.log("ok");
-      // It does match
-      if (this.props.currentlyPlayingObj.currentlyPlaying) {
-        console.log("Matching");
-        this.props.genreObject.audio.play();
-      } else {
-        console.log("no sound");
-        this.props.genreObject.audio.pause();
-      }
+      this.props.genreObject.audio.pause();
     }
   }
 
@@ -71,24 +60,14 @@ export default class PlayPause extends Component {
         </g>
       </svg>
     );
-
-    // Determine whether to return play or pause button
-    if (
-      this.props.currentlyPlayingObj === null ||
-      this.props.currentlyPlayingObj.genreAPI !==
-        this.props.genreObject.genreAPI
-    ) {
+    if (this.props.currentlyPlayingGenre === null) {
       return playButton;
+    } else if (
+      this.props.currentlyPlayingGenre === this.props.genreObject.genreName
+    ) {
+      return pauseButton;
     } else {
-      // Cards match
-      if (this.props.currentlyPlayingObj.currentlyPlaying) {
-        console.log("Hi");
-        return pauseButton;
-      } else {
-        // Other genre cards
-        console.log("hehe");
-        return playButton;
-      }
+      return playButton;
     }
   }
 
