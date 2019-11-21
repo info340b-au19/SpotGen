@@ -5,7 +5,7 @@ export default class RangeFilter extends Component {
     return (
       <div className="input-row-wrapper">
         <label className="input-row-label">
-          <div className="playlist-checkbox-wrapper">
+          <div className="checkbox-wrapper">
             <div className="pretty p-svg p-curve">
               <input
                 type="checkbox"

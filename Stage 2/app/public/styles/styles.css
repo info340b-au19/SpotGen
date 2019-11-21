@@ -98,7 +98,7 @@ body {
 #logo-wrapper a {
   margin-left: 24px;
 }
- 
+
 .tab {
   text-decoration: none;
   color: white;
@@ -390,7 +390,6 @@ p {
 
 .genre-card-description p::-webkit-scrollbar {
   width: 10px;
-
 }
 
 .genre-card-description p::-webkit-scrollbar-track {
@@ -406,7 +405,6 @@ p {
   border: solid 3px transparent;
   border-radius: 8px;
 }
-
 
 /* ------------- Styling for the create page. ------------- */
 
@@ -483,7 +481,6 @@ h3 {
 #name-playlist {
   grid-area: name-playlist;
 }
-
 
 .section-description {
   color: rgba(255, 255, 255, 0.7);

@@ -554,6 +554,8 @@ h3 {
   flex-direction: column;
   overflow-y: scroll;
   max-height: calc(100vh - 300px);
+  display: grid;
+  grid-row-gap: 16px;
 }
 
 /* Scroll bar customizations */
@@ -575,6 +577,11 @@ h3 {
 }
 
 .playlist-checkbox-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.checkbox-wrapper {
   display: flex;
   flex-direction: row;
   margin-bottom: 16px;
@@ -609,7 +616,7 @@ h3 {
   background: none;
   border: none;
   outline: none;
-  color: #e50000;
+  color: #dc143c;
   margin-right: 6px;
   cursor: pointer;
   font-size: 16px;
