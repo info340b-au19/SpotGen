@@ -5,7 +5,7 @@ import Login from "./Components/Login/Login";
 import ExplorePage from "./Components/ExplorePage/ExplorePage";
 import CreatePage from "./Components/CreatePage/CreatePage";
 
-import hash from "./Hash";
+import { hash } from "./Helper";
 
 export default class App extends Component {
   constructor() {

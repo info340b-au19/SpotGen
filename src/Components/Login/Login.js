@@ -6,7 +6,6 @@ import {
   redirectUri,
   scopes
 } from "../../SpotifyConfig";
-import hash from "../../Hash";
 
 export default class Login extends Component {
   render() {
@@ -26,21 +25,21 @@ export default class Login extends Component {
               id="login-button"
               className="button"
               onClick={() => {
-                window.location = `${authEndpoint}client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
+                window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
                   "%20"
                 )}&response_type=token&show_dialog=true`;
               }}
             >
               Login to Spotify
             </button>
-            <a
+            {/* <a
               className="btn btn--loginApp-link"
               href={`${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
                 "%20"
               )}&response_type=token&show_dialog=true`}
             >
               Login to Spotify
-            </a>
+            </a> */}
           </div>
         </div>
       </div>
