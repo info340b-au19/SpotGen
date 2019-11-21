@@ -9,6 +9,7 @@ export default class PlaylistCheckbox extends Component {
     };
   }
 
+  /* Handler for when checkbox is clicked */
   checkboxChanged() {
     this.setState({ isChecked: !this.state.isChecked });
     this.props.handleTogglePlaylistCheckbox(this.props.playlistID);
