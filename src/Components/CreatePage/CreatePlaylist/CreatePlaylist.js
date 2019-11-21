@@ -11,8 +11,7 @@ export default class CreatePlaylist extends Component {
     super();
     this.state = {
       playlistName: "",
-      isLoading: false,
-      showingSuccessMessage: false
+      isLoading: false
     };
     notifier.configure({
       autoClose: 3000,
@@ -33,6 +32,10 @@ export default class CreatePlaylist extends Component {
   }
 
   async createPlaylist(songPool, accessToken) {
+    if (!this.state.playlistName) {
+      notifier.error("You must name your playlist before creating it!");
+      return;
+    }
     this.setState({ isLoading: true });
     /* Create the playlist */
     let parameters = {
