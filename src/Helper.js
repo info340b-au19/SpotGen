@@ -27,13 +27,6 @@ export function average(data) {
 /* Defines methods we wrote to query the Spotify API for different 
  things (user playlists, username, etc.) */
 
-export function getAccessToken() {
-  let accessToken = document.cookie.match(
-    "(^|[^;]+)\\s*accessToken\\s*=\\s*([^;]+)"
-  );
-  return accessToken ? accessToken.pop() : "";
-}
-
 export async function getUserData(accessToken) {
   try {
     let url = "https://api.spotify.com/v1/me";

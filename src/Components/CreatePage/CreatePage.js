@@ -37,6 +37,9 @@ export default class CreatePage extends Component {
   }
 
   async componentDidMount() {
+    if (!this.props.accessToken) {
+      this.props.history.push("/login");
+    }
     let userData = await getUserData(this.props.accessToken);
     if (userData === "Expired Token") {
       this.props.history.push("/login");
