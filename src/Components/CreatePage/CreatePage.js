@@ -131,7 +131,6 @@ export default class CreatePage extends Component {
   /* Apply filters to the song pool */
   async updateSongPool() {
     this.setState({ isLoadingSongs: true });
-    console.log("Updating our song pool");
     let songPool = this.state.songsFromSelectedPlaylists;
     if (this.state.filterByArtistsEnabled) {
       songPool = this.getSongsMatchingArtist(this.state.artists, songPool);
@@ -144,7 +143,6 @@ export default class CreatePage extends Component {
       desiredTempo: this.state.tempo / 100.0,
       desiredDanceability: this.state.danceability / 100.0
     };
-    console.log(audioFilteringOptions);
     if (
       this.state.filterByLoudnessEnabled ||
       this.state.filterByTempoEnabled ||
@@ -155,7 +153,6 @@ export default class CreatePage extends Component {
         songPool,
         this.props.accessToken
       );
-      console.log(songPool);
     }
     this.setState({ songPool: songPool });
     this.setState({ isLoadingSongs: false });

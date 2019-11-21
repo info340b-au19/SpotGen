@@ -2,11 +2,8 @@ import React, { Component } from "react";
 import Navbar from "../Navbar/Navbar";
 import GenreCard from "./GenreCard";
 
-import { getUserData } from "../../Helper";
 import { getSong } from "../../Helper";
 import { getAllSongs } from "../../Helper";
-import { get50Songs } from "../../Helper";
-import { getNumberOfSongsInGenre } from "../../Helper";
 import { highestPopularity } from "../../Helper";
 import { cardAttributes } from "./CardAttributes";
 
@@ -14,53 +11,58 @@ export default class ExplorePage extends Component {
   constructor() {
     super();
     this.state = {
-      userData: {},
       genres: [],
-      currentlyPlayingGenre: null
+      currentlyPlayingGenre: null,
+      isLoadingGenres: false
     };
   }
 
   // Sets the attributes of the genre objects
   async componentDidMount() {
+    this.setState({ isLoadingGenres: true });
     let genreObjects = cardAttributes();
 
-    let userData, songs, songsInGenre, items, numSongs, indexTop;
+    // let userData, songs, songsInGenre, items, numSongs, indexTop;
     for (let i = 0; i < genreObjects.length; i++) {
-      userData = await getUserData(this.props.accessToken);
-      songs = await getSong(genreObjects[i].genreAPI, this.props.accessToken);
-      songsInGenre = await getAllSongs(
-        this.props.accessToken,
-        genreObjects[i].genreAPI
-      );
-      items = await get50Songs(
-        genreObjects[i].genreAPI,
-        0,
-        this.props.accessToken
-      );
-      numSongs = await getNumberOfSongsInGenre(
-        genreObjects[i].genreAPI,
-        this.props.accessToken
-      );
-      indexTop = await highestPopularity(
-        genreObjects[i].genreAPI,
-        this.props.accessToken
-      );
-      genreObjects[i].genreSongs = songsInGenre;
+      let genreAttributes = await this.getGenreAttributes(genreObjects[i]);
+
+      genreObjects[i].genreSongs = genreAttributes.songsInGenre;
       genreObjects[i].topImg =
-        genreObjects[i].genreSongs[indexTop].album.images[0].url;
-      genreObjects[i].alt = genreObjects[i].genreSongs[indexTop].album.name;
+        genreObjects[i].genreSongs[
+          genreAttributes.indexTop
+        ].album.images[0].url;
+      genreObjects[i].alt =
+        genreObjects[i].genreSongs[genreAttributes.indexTop].album.name;
       genreObjects[i].previewUrl =
-        genreObjects[i].genreSongs[indexTop].preview_url;
+        genreObjects[i].genreSongs[genreAttributes.indexTop].preview_url;
       genreObjects[i].audio = new Audio(genreObjects[i].previewUrl);
     }
 
     // Updates the state with appropriate information calculated from
     // componentDidMount()
     this.setState({
-      userData: userData,
-      genres: genreObjects
+      genres: genreObjects,
+      isLoadingGenres: false
     });
   }
+
+  async getGenreAttributes(genreObject) {
+    let songs = await getSong(genreObject.genreAPI, this.props.accessToken);
+    let songsInGenre = await getAllSongs(
+      this.props.accessToken,
+      genreObject.genreAPI
+    );
+    let indexTop = await highestPopularity(
+      genreObject.genreAPI,
+      this.props.accessToken
+    );
+    return {
+      songs: songs,
+      songsInGenre: songsInGenre,
+      indexTop: indexTop
+    };
+  }
+
   // Update the status of whether song is playing
   updatePlaying(genreObj) {
     // Currently already playing
@@ -74,9 +76,26 @@ export default class ExplorePage extends Component {
   render() {
     return (
       <div className="page">
-        <Navbar userData={this.state.userData} />
+        <Navbar userData={this.props.userData} />
         <main>
-          <div className="genre-cards-wrapper">
+          <div
+            className={
+              this.state.isLoadingGenres
+                ? "spinner-songs-wrapper spinner-genres"
+                : "hidden"
+            }
+          >
+            <div className="spinner-songs">
+              <div className="bounce1"></div>
+              <div className="bounce2"></div>
+              <div className="bounce3"></div>
+            </div>
+          </div>
+          <div
+            className={
+              this.props.isLoadingGenres ? "hidden" : "genre-cards-wrapper"
+            }
+          >
             {this.state.genres.map(genreObject => {
               return (
                 <GenreCard
