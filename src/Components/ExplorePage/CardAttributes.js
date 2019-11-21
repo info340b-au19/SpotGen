@@ -1,4 +1,5 @@
 /* eslint-disable no-multi-str */
+// Sets all the initial attributes, including Spotify API name, actual name, and description.
 export function cardAttributes() {
   let genreObjects = [
     {
