@@ -35,51 +35,65 @@ export function getAccessToken() {
 }
 
 export async function getUserData(accessToken) {
-  let url = "https://api.spotify.com/v1/me";
-  let data = await fetch(url, {
-    method: "GET",
-    headers: {
-      Authorization: "Bearer " + accessToken
+  try {
+    let url = "https://api.spotify.com/v1/me";
+    let data = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + accessToken
+      }
+    });
+    if (data.status === 401) {
+      console.log("Expired Token");
+      return "Expired Token";
     }
-  });
-  if (data.status === 401) {
-    console.log("Expired Token");
-    return "Expired Token";
+    let userData = await data.json();
+    return userData;
+  } catch (error) {
+    console.error(error);
   }
-  let userData = await data.json();
-  return userData;
 }
 
 export async function getUserPlaylists(userID, accessToken) {
-  let url = new URL(
-    "https://api.spotify.com/v1/users/" + userID + "/playlists"
-  );
-  let params = { limit: 50 };
-  Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-  let data = await fetch(url, {
-    method: "GET",
-    headers: {
-      Authorization: "Bearer " + accessToken
+  try {
+    let url = new URL(
+      "https://api.spotify.com/v1/users/" + userID + "/playlists"
+    );
+    let params = { limit: 50 };
+    Object.keys(params).forEach(key =>
+      url.searchParams.append(key, params[key])
+    );
+    let data = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + accessToken
+      }
+    });
+    let playlists = await data.json();
+    let playlistsMap = {};
+    for (let playlist of playlists.items) {
+      playlistsMap[playlist.id] = playlist.name;
     }
-  });
-  let playlists = await data.json();
-  let playlistsMap = {};
-  for (let playlist of playlists.items) {
-    playlistsMap[playlist.id] = playlist.name;
+    return playlistsMap;
+  } catch (error) {
+    console.error(error);
   }
-  return playlistsMap;
 }
 
 export async function getNumberOfSongsInPlaylist(playlistID, accessToken) {
-  let url = "https://api.spotify.com/v1/playlists/" + playlistID + "/tracks";
-  let data = await fetch(url, {
-    method: "GET",
-    headers: {
-      Authorization: "Bearer " + accessToken
-    }
-  });
-  let response = await data.json();
-  return response.total;
+  try {
+    let url = "https://api.spotify.com/v1/playlists/" + playlistID + "/tracks";
+    let data = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + accessToken
+      }
+    });
+    let response = await data.json();
+    return response.total;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export async function getHundredSongsFromPlaylist(
@@ -87,62 +101,82 @@ export async function getHundredSongsFromPlaylist(
   offset,
   accessToken
 ) {
-  let url = new URL(
-    "https://api.spotify.com/v1/playlists/" + playlistID + "/tracks"
-  );
-  let params = { offset: offset };
-  Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-  let data = await fetch(url, {
-    method: "GET",
-    headers: {
-      Authorization: "Bearer " + accessToken
-    }
-  });
-  let response = await data.json();
-  return response.items;
+  try {
+    let url = new URL(
+      "https://api.spotify.com/v1/playlists/" + playlistID + "/tracks"
+    );
+    let params = { offset: offset };
+    Object.keys(params).forEach(key =>
+      url.searchParams.append(key, params[key])
+    );
+    let data = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + accessToken
+      }
+    });
+    let response = await data.json();
+    return response.items;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export async function createPlaylist(userID, parameters, accessToken) {
-  let createPlaylistURL =
-    "https://api.spotify.com/v1/users/" + userID + "/playlists";
-  let data = await fetch(createPlaylistURL, {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer " + accessToken,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(parameters)
-  });
-  let playlist = await data.json();
-  return playlist;
+  try {
+    let createPlaylistURL =
+      "https://api.spotify.com/v1/users/" + userID + "/playlists";
+    let data = await fetch(createPlaylistURL, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + accessToken,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(parameters)
+    });
+    let playlist = await data.json();
+    return playlist;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export async function addTracksToPlaylist(playlist, tracksToAdd, accessToken) {
-  let addSongsToPlaylistURL =
-    "https://api.spotify.com/v1/playlists/" + playlist.id + "/tracks";
-  let addSongsData = await fetch(addSongsToPlaylistURL, {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer " + accessToken,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      uris: tracksToAdd
-    })
-  });
-  return addSongsData;
+  try {
+    let addSongsToPlaylistURL =
+      "https://api.spotify.com/v1/playlists/" + playlist.id + "/tracks";
+    let addSongsData = await fetch(addSongsToPlaylistURL, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + accessToken,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        uris: tracksToAdd
+      })
+    });
+    return addSongsData;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export async function getSongFeaturesMultiple(songs, accessToken) {
-  let url = new URL("https://api.spotify.com/v1/audio-features"),
-    params = { ids: songs };
-  Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-  let data = await fetch(url, {
-    method: "GET",
-    headers: {
-      Authorization: "Bearer " + accessToken
-    }
-  });
-  let songFeatures = await data.json();
-  return songFeatures;
+  try {
+    let url = new URL("https://api.spotify.com/v1/audio-features"),
+      params = { ids: songs };
+    Object.keys(params).forEach(key =>
+      url.searchParams.append(key, params[key])
+    );
+    let data = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + accessToken
+      }
+    });
+    let songFeatures = await data.json();
+    return songFeatures;
+  } catch (error) {
+    console.error(error);
+  }
 }
