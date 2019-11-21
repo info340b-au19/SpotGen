@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import SongPool from "./SongPool";
 
+import notifier from "simple-react-notifications";
+import "simple-react-notifications/dist/index.css";
+
 import { createPlaylist, addTracksToPlaylist } from "../../../Helper";
 
 export default class CreatePlaylist extends Component {
@@ -11,6 +14,22 @@ export default class CreatePlaylist extends Component {
       isLoading: false,
       showingSuccessMessage: false
     };
+    notifier.configure({
+      autoClose: 3000,
+      width: 375,
+      position: "bottom-right",
+      delay: 0,
+      closeOnClick: true,
+      pauseOnHover: true,
+      onlyLast: false,
+      rtl: false,
+      newestOnTop: true,
+      animation: {
+        in: "fadeIn",
+        out: "fadeOut",
+        duration: 400
+      }
+    });
   }
 
   async createPlaylist(songPool, accessToken) {
@@ -39,10 +58,9 @@ export default class CreatePlaylist extends Component {
       );
     }
     this.setState({ isLoading: false });
-    this.setState({ showingSuccessMessage: true });
-    setTimeout(() => {
-      this.setState({ showingSuccessMessage: false });
-    }, 3000);
+    notifier.success(
+      "Your playlist has been created and added to your Spotify account! Enjoy!"
+    );
   }
   async test() {
     console.log(
@@ -56,13 +74,15 @@ export default class CreatePlaylist extends Component {
   render() {
     return (
       <section id="name-playlist">
-        {/* <button
+        <button
           onClick={() => {
-            this.test();
+            notifier.success(
+              "Your playlist has been created and added to your Spotify account! Enjoy!"
+            );
           }}
         >
           test
-        </button> */}
+        </button>
         <div className="step">
           <div className="step-number">3</div>
           <div>
@@ -106,13 +126,13 @@ export default class CreatePlaylist extends Component {
             <div className="rect5"></div>
           </div>
         )}
-        {this.state.showingSuccessMessage && (
+        {/* {this.state.showingSuccessMessage && (
           <div id="success-message-wrapper">
             <span id="success-message">
               Successfully created your playlist. Check Spotify!
             </span>
           </div>
-        )}
+        )} */}
       </section>
     );
   }
