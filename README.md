@@ -1,3 +1,8 @@
+## Details About this Project
+
+- Created by Kha Nguyen & David Chiang
+- Bootstrapped using Create React App
+
 ## How to Run this Project
 
 **IMPORTANT**:
