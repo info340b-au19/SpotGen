@@ -27,6 +27,19 @@ export function average(data) {
 /* Defines methods we wrote to query the Spotify API for different 
  things (user playlists, username, etc.) */
 
+// Hash function from https://levelup.gitconnected.com/how-to-build-a-spotify-player-with-react-in-15-minutes-7e01991bc4b6
+export const hash = window.location.hash
+  .substring(1)
+  .split("&")
+  .reduce(function(initial, item) {
+    if (item) {
+      var parts = item.split("=");
+      initial[parts[0]] = decodeURIComponent(parts[1]);
+    }
+    return initial;
+  }, {});
+window.location.hash = "";
+
 export async function getUserData(accessToken) {
   try {
     let url = "https://api.spotify.com/v1/me";
