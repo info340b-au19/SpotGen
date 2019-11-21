@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import SongPool from "./SongPool";
 
+import notifier from "simple-react-notifications";
+import "simple-react-notifications/dist/index.css";
+
 import { createPlaylist, addTracksToPlaylist } from "../../../Helper";
 
 export default class CreatePlaylist extends Component {
@@ -8,12 +11,31 @@ export default class CreatePlaylist extends Component {
     super();
     this.state = {
       playlistName: "",
-      isLoading: false,
-      showingSuccessMessage: false
+      isLoading: false
     };
+    notifier.configure({
+      autoClose: 3000,
+      width: 375,
+      position: "bottom-center",
+      delay: 0,
+      closeOnClick: true,
+      pauseOnHover: true,
+      onlyLast: false,
+      rtl: false,
+      newestOnTop: true,
+      animation: {
+        in: "fadeIn",
+        out: "fadeOut",
+        duration: 400
+      }
+    });
   }
 
   async createPlaylist(songPool, accessToken) {
+    if (!this.state.playlistName) {
+      notifier.error("You must name your playlist before creating it!");
+      return;
+    }
     this.setState({ isLoading: true });
     /* Create the playlist */
     let parameters = {
@@ -39,30 +61,14 @@ export default class CreatePlaylist extends Component {
       );
     }
     this.setState({ isLoading: false });
-    this.setState({ showingSuccessMessage: true });
-    setTimeout(() => {
-      this.setState({ showingSuccessMessage: false });
-    }, 3000);
-  }
-  async test() {
-    console.log(
-      await this.getSongPool(
-        this.props.selectedPlaylists,
-        this.props.accessToken
-      )
+    notifier.success(
+      "Your playlist has been created and added to your Spotify account! Enjoy!"
     );
   }
 
   render() {
     return (
       <section id="name-playlist">
-        {/* <button
-          onClick={() => {
-            this.test();
-          }}
-        >
-          test
-        </button> */}
         <div className="step">
           <div className="step-number">3</div>
           <div>
@@ -70,7 +76,14 @@ export default class CreatePlaylist extends Component {
           </div>
         </div>
         <label className="input-row-label">Songs In Your New Playlist</label>
-        <SongPool songPool={this.props.songPool} />
+
+        <SongPool
+          isLoadingSongs={this.props.isLoadingSongs}
+          songPool={this.props.songPool}
+          removeSongFromPool={song => {
+            this.props.removeSongFromPool(song);
+          }}
+        />
         <div id="playlist-name-input-wrapper" className="input-row-wrapper">
           <label className="input-row-label">Playlist Name</label>
           <input
@@ -100,13 +113,6 @@ export default class CreatePlaylist extends Component {
             <div className="rect3"></div>
             <div className="rect4"></div>
             <div className="rect5"></div>
-          </div>
-        )}
-        {this.state.showingSuccessMessage && (
-          <div id="success-message-wrapper">
-            <span id="success-message">
-              Successfully created your playlist. Check Spotify!
-            </span>
           </div>
         )}
       </section>

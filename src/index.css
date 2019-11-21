@@ -189,6 +189,61 @@ p {
 }
 
 /* Loading animation */
+.spinner-songs-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.spinner-songs {
+  width: 70px;
+  text-align: center;
+}
+
+.spinner-songs > div {
+  width: 18px;
+  height: 18px;
+  background-color: grey;
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.spinner-songs .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.spinner-songs .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+  }
+  40% {
+    -webkit-transform: scale(1);
+  }
+}
+
+@keyframes sk-bouncedelay {
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  40% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
 .spinner {
   margin: 25px auto;
   width: 100%;
@@ -499,6 +554,8 @@ h3 {
   flex-direction: column;
   overflow-y: scroll;
   max-height: calc(100vh - 300px);
+  display: grid;
+  grid-row-gap: 16px;
 }
 
 /* Scroll bar customizations */
@@ -522,6 +579,11 @@ h3 {
 .playlist-checkbox-wrapper {
   display: flex;
   flex-direction: row;
+}
+
+.checkbox-wrapper {
+  display: flex;
+  flex-direction: row;
   margin-bottom: 16px;
 }
 
@@ -538,10 +600,32 @@ h3 {
   max-height: calc(100vh - 475px);
 }
 
+@media (min-width: 992px) {
+  #song-pool {
+    height: calc(100vh - 475px);
+  }
+}
+
 .song-row {
   padding: 5px 0px;
-  font-size: 0.9em;
+  font-size: 1em;
   text-overflow: wrap;
+}
+
+.remove-song-button {
+  background: none;
+  border: none;
+  outline: none;
+  color: #dc143c;
+  margin-right: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.1s ease-out;
+}
+
+.remove-song-button:hover {
+  filter: brightness(115%);
+  transform: scale(1.25);
 }
 
 .song-title {
@@ -628,6 +712,25 @@ input:disabled {
 .range-labels-wrapper {
   display: flex;
   justify-content: space-between;
-  margin-top: 6px;
+  margin-top: 12px;
   color: rgba(255, 255, 255, 0.75);
+}
+
+/* Notifications */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }

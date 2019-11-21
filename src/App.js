@@ -5,12 +5,12 @@ import Login from "./Components/Login/Login";
 import ExplorePage from "./Components/ExplorePage/ExplorePage";
 import CreatePage from "./Components/CreatePage/CreatePage";
 
-import { getAccessToken } from "./Helper";
+import { hash } from "./Helper";
 
 export default class App extends Component {
   constructor() {
     super();
-    const token = getAccessToken();
+    const token = hash.access_token;
     this.state = {
       loggedIn: token ? true : false,
       accessToken: token
@@ -21,7 +21,11 @@ export default class App extends Component {
     return (
       <div className="App">
         {!this.state.loggedIn && <Redirect to="/login" />}
-        <Route exact path="/login" component={Login} />
+        <Route
+          exact
+          path="/login"
+          render={routerProps => <Login {...routerProps} />}
+        />
         <Route
           exact
           path="/"

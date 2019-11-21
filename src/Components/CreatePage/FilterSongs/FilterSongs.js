@@ -46,6 +46,32 @@ export default class FilterSongs extends Component {
             this.props.setLoudness(loudness);
           }}
         />
+        <RangeFilter
+          filterType="Tempo"
+          lowLabel="Slow"
+          highLabel="Fast"
+          filterEnabled={this.props.filterByTempoEnabled}
+          toggleFilter={checked => {
+            this.props.toggleFilteringByTempo(checked);
+          }}
+          value={this.props.tempo}
+          setValue={tempo => {
+            this.props.setTempo(tempo);
+          }}
+        />
+        <RangeFilter
+          filterType="Danceability"
+          lowLabel="Low"
+          highLabel="High"
+          filterEnabled={this.props.filterByDanceabilityEnabled}
+          toggleFilter={checked => {
+            this.props.toggleFilteringByDanceability(checked);
+          }}
+          value={this.props.danceability}
+          setValue={danceability => {
+            this.props.setDanceability(danceability);
+          }}
+        />
       </div>
     );
   }

@@ -21,17 +21,25 @@ export default class CreatePage extends Component {
     this.state = {
       userData: {},
       userPlaylists: {},
+      songsFromSelectedPlaylists: [],
       songPool: [],
+      isLoadingSongs: false,
       filterByArtistsEnabled: false,
       artists: "",
       filterByLoudnessEnabled: false,
       loudness: 50,
-      tempo: 50
+      filterByTempoEnabled: false,
+      tempo: 50,
+      filterByDanceabilityEnabled: false,
+      danceability: 50
     };
     this.selectedPlaylists = new Set();
   }
 
   async componentDidMount() {
+    if (!this.props.accessToken) {
+      this.props.history.push("/login");
+    }
     let userData = await getUserData(this.props.accessToken);
     if (userData === "Expired Token") {
       this.props.history.push("/login");
@@ -40,75 +48,117 @@ export default class CreatePage extends Component {
         userData.id,
         this.props.accessToken
       );
-      this.setState({
-        userData: userData,
-        userPlaylists: userPlaylists
-      });
+      this.setState({ userData: userData, userPlaylists: userPlaylists });
     }
   }
 
-  handleTogglePlaylistCheckbox(playlistID) {
+  async handleTogglePlaylistCheckbox(playlistID) {
     if (!this.selectedPlaylists.has(playlistID)) {
       this.selectedPlaylists.add(playlistID);
     } else {
       this.selectedPlaylists.delete(playlistID);
     }
+    this.setState({ isLoadingSongs: true });
+    await this.updateSongsFromSelectedPlaylists();
+    this.setState({ isLoadingSongs: false });
     this.updateSongPool();
   }
 
   toggleFilteringByArtists(checked) {
-    this.setState({ filterByArtistsEnabled: checked });
-    this.updateSongPool();
+    this.setState({ filterByArtistsEnabled: checked }, this.updateSongPool);
   }
 
   handleInputArtists(artists) {
-    this.setState({
-      artists: artists
-    });
-    this.updateSongPool();
+    this.setState({ artists: artists }, this.updateSongPool);
   }
 
   toggleFilteringByLoudness(checked) {
-    this.setState({ filterByLoudnessEnabled: checked });
-    this.updateSongPool();
+    this.setState({ filterByLoudnessEnabled: checked }, this.updateSongPool);
   }
 
   handleInputLoudness(loudness) {
-    this.setState({
-      loudness: loudness
-    });
-    this.updateSongPool();
+    this.setState(
+      {
+        loudness: loudness
+      },
+      this.updateSongPool
+    );
   }
 
-  async updateSongPool() {
-    console.log("updating song pool");
-    let songPool = await this.getSongsFromSelectedPlaylists(
+  toggleFilteringByTempo(checked) {
+    this.setState({ filterByTempoEnabled: checked }, this.updateSongPool);
+  }
+
+  handleInputTempo(tempo) {
+    this.setState(
+      {
+        tempo: tempo
+      },
+      this.updateSongPool
+    );
+  }
+
+  toggleFilteringByDanceability(checked) {
+    this.setState(
+      { filterByDanceabilityEnabled: checked },
+      this.updateSongPool
+    );
+  }
+
+  handleInputDanceability(danceability) {
+    this.setState(
+      {
+        danceability: danceability
+      },
+      this.updateSongPool
+    );
+  }
+
+  async updateSongsFromSelectedPlaylists() {
+    let songsFromSelectedPlaylists = await this.getSongsFromSelectedPlaylists(
       this.selectedPlaylists,
       this.props.accessToken
     );
-    songPool = this.filterOutLocalSongs(songPool);
-    songPool = this.filterOutDuplicateSongs(songPool);
+    songsFromSelectedPlaylists = this.filterOutLocalSongs(
+      songsFromSelectedPlaylists
+    );
+    songsFromSelectedPlaylists = this.filterOutDuplicateSongs(
+      songsFromSelectedPlaylists
+    );
+    this.setState({ songsFromSelectedPlaylists: songsFromSelectedPlaylists });
+  }
+
+  /* Apply filters to the song pool */
+  async updateSongPool() {
+    this.setState({ isLoadingSongs: true });
+    console.log("Updating our song pool");
+    let songPool = this.state.songsFromSelectedPlaylists;
     if (this.state.filterByArtistsEnabled) {
       songPool = this.getSongsMatchingArtist(this.state.artists, songPool);
     }
     let audioFilteringOptions = {
       filterByLoudnessEnabled: this.state.filterByLoudnessEnabled,
-      // tempoFilteringEnabled: this.state.tempoFilteringEnabled,
-      // danceabilityFilteringEnabled: this.state.danceabilityFilteringEnabled,
-      desiredLoudness: this.state.loudness / 100.0
-      // desiredTempo: this.state.tempo,
-      // desiredDanceability: this.state.danceability
+      filterByTempoEnabled: this.state.filterByTempoEnabled,
+      filterByDanceabilityEnabled: this.state.filterByDanceabilityEnabled,
+      desiredLoudness: this.state.loudness / 100.0,
+      desiredTempo: this.state.tempo / 100.0,
+      desiredDanceability: this.state.danceability / 100.0
     };
-    if (this.state.filterByLoudnessEnabled) {
+    console.log(audioFilteringOptions);
+    if (
+      this.state.filterByLoudnessEnabled ||
+      this.state.filterByTempoEnabled ||
+      this.state.filterByDanceabilityEnabled
+    ) {
       songPool = await this.getSongsMatchingAudioFeatures(
         audioFilteringOptions,
         songPool,
         this.props.accessToken
       );
+      console.log(songPool);
     }
-    this.setState({
-      songPool: songPool
-    });
+    this.setState({ songPool: songPool });
+    this.setState({ isLoadingSongs: false });
   }
 
   filterOutLocalSongs(songPool) {
@@ -255,18 +305,18 @@ export default class CreatePage extends Component {
           loudnessValues[songIndex] > desiredLoudness - standardDevLoudness;
       }
 
-      // if (audioFilteringOptions["tempoFilteringEnabled"]) {
-      //   passesTempoFilter =
-      //     tempoValues[songIndex] < desiredTempo + standardDevTempo &&
-      //     tempoValues[songIndex] > desiredTempo - standardDevTempo;
-      // }
-      // if (audioFilteringOptions["danceabilityFilteringEnabled"]) {
-      //   passesDanceabilityFilter =
-      //     danceabilityValues[songIndex] <
-      //       desiredDanceability + standardDevDanceability &&
-      //     danceabilityValues[songIndex] >
-      //       desiredDanceability - standardDevDanceability;
-      // }
+      if (audioFilteringOptions["filterByTempoEnabled"]) {
+        passesTempoFilter =
+          tempoValues[songIndex] < desiredTempo + standardDevTempo &&
+          tempoValues[songIndex] > desiredTempo - standardDevTempo;
+      }
+      if (audioFilteringOptions["filterByDanceabilityEnabled"]) {
+        passesDanceabilityFilter =
+          danceabilityValues[songIndex] <
+            desiredDanceability + standardDevDanceability &&
+          danceabilityValues[songIndex] >
+            desiredDanceability - standardDevDanceability;
+      }
       if (
         passesLoudnessFilter &&
         passesTempoFilter &&
@@ -278,17 +328,17 @@ export default class CreatePage extends Component {
     return songsMatchingFilters;
   }
 
+  removeSongFromPool(song) {
+    let songPoolWithoutSong = this.state.songPool.filter(
+      songInPool => songInPool.track.name !== song.track.name
+    );
+    this.setState({ songPool: songPoolWithoutSong });
+  }
+
   render() {
     return (
       <div className="page">
         <Navbar userData={this.state.userData} />
-        <button
-          onClick={() => {
-            console.log(this.state);
-          }}
-        >
-          Test
-        </button>
         <main id="create-page-main">
           <SelectPlaylists
             userPlaylists={this.state.userPlaylists}
@@ -301,7 +351,7 @@ export default class CreatePage extends Component {
             toggleFilteringByArtists={checked => {
               this.toggleFilteringByArtists(checked);
             }}
-            artists={this.artists}
+            artists={this.state.artists}
             setArtists={artists => {
               this.handleInputArtists(artists);
             }}
@@ -313,10 +363,30 @@ export default class CreatePage extends Component {
             setLoudness={loudness => {
               this.handleInputLoudness(loudness);
             }}
+            filterByTempoEnabled={this.state.filterByTempoEnabled}
+            toggleFilteringByTempo={checked => {
+              this.toggleFilteringByTempo(checked);
+            }}
+            tempo={this.tempo}
+            setTempo={tempo => {
+              this.handleInputTempo(tempo);
+            }}
+            filterByDanceabilityEnabled={this.state.filterByDanceabilityEnabled}
+            toggleFilteringByDanceability={checked => {
+              this.toggleFilteringByDanceability(checked);
+            }}
+            danceability={this.danceability}
+            setDanceability={danceability => {
+              this.handleInputDanceability(danceability);
+            }}
           />
           <CreatePlaylist
             userData={this.state.userData}
+            isLoadingSongs={this.state.isLoadingSongs}
             songPool={this.state.songPool}
+            removeSongFromPool={song => {
+              this.removeSongFromPool(song);
+            }}
             accessToken={this.props.accessToken}
           />
         </main>
