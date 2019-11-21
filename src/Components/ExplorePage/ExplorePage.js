@@ -73,6 +73,21 @@ export default class ExplorePage extends Component {
     }
   }
 
+  /* Creates DOM objects for our genre object cards */
+  createGenreDOMObjects() {
+    return this.state.genres.map(genreObject => {
+      return (
+        <GenreCard
+          genreObject={genreObject}
+          updatePlaying={cardClicked => {
+            this.updatePlaying(cardClicked);
+          }}
+          currentlyPlayingGenre={this.state.currentlyPlayingGenre}
+        />
+      );
+    });
+  }
+
   render() {
     return (
       <div className="page">
@@ -96,17 +111,7 @@ export default class ExplorePage extends Component {
               this.props.isLoadingGenres ? "hidden" : "genre-cards-wrapper"
             }
           >
-            {this.state.genres.map(genreObject => {
-              return (
-                <GenreCard
-                  genreObject={genreObject}
-                  updatePlaying={cardClicked => {
-                    this.updatePlaying(cardClicked);
-                  }}
-                  currentlyPlayingGenre={this.state.currentlyPlayingGenre}
-                />
-              );
-            })}
+            {this.createGenreDOMObjects()}
           </div>
         </main>
         <footer>

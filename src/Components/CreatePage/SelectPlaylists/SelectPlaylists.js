@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PlaylistCheckbox from "./PlaylistCheckbox";
 
 export default class SelectPlaylists extends Component {
+  /* Creates multiple playlist checkboxes based on the user's playlists */
   createPlaylistCheckboxes() {
     let userPlaylists = this.props.userPlaylists;
     return Object.keys(userPlaylists).map(playlistID => {

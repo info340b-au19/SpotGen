@@ -52,6 +52,7 @@ export default class CreatePage extends Component {
     }
   }
 
+  /* Update our set of selected playlists when user toggles playlist checkbox */
   async handleTogglePlaylistCheckbox(playlistID) {
     if (!this.selectedPlaylists.has(playlistID)) {
       this.selectedPlaylists.add(playlistID);
@@ -64,18 +65,22 @@ export default class CreatePage extends Component {
     this.updateSongPool();
   }
 
+  /* Handle toggling filter by artists checkbox */
   toggleFilteringByArtists(checked) {
     this.setState({ filterByArtistsEnabled: checked }, this.updateSongPool);
   }
 
+  /* Handle inputting a value into artists input box */
   handleInputArtists(artists) {
     this.setState({ artists: artists }, this.updateSongPool);
   }
 
+  /* Handle toggling filter by loudness checkbox */
   toggleFilteringByLoudness(checked) {
     this.setState({ filterByLoudnessEnabled: checked }, this.updateSongPool);
   }
 
+  /* Handle inputting a value into loudness input box */
   handleInputLoudness(loudness) {
     this.setState(
       {
@@ -85,10 +90,12 @@ export default class CreatePage extends Component {
     );
   }
 
+  /* Handle toggling filter by tempo checkbox */
   toggleFilteringByTempo(checked) {
     this.setState({ filterByTempoEnabled: checked }, this.updateSongPool);
   }
 
+  /* Handle inputting a value into tempo input box */
   handleInputTempo(tempo) {
     this.setState(
       {
@@ -98,6 +105,8 @@ export default class CreatePage extends Component {
     );
   }
 
+  /* Handle toggling filter by danceability checkbox */
+
   toggleFilteringByDanceability(checked) {
     this.setState(
       { filterByDanceabilityEnabled: checked },
@@ -105,6 +114,7 @@ export default class CreatePage extends Component {
     );
   }
 
+  /* Handle inputting a value into danceability input box */
   handleInputDanceability(danceability) {
     this.setState(
       {
@@ -114,6 +124,7 @@ export default class CreatePage extends Component {
     );
   }
 
+  /* Updates the song pool based on the playlists the user has selected */
   async updateSongsFromSelectedPlaylists() {
     let songsFromSelectedPlaylists = await this.getSongsFromSelectedPlaylists(
       this.selectedPlaylists,
@@ -158,10 +169,12 @@ export default class CreatePage extends Component {
     this.setState({ isLoadingSongs: false });
   }
 
+  /* Filter out songs that are locally added to Spotify */
   filterOutLocalSongs(songPool) {
     return songPool.filter(song => !song.track.uri.includes("local"));
   }
 
+  /* Filter out duplicate songs that user may have in their song pool */
   filterOutDuplicateSongs(songPool) {
     return songPool.filter(
       (song, index, self) =>
@@ -169,6 +182,7 @@ export default class CreatePage extends Component {
     );
   }
 
+  /* Get the songs from the playlists the user has selected from Spotify */
   async getSongsFromSelectedPlaylists(selectedPlaylists, accessToken) {
     let songPool = [];
     let selectedPlaylistsArray = [...selectedPlaylists];
@@ -182,6 +196,7 @@ export default class CreatePage extends Component {
     return songPool;
   }
 
+  /* Get list of song objects from a given playlist */
   async getSongsInPlaylist(playlistID, accessToken) {
     let songsInPlaylist = [];
     let firstHundred = await getHundredSongsFromPlaylist(
@@ -211,6 +226,7 @@ export default class CreatePage extends Component {
     return songsInPlaylist;
   }
 
+  /* Filter and select songs that match the given desired artists */
   getSongsMatchingArtist(desiredArtists, songPool) {
     desiredArtists = desiredArtists.split(",");
     desiredArtists = desiredArtists.map(artist => artist.trim().toLowerCase());
@@ -227,6 +243,7 @@ export default class CreatePage extends Component {
     return songsMatchingDesiredArtists;
   }
 
+  /* Returns boolean on whether or not a song contains an artist provided in desired artists array */
   songContainsMatchingArtist(songArtists, desiredArtists) {
     for (let songArtist of songArtists) {
       for (let desiredArtist of desiredArtists) {
@@ -235,8 +252,10 @@ export default class CreatePage extends Component {
         }
       }
     }
+    return false;
   }
 
+  /* Get only the songs that match the user's inputted audio feature choices */
   async getSongsMatchingAudioFeatures(
     audioFilteringOptions,
     songPool,
@@ -325,6 +344,7 @@ export default class CreatePage extends Component {
     return songsMatchingFilters;
   }
 
+  /* Remove a certain song from the song pool (won't be added to created playlist) */
   removeSongFromPool(song) {
     let songPoolWithoutSong = this.state.songPool.filter(
       songInPool => songInPool.track.name !== song.track.name

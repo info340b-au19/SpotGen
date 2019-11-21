@@ -31,6 +31,8 @@ export default class CreatePlaylist extends Component {
     });
   }
 
+  /* Create a playlist to the user's spotify account using the given song pool */
+
   async createPlaylist(songPool, accessToken) {
     if (!this.state.playlistName) {
       notifier.error("You must name your playlist before creating it!");
