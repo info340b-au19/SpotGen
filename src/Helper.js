@@ -55,10 +55,10 @@ export async function getSong(genre, accessToken) {
   let parameters = "?q=" + genre + "&type=track" + "&limit=50";
   let url = endpoint + parameters;
   let data = await fetch(url, {
-      method: 'GET', // *GET, POST, PUT, DELETE, etc.
-      headers: {
-          'Authorization': 'Bearer ' + accessToken
-      },
+    method: "GET", // *GET, POST, PUT, DELETE, etc.
+    headers: {
+      Authorization: "Bearer " + accessToken
+    }
   });
   let songs = await data.json();
   return songs;
@@ -68,37 +68,52 @@ export async function getAllSongs(accessToken, genre) {
   let songsInGenre = [];
   let first50 = await get50Songs(genre, 0, accessToken);
   songsInGenre = songsInGenre.concat(first50);
-  let numberOfSongsTotalInGenre = await getNumberOfSongsInGenre(genre, accessToken);
+  let numberOfSongsTotalInGenre = await getNumberOfSongsInGenre(
+    genre,
+    accessToken
+  );
   let offset = 50;
-  while (offset < numberOfSongsTotalInGenre / 100) { // 1% of the songs
-      let next50Songs = await get50Songs(genre, offset, accessToken);
-      songsInGenre = songsInGenre.concat(next50Songs);
-      offset += 50;
+  while (offset < numberOfSongsTotalInGenre / 100) {
+    // 1% of the songs
+    let next50Songs = await get50Songs(genre, offset, accessToken);
+    songsInGenre = songsInGenre.concat(next50Songs);
+    offset += 50;
   }
   return songsInGenre;
 }
 
 export async function get50Songs(genre, offset, accessToken) {
-  let url = new URL("https://api.spotify.com/v1/search" + "?q=" + genre + "&type=track" + "&limit=50");
+  let url = new URL(
+    "https://api.spotify.com/v1/search" +
+      "?q=" +
+      genre +
+      "&type=track" +
+      "&limit=50"
+  );
   let params = { offset: 0 };
   Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
   let data = await fetch(url, {
-      method: 'GET', // *GET, POST, PUT, DELETE, etc.
-      headers: {
-          'Authorization': 'Bearer ' + accessToken
-      },
+    method: "GET", // *GET, POST, PUT, DELETE, etc.
+    headers: {
+      Authorization: "Bearer " + accessToken
+    }
   });
   let response = await data.json();
   return response.tracks.items;
 }
 
 export async function getNumberOfSongsInGenre(genre, accessToken) {
-  let url = "https://api.spotify.com/v1/search" + "?q=" + genre + "&type=track" + "&limit=50";
+  let url =
+    "https://api.spotify.com/v1/search" +
+    "?q=" +
+    genre +
+    "&type=track" +
+    "&limit=50";
   let data = await fetch(url, {
-      method: 'GET',
-      headers: {
-          'Authorization': 'Bearer ' + accessToken
-      },
+    method: "GET",
+    headers: {
+      Authorization: "Bearer " + accessToken
+    }
   });
   let response = await data.json();
   return response.tracks.total;
@@ -154,6 +169,21 @@ export async function getHundredSongsFromPlaylist(
   });
   let response = await data.json();
   return response.items;
+}
+
+export async function highestPopularity(genre, accessToken) {
+  let allSongs = await getAllSongs(accessToken, genre);
+  let index = 0;
+  let highestPop = 0;
+  for (let i = 0; i < allSongs.length; i++) {
+    if (allSongs[i].popularity > highestPop) {
+      if (allSongs[i].preview_url != null) {
+        highestPop = allSongs[i].popularity;
+        index = i;
+      }
+    }
+  }
+  return index;
 }
 
 export async function createPlaylist(userID, parameters, accessToken) {
