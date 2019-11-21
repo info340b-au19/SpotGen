@@ -328,6 +328,13 @@ export default class CreatePage extends Component {
     return songsMatchingFilters;
   }
 
+  removeSongFromPool(song) {
+    let songPoolWithoutSong = this.state.songPool.filter(
+      songInPool => songInPool.track.name !== song.track.name
+    );
+    this.setState({ songPool: songPoolWithoutSong });
+  }
+
   render() {
     return (
       <div className="page">
@@ -377,6 +384,9 @@ export default class CreatePage extends Component {
             userData={this.state.userData}
             isLoadingSongs={this.state.isLoadingSongs}
             songPool={this.state.songPool}
+            removeSongFromPool={song => {
+              this.removeSongFromPool(song);
+            }}
             accessToken={this.props.accessToken}
           />
         </main>
