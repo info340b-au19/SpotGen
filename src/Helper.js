@@ -109,7 +109,9 @@ export async function get50Songs(genre, offset, accessToken) {
     }
   });
   let response = await data.json();
-  return response.tracks.items;
+  if (response.tracks) {
+    return response.tracks.items;
+  }
 }
 
 export async function getNumberOfSongsInGenre(genre, accessToken) {
