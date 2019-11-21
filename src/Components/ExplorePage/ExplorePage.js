@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Navbar from "../Navbar/Navbar";
 import GenreCard from "./GenreCard";
 
+import { getUserData } from "../../Helper";
 import { getSong } from "../../Helper";
 import { getAllSongs } from "../../Helper";
 import { highestPopularity } from "../../Helper";
@@ -11,6 +12,7 @@ export default class ExplorePage extends Component {
   constructor() {
     super();
     this.state = {
+      userData: {},
       genres: [],
       currentlyPlayingGenre: null,
       isLoadingGenres: false
@@ -20,6 +22,9 @@ export default class ExplorePage extends Component {
   // Sets the attributes of the genre objects
   async componentDidMount() {
     this.setState({ isLoadingGenres: true });
+    let userData = await getUserData(this.props.accessToken);
+    this.setState({ userData: userData });
+
     let genreObjects = cardAttributes();
 
     // let userData, songs, songsInGenre, items, numSongs, indexTop;
@@ -78,6 +83,7 @@ export default class ExplorePage extends Component {
     return this.state.genres.map(genreObject => {
       return (
         <GenreCard
+          key={genreObject.genreName}
           genreObject={genreObject}
           updatePlaying={cardClicked => {
             this.updatePlaying(cardClicked);
@@ -91,7 +97,7 @@ export default class ExplorePage extends Component {
   render() {
     return (
       <div className="page">
-        <Navbar userData={this.props.userData} />
+        <Navbar userData={this.state.userData} />
         <main>
           <div
             className={

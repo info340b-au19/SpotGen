@@ -39,7 +39,7 @@ export default class PlayPause extends Component {
       </svg>
     );
     let pauseButton = (
-      <svg className="pause" hidden="true">
+      <svg className="pause">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           <g transform="translate(-14.000000, -11.000000)">
             <rect></rect>
