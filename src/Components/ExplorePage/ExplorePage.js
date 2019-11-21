@@ -8,6 +8,7 @@ import { getAllSongs } from "../../Helper";
 import { get50Songs } from "../../Helper";
 import { getNumberOfSongsInGenre } from "../../Helper";
 import { highestPopularity } from "../../Helper";
+import { cardAttributes } from "./CardAttributes";
 
 export default class ExplorePage extends Component {
   constructor() {
@@ -19,61 +20,10 @@ export default class ExplorePage extends Component {
     };
   }
 
+  // Sets the attributes of the genre objects
   async componentDidMount() {
-    let genreObjects = [
-      {
-        genreAPI: "alt-rock",
-        genreName: "Alternative Rock",
-        description:
-          "A style of rock music that emerged from the independent music underground\
-        of the 1970s andbecame widely popular in the 1980s."
-      },
-      {
-        genreAPI: "hip-hop",
-        genreName: "Rap",
-        description:
-          "A style of popular music in which an insistent, recurring beat pattern provides\
-        the background and counterpoint for rapid, slangy, and often boastful\
-        rhyming patter glibly intoned by a vocalist or vocalists."
-      },
-      {
-        genreAPI: "country",
-        genreName: "Country",
-        description:
-          "A genre of popular music that originated in the southern United States in the early 1920s.\
-        It takes its roots from genres such as American folk music and blues."
-      },
-      {
-        genreAPI: "folk",
-        genreName: "Folk",
-        description:
-          "Includes traditional folk music and the genre that evolved from it during the 20th-century\
-      folk revival. Some types of folk music may be called world music."
-      },
-      {
-        genreAPI: "hard-rock",
-        genreName: "Hard-Rock",
-        description:
-          "A loosely defined subgenre of rock music that began in the mid-1960s, with the garage,\
-        psychedelic and blues rock movements. It is typified by a heavy use of aggressive vocals,\
-        distorted electric guitars, bass guitar, drums, and often accompanied with keyboards."
-      },
-      {
-        genreAPI: "classical",
-        genreName: "Classical",
-        description:
-          "Art music produced or rooted in the traditions of Western culture, including both liturgical\
-        (religious) and secular music."
-      },
-      {
-        genreAPI: "jazz",
-        genreName: "Jazz",
-        description:
-          "A music genre that originated in the African-American communities of New Orleans, United\
-        States. It originated in the late 19th and early 20th centuries, and developed from roots in blues\
-        and ragtime. Jazz is seen by many as 'America's classical music.'"
-      }
-    ];
+    let genreObjects = cardAttributes();
+
     let userData, songs, songsInGenre, items, numSongs, indexTop;
     for (let i = 0; i < genreObjects.length; i++) {
       userData = await getUserData(this.props.accessToken);
@@ -102,93 +52,80 @@ export default class ExplorePage extends Component {
       genreObjects[i].previewUrl =
         genreObjects[i].genreSongs[indexTop].preview_url;
       genreObjects[i].currentlyPlaying = false;
-      genreObjects[i].currentAudio = null;
+      genreObjects[i].audio = new Audio(genreObjects[i].previewUrl);
     }
 
+    // Updates the state with appropriate information calculated from
+    // componentDidMount()
     this.setState({
       userData: userData,
       genres: genreObjects
     });
   }
 
-  updatePlaying = genreObj => {
-    this.setState(currentState => {
-      let audio = new Audio(genreObj.previewUrl);
-      // currentState.currentlyPlaying Obj  // current
-      // currentState.currentlyPlayingObj = genreObj; // new
-      //console.log(currentState.currentlyPlayingObj);
-      currentState.currentlyPlayingObj = genreObj;
-      currentState.currentlyPlayingObj.currentAudio = audio;
-      currentState.currentlyPlayingObj.currentAudio.play(); // current
-      console.log(currentState.currentlyPlayingObj.currentAudio);
-      console.log(currentState.currentlyPlayingObj);
-    });
-    return genreObj;
-  };
+  // Update the status of whether song is playing
+  updatePlaying(genreObj) {
+    // we are playing our first one
+    if (this.state.currentlyPlayingObj === null) {
+      genreObj.currentlyPlaying = true;
+      this.setState({
+        currentlyPlayingObj: genreObj
+      });
+    }
+    // switching to a different card
+    else if (this.state.currentlyPlayingObj !== genreObj) {
+      this.setState({
+        currentlyPlayingObj: {
+          ...this.state.currentlyPlayingObj,
+          currentlyPlaying: false
+        }
+      });
+      genreObj.currentlyPlaying = true;
+    } else if (this.state.currentlyPlayingObj === genreObj) {
+      console.log("Pausing our current one");
+      genreObj.currentlyPlaying = !genreObj.currentlyPlaying;
+      this.setState({
+        ...this.state
+      });
+      // this.setState({
+      //   currentlyPlayingObj: {
+      //     ...this.state.currentlyPlayingObj,
+      //     currentlyPlaying: !this.state.currentlyPlayingObj.currentlyPlaying
+      //   }
+      // });
+    }
 
-  // state variable that contains the currently playing genreObject
-  // in the updatePlaying => pause the currently playing genreObject in the state and
-  // reassign the state variable genre object to the genreObj passed in
-
-  updatePausing = genreObj => {
-    this.setState(currentState => {
-      // currentState.currentlyPlaying Obj  // current
-      // currentState.currentlyPlayingObj = genreObj; // new
-      // console.log(currentState.currentlyPlayingObj);
-      console.log(currentState.currentlyPlayingObj.currentAudio);
-      console.log(genreObj.currentAudio);
-      currentState.currentlyPlayingObj = genreObj;
-      currentState.currentlyPlayingObj.currentAudio.pause(); // current
-    });
-    return genreObj;
-  };
-
-  pauseThenPlay = genreObj => {
-    this.setState(currentState => {
-      genreObj.pause();
-      let audio = new Audio(genreObj.previewUrl);
-      currentState.currentlyPlayingObj = genreObj;
-      currentState.currentlyPlayingObj.currentAudio = audio;
-      currentState.currentlyPlayingObj.currentAudio.play();
-      console.log(currentState.currentlyPlayingObj.currentAudio);
-      console.log(genreObj.currentAudio);
-    });
-    return genreObj;
-  };
-  // for (let i = 0; i < this.state.genres.length; i++) {
-  //   if (this.state.genres[i].currentlyPlaying === true) {
-  //     let currentIndexPlaying = i;
-  //     this.state.genres[i].currentlyPlaying = false;
-  //     this.state.genres[i].currentAudio.pause();
-  //     this.state.genres[i].currentAudio = null;
-  //   }
-  //   // let currentIndexPlaying = 1;
-  //   // genreObject[currentIndexPlaying].currentPlaying = false;
-  //   // genreObject[justClicked].currentPlaying = true;
-  //   // currentIndexPlaying = justClicked;
-  // }
+    // if (this.state.currentlyPlayingObj) {
+    //   console.log("Should pause");
+    // }
+    // if (this.state.currentlyPlayingObj !== genreObj) {
+    //   console.log("We clicked the same card");
+    //   genreObj.currentlyPlaying = !genreObj.currentlyPlaying;
+    //   this.setState({ currentlyPlayingObj: genreObj });
+    // }
+  }
 
   render() {
     return (
       <div className="page">
         <Navbar userData={this.state.userData} />
+        <button
+          onClick={() => {
+            console.log(this.state.genres);
+          }}
+        >
+          test
+        </button>
         <main>
-          <button
-            onClick={() => {
-              console.log(this.state);
-            }}
-          >
-            test
-          </button>
           <div className="genre-cards-wrapper">
             {this.state.genres.map(genreObject => {
               return (
                 <GenreCard
                   genreObject={genreObject}
-                  updatePlaying={this.updatePlaying}
-                  updatePausing={this.updatePausing}
-                  pauseThenPlay={this.pauseThenPlay}
-                  currentlyPlayingObj={this.currentlyPlayingObj}
+                  updatePlaying={cardClicked => {
+                    this.updatePlaying(cardClicked);
+                  }}
+                  currentlyPlayingObj={this.state.currentlyPlayingObj}
                 />
               );
             })}

@@ -2,10 +2,7 @@ import React, { Component } from "react";
 import PlayPause from "./PlayPause";
 
 export default class GenreCard extends Component {
-  constructor(props) {
-    super(props);
-  }
-
+  // Sets the content of each genre card
   render() {
     return (
       <>
@@ -18,9 +15,9 @@ export default class GenreCard extends Component {
             />
             <PlayPause
               genreObject={this.props.genreObject}
-              updatePlaying={this.props.updatePlaying}
-              updatePausing={this.props.updatePausing}
-              pauseThenPlay={this.props.pauseThenPlay}
+              updatePlaying={cardClicked => {
+                this.props.updatePlaying(cardClicked);
+              }}
               currentlyPlayingObj={this.props.currentlyPlayingObj}
             />
           </div>
