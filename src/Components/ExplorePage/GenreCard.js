@@ -18,7 +18,7 @@ export default class GenreCard extends Component {
               updatePlaying={cardClicked => {
                 this.props.updatePlaying(cardClicked);
               }}
-              currentlyPlayingObj={this.props.currentlyPlayingObj}
+              currentlyPlayingGenre={this.props.currentlyPlayingGenre}
             />
           </div>
           <div className="genre-card-description">

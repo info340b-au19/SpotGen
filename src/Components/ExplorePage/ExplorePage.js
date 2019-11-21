@@ -16,7 +16,7 @@ export default class ExplorePage extends Component {
     this.state = {
       userData: {},
       genres: [],
-      currentlyPlayingObj: null
+      currentlyPlayingGenre: null
     };
   }
 
@@ -51,7 +51,6 @@ export default class ExplorePage extends Component {
       genreObjects[i].alt = genreObjects[i].genreSongs[indexTop].album.name;
       genreObjects[i].previewUrl =
         genreObjects[i].genreSongs[indexTop].preview_url;
-      genreObjects[i].currentlyPlaying = false;
       genreObjects[i].audio = new Audio(genreObjects[i].previewUrl);
     }
 
@@ -62,60 +61,20 @@ export default class ExplorePage extends Component {
       genres: genreObjects
     });
   }
-
   // Update the status of whether song is playing
   updatePlaying(genreObj) {
-    // we are playing our first one
-    if (this.state.currentlyPlayingObj === null) {
-      genreObj.currentlyPlaying = true;
-      this.setState({
-        currentlyPlayingObj: genreObj
-      });
+    // Currently already playing
+    if (this.state.currentlyPlayingGenre === genreObj.genreName) {
+      this.setState({ currentlyPlayingGenre: null });
+    } else {
+      this.setState({ currentlyPlayingGenre: genreObj.genreName });
     }
-    // switching to a different card
-    else if (this.state.currentlyPlayingObj !== genreObj) {
-      this.setState({
-        currentlyPlayingObj: {
-          ...this.state.currentlyPlayingObj,
-          currentlyPlaying: false
-        }
-      });
-      genreObj.currentlyPlaying = true;
-    } else if (this.state.currentlyPlayingObj === genreObj) {
-      console.log("Pausing our current one");
-      genreObj.currentlyPlaying = !genreObj.currentlyPlaying;
-      this.setState({
-        ...this.state
-      });
-      // this.setState({
-      //   currentlyPlayingObj: {
-      //     ...this.state.currentlyPlayingObj,
-      //     currentlyPlaying: !this.state.currentlyPlayingObj.currentlyPlaying
-      //   }
-      // });
-    }
-
-    // if (this.state.currentlyPlayingObj) {
-    //   console.log("Should pause");
-    // }
-    // if (this.state.currentlyPlayingObj !== genreObj) {
-    //   console.log("We clicked the same card");
-    //   genreObj.currentlyPlaying = !genreObj.currentlyPlaying;
-    //   this.setState({ currentlyPlayingObj: genreObj });
-    // }
   }
 
   render() {
     return (
       <div className="page">
         <Navbar userData={this.state.userData} />
-        <button
-          onClick={() => {
-            console.log(this.state.genres);
-          }}
-        >
-          test
-        </button>
         <main>
           <div className="genre-cards-wrapper">
             {this.state.genres.map(genreObject => {
@@ -125,7 +84,7 @@ export default class ExplorePage extends Component {
                   updatePlaying={cardClicked => {
                     this.updatePlaying(cardClicked);
                   }}
-                  currentlyPlayingObj={this.state.currentlyPlayingObj}
+                  currentlyPlayingGenre={this.state.currentlyPlayingGenre}
                 />
               );
             })}
