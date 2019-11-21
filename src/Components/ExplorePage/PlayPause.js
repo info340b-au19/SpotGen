@@ -60,6 +60,7 @@ export default class PlayPause extends Component {
         </g>
       </svg>
     );
+    // Determines when to play or pause button
     if (this.props.currentlyPlayingGenre === null) {
       return playButton;
     } else if (
