@@ -128,7 +128,9 @@ export async function getNumberOfSongsInGenre(genre, accessToken) {
     }
   });
   let response = await data.json();
-  return response.tracks.total;
+  if (response.tracks) {
+    return response.tracks.total;
+  }
 }
 
 export async function getUserPlaylists(userID, accessToken) {
