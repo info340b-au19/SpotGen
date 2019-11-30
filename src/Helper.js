@@ -83,7 +83,7 @@ export async function getAllSongs(accessToken, genre) {
     accessToken
   );
   let offset = 50;
-  while (offset < numberOfSongsTotalInGenre / 100) {
+  while (offset < numberOfSongsTotalInGenre / 1000) {
     // 1% of the songs
     let next50Songs = await get50Songs(genre, offset, accessToken);
     songsInGenre = songsInGenre.concat(next50Songs);

@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import Navbar from "../Navbar/Navbar";
 import GenreCard from "./GenreCard";
-
-import { getUserData } from "../../Helper";
-import { getSong } from "../../Helper";
-import { getAllSongs } from "../../Helper";
-import { highestPopularity } from "../../Helper";
+import {
+  getUserData,
+  getSong,
+  getAllSongs,
+  highestPopularity
+} from "../../Helper";
 import { cardAttributes } from "./CardAttributes";
 
 export default class ExplorePage extends Component {
@@ -27,24 +28,18 @@ export default class ExplorePage extends Component {
 
     let genreObjects = cardAttributes();
 
-    // let userData, songs, songsInGenre, items, numSongs, indexTop;
     for (let i = 0; i < genreObjects.length; i++) {
       let genreAttributes = await this.getGenreAttributes(genreObjects[i]);
 
       genreObjects[i].genreSongs = genreAttributes.songsInGenre;
-      genreObjects[i].topImg =
-        genreObjects[i].genreSongs[
-          genreAttributes.indexTop
-        ].album.images[0].url;
-      genreObjects[i].alt =
-        genreObjects[i].genreSongs[genreAttributes.indexTop].album.name;
-      genreObjects[i].previewUrl =
-        genreObjects[i].genreSongs[genreAttributes.indexTop].preview_url;
+      let index = genreObjects[i].genreSongs[genreAttributes.indexTop];
+      genreObjects[i].topImg = index.album.images[0].url;
+      genreObjects[i].alt = index.album.name;
+      genreObjects[i].previewUrl = index.preview_url;
       genreObjects[i].audio = new Audio(genreObjects[i].previewUrl);
     }
 
-    // Updates the state with appropriate information calculated from
-    // componentDidMount()
+    // Updates the state with appropriate information calculated from componentDidMount()
     this.setState({
       genres: genreObjects,
       isLoadingGenres: false
