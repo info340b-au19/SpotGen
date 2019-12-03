@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Navbar from "../Navbar/Navbar";
 import GenreCard from "./GenreCard";
+import ExplorePageActions from "./ExplorePageActions";
 import {
   getUserData,
   getSong,
@@ -107,6 +108,7 @@ export default class ExplorePage extends Component {
               <div className="bounce3"></div>
             </div>
           </div>
+          <ExplorePageActions />
           <div
             className={
               this.props.isLoadingGenres ? "hidden" : "genre-cards-wrapper"
