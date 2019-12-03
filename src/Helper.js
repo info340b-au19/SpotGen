@@ -178,7 +178,7 @@ export async function getHundredSongsFromPlaylist(
   }
 }
 
-export async function highestPopularity(genre, accessToken) {
+export async function shuffleSongs(genre, accessToken) {
   let allSongs = await getAllSongs(accessToken, genre);
   let index = 0;
   index = Math.floor(Math.random() * allSongs.length);

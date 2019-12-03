@@ -2,12 +2,7 @@ import React, { Component } from "react";
 import Navbar from "../Navbar/Navbar";
 import GenreCard from "./GenreCard";
 import ExplorePageActions from "./ExplorePageActions";
-import {
-  getUserData,
-  getSong,
-  getAllSongs,
-  highestPopularity
-} from "../../Helper";
+import { getUserData, getSong, getAllSongs, shuffleSongs } from "../../Helper";
 import { cardAttributes } from "./CardAttributes";
 
 export default class ExplorePage extends Component {
@@ -16,8 +11,7 @@ export default class ExplorePage extends Component {
     this.state = {
       userData: {},
       genres: [],
-      currentlyPlayingGenre: null,
-      isLoadingGenres: false
+      currentlyPlayingGenre: null
     };
   }
 
@@ -33,7 +27,7 @@ export default class ExplorePage extends Component {
       let genreAttributes = await this.getGenreAttributes(genreObjects[i]);
 
       genreObjects[i].genreSongs = genreAttributes.songsInGenre;
-      let index = genreObjects[i].genreSongs[genreAttributes.indexTop];
+      let index = genreObjects[i].genreSongs[genreAttributes.randomIndex];
       genreObjects[i].topImg = index.album.images[0].url;
       genreObjects[i].alt = index.album.name;
       genreObjects[i].previewUrl = index.preview_url;
@@ -53,14 +47,14 @@ export default class ExplorePage extends Component {
       this.props.accessToken,
       genreObject.genreAPI
     );
-    let indexTop = await highestPopularity(
+    let randomIndex = await shuffleSongs(
       genreObject.genreAPI,
       this.props.accessToken
     );
     return {
       songs: songs,
       songsInGenre: songsInGenre,
-      indexTop: indexTop
+      randomIndex: randomIndex
     };
   }
 
@@ -90,6 +84,10 @@ export default class ExplorePage extends Component {
     });
   }
 
+  updateShufflePlay() {
+    this.setState({ currentlyPlayingGenre: null });
+  }
+
   render() {
     return (
       <div className="page">
@@ -108,7 +106,12 @@ export default class ExplorePage extends Component {
               <div className="bounce3"></div>
             </div>
           </div>
-          <ExplorePageActions />
+          <ExplorePageActions
+            randomize={() => {
+              this.updateShufflePlay();
+              this.componentDidMount();
+            }}
+          />
           <div
             className={
               this.props.isLoadingGenres ? "hidden" : "genre-cards-wrapper"
