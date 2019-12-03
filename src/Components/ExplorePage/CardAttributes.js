@@ -26,7 +26,7 @@ export function cardAttributes() {
         "A kind of country music influenced by jazz and blues and characterized by\
           virtuosic playing of banjos and guitars and high-pitched, close-harmony vocals.\
           It include vocal harmonies featuring two, three, or four parts, often featuring\
-          a dissonant or modal sound in the highest voice"
+          a dissonant or modal sound in the highest voice."
     },
     {
       genreAPI: "blues",
@@ -40,7 +40,7 @@ export function cardAttributes() {
       genreAPI: "classical",
       genreName: "Classical",
       description:
-        "Hass two meanings: the broader meaning includes all Western art music from the Medieval era\
+        "Has two meanings: the broader meaning includes all Western art music from the Medieval era\
           to the 2000s, and the specific meaning refers to the art music from the 1750s to the early\
           1820s—the era of Wolfgang Amadeus Mozart, Joseph Haydn, and Ludwig van Beethoven."
     },
@@ -70,10 +70,10 @@ export function cardAttributes() {
           another similar form of music, “Disco”."
     },
     {
-    genreAPI: "edm",
-    genreName: "Electronic Dance Music",
-    description:
-      "Generally referred as EDM, this form of music is produced by DJs who add dozens\
+      genreAPI: "edm",
+      genreName: "Electronic Dance Music",
+      description:
+        "Generally referred as EDM, this form of music is produced by DJs who add dozens\
         of tones to a piece to create unique music. You can hear them in clubs or even live,\
         depending upon your accessibility for the same."
     },

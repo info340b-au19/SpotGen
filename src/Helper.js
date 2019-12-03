@@ -78,13 +78,9 @@ export async function getAllSongs(accessToken, genre) {
   let songsInGenre = [];
   let first50 = await get50Songs(genre, 0, accessToken);
   songsInGenre = songsInGenre.concat(first50);
-  let numberOfSongsTotalInGenre = await getNumberOfSongsInGenre(
-    genre,
-    accessToken
-  );
+
   let offset = 50;
-  while (offset < numberOfSongsTotalInGenre / 1000) {
-    // 1% of the songs
+  while (offset < 100) {
     let next50Songs = await get50Songs(genre, offset, accessToken);
     songsInGenre = songsInGenre.concat(next50Songs);
     offset += 50;
@@ -100,7 +96,7 @@ export async function get50Songs(genre, offset, accessToken) {
       "&type=track" +
       "&limit=50"
   );
-  let params = { offset: 0 };
+  let params = { offset: offset };
   Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
   let data = await fetch(url, {
     method: "GET", // *GET, POST, PUT, DELETE, etc.
@@ -111,25 +107,6 @@ export async function get50Songs(genre, offset, accessToken) {
   let response = await data.json();
   if (response.tracks) {
     return response.tracks.items;
-  }
-}
-
-export async function getNumberOfSongsInGenre(genre, accessToken) {
-  let url =
-    "https://api.spotify.com/v1/search" +
-    "?q=" +
-    genre +
-    "&type=track" +
-    "&limit=50";
-  let data = await fetch(url, {
-    method: "GET",
-    headers: {
-      Authorization: "Bearer " + accessToken
-    }
-  });
-  let response = await data.json();
-  if (response.tracks) {
-    return response.tracks.total;
   }
 }
 
@@ -204,14 +181,9 @@ export async function getHundredSongsFromPlaylist(
 export async function highestPopularity(genre, accessToken) {
   let allSongs = await getAllSongs(accessToken, genre);
   let index = 0;
-  let highestPop = 0;
-  for (let i = 0; i < allSongs.length; i++) {
-    if (allSongs[i].popularity > highestPop) {
-      if (allSongs[i].preview_url != null) {
-        highestPop = allSongs[i].popularity;
-        index = i;
-      }
-    }
+  index = Math.floor(Math.random() * allSongs.length);
+  while (allSongs[index].preview_url === null) {
+    index = Math.floor(Math.random() * allSongs.length);
   }
   return index;
 }
