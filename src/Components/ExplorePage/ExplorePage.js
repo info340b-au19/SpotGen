@@ -5,7 +5,7 @@ import "firebase/database";
 import Navbar from "../Navbar/Navbar";
 import GenreCard from "./GenreCard";
 import ExplorePageActions from "./ExplorePageActions";
-import { getUserData, getSong, getAllSongs, shuffleSongs } from "../../Helper";
+import { getUserData, songsWithinGenre, shuffleSongs } from "../../Helper";
 import { cardAttributes } from "./CardAttributes";
 
 export default class ExplorePage extends Component {
@@ -20,7 +20,7 @@ export default class ExplorePage extends Component {
     };
   }
 
-  // Sets the attributes of the genre objects
+  // Sets user data and the attributes of the genre objects
   async componentDidMount() {
     this.setState({ isLoadingGenres: true });
     let userData = await getUserData(this.props.accessToken);
@@ -34,6 +34,7 @@ export default class ExplorePage extends Component {
     });
   }
 
+  // Sets the attributes of the genre objects
   async assignSongsToGenres() {
     this.setState({ isLoadingGenres: true });
 
@@ -45,7 +46,7 @@ export default class ExplorePage extends Component {
       let index = genreObjects[i].genreSongs[genreAttributes.randomIndex];
       genreObjects[i].id = index.id;
 
-      genreObjects[i].topImg = index.album.images[0].url;
+      genreObjects[i].img = index.album.images[0].url;
       genreObjects[i].alt = index.album.name;
       genreObjects[i].previewUrl = index.preview_url;
       genreObjects[i].audio = new Audio(genreObjects[i].previewUrl);
@@ -53,8 +54,9 @@ export default class ExplorePage extends Component {
     this.setState({ genres: genreObjects, isLoadingGenres: false });
   }
 
+  // Get songs in genre and index of randomized song
   async getGenreAttributes(genreObject) {
-    let songsInGenre = await getAllSongs(
+    let songsInGenre = await songsWithinGenre(
       this.props.accessToken,
       genreObject.genreAPI
     );
@@ -96,6 +98,7 @@ export default class ExplorePage extends Component {
     });
   }
 
+  // Stores user information to Firebase database
   async pressSaveSongButton(genreObject) {
     let usersRef = firebase.database().ref("users");
     let spotifyID = this.state.userData.display_name;
@@ -122,6 +125,7 @@ export default class ExplorePage extends Component {
     }
   }
 
+  // Retrieves the songs that user saved
   async getSavedSongs() {
     let usersavedSongsRef = firebase
       .database()
@@ -134,6 +138,7 @@ export default class ExplorePage extends Component {
     return savedSongs;
   }
 
+  // Retrieves the ID of favorited song
   getLikedSongID(songName, savedSongs) {
     // let usersavedSongsRef = firebase
     //   .database()
@@ -150,6 +155,7 @@ export default class ExplorePage extends Component {
     return "Not found";
   }
 
+  // Checks if current song is in saved ones
   isSongInSavedSongs(song, savedSongs) {
     for (let songID in savedSongs) {
       if (song.alt === savedSongs[songID].alt) {
@@ -160,6 +166,7 @@ export default class ExplorePage extends Component {
     return false;
   }
 
+  // Update the status of genre cards when shuffled
   updateShufflePlay() {
     this.setState({ isLoadingGenres: true });
     this.setState({ currentlyPlayingGenre: null });

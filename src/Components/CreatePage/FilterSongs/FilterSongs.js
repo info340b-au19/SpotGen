@@ -13,10 +13,11 @@ export default class FilterSongs extends Component {
           </div>
         </div>
         <p className="section-description">
-          Select each checkbox to enable the corresponding filter. <br /> Adjust
-          filters to fine tune what songs will be picked for your new playlist.
-          <br />
-          <br />
+          Select each checkbox to enable the corresponding filter.
+          <span class="br">
+            Adjust filters to fine tune what songs will be picked for your new
+            playlist.
+          </span>
           <i>
             Note: values are based relatively to other songs in your playlists
           </i>

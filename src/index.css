@@ -688,6 +688,11 @@ h3 {
   max-height: calc(100vh - 475px);
 }
 
+.br {
+  display: block;
+  margin-bottom: 1em;
+}
+
 @media (min-width: 992px) {
   #song-pool {
     height: calc(100vh - 475px);
