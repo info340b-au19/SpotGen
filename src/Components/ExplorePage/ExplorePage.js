@@ -5,12 +5,7 @@ import "firebase/database";
 import Navbar from "../Navbar/Navbar";
 import GenreCard from "./GenreCard";
 import ExplorePageActions from "./ExplorePageActions";
-import {
-  getUserData,
-  getSong,
-  getAllSongs,
-  highestPopularity
-} from "../../Helper";
+import { getUserData, getSong, getAllSongs, shuffleSongs } from "../../Helper";
 import { cardAttributes } from "./CardAttributes";
 
 export default class ExplorePage extends Component {
@@ -19,9 +14,13 @@ export default class ExplorePage extends Component {
     this.state = {
       userData: {},
       genres: [],
+<<<<<<< HEAD
       currentlyPlayingGenre: null,
       isLoadingGenres: false,
       savedSongs: {}
+=======
+      currentlyPlayingGenre: null
+>>>>>>> 4156c1eabebf126340f60a57224adca1471ac3d0
     };
   }
 
@@ -37,7 +36,7 @@ export default class ExplorePage extends Component {
       let genreAttributes = await this.getGenreAttributes(genreObjects[i]);
 
       genreObjects[i].genreSongs = genreAttributes.songsInGenre;
-      let index = genreObjects[i].genreSongs[genreAttributes.indexTop];
+      let index = genreObjects[i].genreSongs[genreAttributes.randomIndex];
       genreObjects[i].topImg = index.album.images[0].url;
       genreObjects[i].alt = index.album.name;
       genreObjects[i].previewUrl = index.preview_url;
@@ -59,14 +58,14 @@ export default class ExplorePage extends Component {
       this.props.accessToken,
       genreObject.genreAPI
     );
-    let indexTop = await highestPopularity(
+    let randomIndex = await shuffleSongs(
       genreObject.genreAPI,
       this.props.accessToken
     );
     return {
       songs: songs,
       songsInGenre: songsInGenre,
-      indexTop: indexTop
+      randomIndex: randomIndex
     };
   }
 
@@ -102,6 +101,7 @@ export default class ExplorePage extends Component {
     });
   }
 
+<<<<<<< HEAD
   async pressSaveSongButton(genreObject) {
     let usersRef = firebase.database().ref("users");
     let spotifyID = this.state.userData.id;
@@ -158,6 +158,14 @@ export default class ExplorePage extends Component {
       }
     }
     return false;
+=======
+  updateShufflePlay() {
+    console.log(this.state.currentlyPlayingGenre);
+    console.log(this.state.genres);
+    this.setState({ currentlyPlayingGenre: null });
+    console.log(this.state.currentlyPlayingGenre);
+    console.log(this.state.genres);
+>>>>>>> 4156c1eabebf126340f60a57224adca1471ac3d0
   }
 
   render() {
@@ -178,7 +186,12 @@ export default class ExplorePage extends Component {
               <div className="bounce3"></div>
             </div>
           </div>
-          <ExplorePageActions />
+          <ExplorePageActions
+            randomize={() => {
+              this.updateShufflePlay();
+              this.componentDidMount();
+            }}
+          />
           <div
             className={
               this.props.isLoadingGenres ? "hidden" : "genre-cards-wrapper"
