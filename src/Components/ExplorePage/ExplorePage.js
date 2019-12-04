@@ -103,7 +103,6 @@ export default class ExplorePage extends Component {
     let usersRef = firebase.database().ref("users");
     let spotifyID = this.state.userData.display_name;
     let savedSongs = this.state.savedSongs;
-    // let likedSongID = this.getLikedSongID(genreObject.alt, savedSongs);
     if (this.isSongInSavedSongs(genreObject, savedSongs)) {
       // unsave
       delete savedSongs[genreObject.id];
@@ -140,13 +139,6 @@ export default class ExplorePage extends Component {
 
   // Retrieves the ID of favorited song
   getLikedSongID(songName, savedSongs) {
-    // let usersavedSongsRef = firebase
-    //   .database()
-    //   .ref("users/" + this.state.userData.id + "/savedSongs");
-    // const snapshot = await usersavedSongsRef.once("value");
-    // const savedSongs = snapshot.val();
-    console.log(songName);
-    console.log(savedSongs);
     for (let songID in savedSongs) {
       if (songName === savedSongs[songID].alt) {
         return songID;
@@ -159,7 +151,6 @@ export default class ExplorePage extends Component {
   isSongInSavedSongs(song, savedSongs) {
     for (let songID in savedSongs) {
       if (song.alt === savedSongs[songID].alt) {
-        // console.log("Found a match");
         return true;
       }
     }
