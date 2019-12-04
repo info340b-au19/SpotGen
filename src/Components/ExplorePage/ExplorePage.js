@@ -5,7 +5,7 @@ import "firebase/database";
 import Navbar from "../Navbar/Navbar";
 import GenreCard from "./GenreCard";
 import ExplorePageActions from "./ExplorePageActions";
-import { getUserData, getSong, getAllSongs, shuffleSongs } from "../../Helper";
+import { getUserData, getAllSongs, shuffleSongs } from "../../Helper";
 import { cardAttributes } from "./CardAttributes";
 
 export default class ExplorePage extends Component {
@@ -25,7 +25,6 @@ export default class ExplorePage extends Component {
     this.setState({ isLoadingGenres: true });
 
     let userData = await getUserData(this.props.accessToken);
-
     this.setState({ userData: userData });
 
     await this.assignSongsToGenres();
@@ -101,9 +100,8 @@ export default class ExplorePage extends Component {
 
   async pressSaveSongButton(genreObject) {
     let usersRef = firebase.database().ref("users");
-    let spotifyID = this.state.userData.display_name;
+    let spotifyID = this.state.userData.id;
     let savedSongs = this.state.savedSongs;
-    // let likedSongID = this.getLikedSongID(genreObject.alt, savedSongs);
     if (this.isSongInSavedSongs(genreObject, savedSongs)) {
       // unsave
       delete savedSongs[genreObject.id];
@@ -138,13 +136,6 @@ export default class ExplorePage extends Component {
   }
 
   getLikedSongID(songName, savedSongs) {
-    // let usersavedSongsRef = firebase
-    //   .database()
-    //   .ref("users/" + this.state.userData.id + "/savedSongs");
-    // const snapshot = await usersavedSongsRef.once("value");
-    // const savedSongs = snapshot.val();
-    console.log(songName);
-    console.log(savedSongs);
     for (let songID in savedSongs) {
       if (songName === savedSongs[songID].alt) {
         return songID;
@@ -156,7 +147,6 @@ export default class ExplorePage extends Component {
   isSongInSavedSongs(song, savedSongs) {
     for (let songID in savedSongs) {
       if (song.alt === savedSongs[songID].alt) {
-        // console.log("Found a match");
         return true;
       }
     }
@@ -197,6 +187,7 @@ export default class ExplorePage extends Component {
                 ? "hidden"
                 : "explore-page-action-buttons-wrapper"
             }
+            history={this.props.history}
           />
           <div
             className={
