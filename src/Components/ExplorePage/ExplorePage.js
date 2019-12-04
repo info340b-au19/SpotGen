@@ -28,12 +28,8 @@ export default class ExplorePage extends Component {
 
     this.setState({ userData: userData });
 
-    var a = performance.now();
     await this.assignSongsToGenres();
-    var b = performance.now();
-    // alert("It took " + (b - a) + " time");
 
-    // Updates the state with appropriate information calculated from componentDidMount()
     let savedSongs = await this.getSavedSongs();
     this.setState({
       isLoadingGenres: false,
@@ -50,6 +46,8 @@ export default class ExplorePage extends Component {
 
       genreObjects[i].genreSongs = genreAttributes.songsInGenre;
       let index = genreObjects[i].genreSongs[genreAttributes.randomIndex];
+      genreObjects[i].id = index.id;
+
       genreObjects[i].topImg = index.album.images[0].url;
       genreObjects[i].alt = index.album.name;
       genreObjects[i].previewUrl = index.preview_url;
@@ -105,24 +103,27 @@ export default class ExplorePage extends Component {
   async pressSaveSongButton(genreObject) {
     let usersRef = firebase.database().ref("users");
     let spotifyID = this.state.userData.id;
-    let savedSongs = await this.getSavedSongs();
+    let savedSongs = this.state.savedSongs;
+    // let likedSongID = this.getLikedSongID(genreObject.alt, savedSongs);
     if (this.isSongInSavedSongs(genreObject, savedSongs)) {
-      // un save
-      let likedSongID = this.getLikedSongID(genreObject.alt, savedSongs);
+      // unsave
+      delete savedSongs[genreObject.id];
+      this.setState({ savedSongs: savedSongs });
       usersRef
         .child(spotifyID)
         .child("likedSongs")
-        .child(likedSongID)
+        .child(genreObject.id)
         .remove();
     } else {
-      //save
+      // save
+      savedSongs[genreObject.id] = genreObject;
+      this.setState({ savedSongs: savedSongs });
       usersRef
         .child(spotifyID)
         .child("likedSongs")
-        .push(genreObject);
+        .child(genreObject.id)
+        .set(genreObject);
     }
-    savedSongs = await this.getSavedSongs();
-    this.setState({ savedSongs: savedSongs });
   }
 
   async getSavedSongs() {
