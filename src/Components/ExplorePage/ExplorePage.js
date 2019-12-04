@@ -49,7 +49,6 @@ export default class ExplorePage extends Component {
       genreObjects[i].alt = index.album.name;
       genreObjects[i].previewUrl = index.preview_url;
       genreObjects[i].audio = new Audio(genreObjects[i].previewUrl);
-      console.log(genreObjects);
     }
     this.setState({ genres: genreObjects, isLoadingGenres: false });
   }
@@ -61,7 +60,6 @@ export default class ExplorePage extends Component {
       genreObject.genreAPI
     );
     let randomIndex = shuffleSongs(songsInGenre);
-    console.log(randomIndex);
     return {
       songsInGenre: songsInGenre,
       randomIndex: randomIndex
