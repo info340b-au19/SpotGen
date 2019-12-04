@@ -22,6 +22,7 @@ export default class PlaylistCheckbox extends Component {
           <input
             type="checkbox"
             className="playlistCheckbox"
+            aria-label="checkbox-checkmark"
             value={this.props.playlistName}
             checked={this.state.isChecked}
             onChange={() => {

@@ -60,26 +60,13 @@ export async function getUserData(accessToken) {
   }
 }
 
-export async function getSong(genre, accessToken) {
-  let endpoint = "https://api.spotify.com/v1/search";
-  let parameters = "?q=" + genre + "&type=track" + "&limit=50";
-  let url = endpoint + parameters;
-  let data = await fetch(url, {
-    method: "GET", // *GET, POST, PUT, DELETE, etc.
-    headers: {
-      Authorization: "Bearer " + accessToken
-    }
-  });
-  let songs = await data.json();
-  return songs;
-}
-
-export async function getAllSongs(accessToken, genre) {
+export async function songsWithinGenre(accessToken, genre) {
   let songsInGenre = [];
   let first50 = await get50Songs(genre, 0, accessToken);
   songsInGenre = songsInGenre.concat(first50);
 
   let offset = 50;
+  // Set limit to number of songs in each genre
   while (offset < 100) {
     let next50Songs = await get50Songs(genre, offset, accessToken);
     songsInGenre = songsInGenre.concat(next50Songs);

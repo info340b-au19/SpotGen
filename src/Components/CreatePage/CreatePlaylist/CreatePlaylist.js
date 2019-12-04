@@ -92,6 +92,7 @@ export default class CreatePlaylist extends Component {
             id="playlist-name-input"
             className="text-input"
             type="text"
+            aria-label="playlist-name"
             placeholder="Slow, smooth jazz beats"
             value={this.state.playlistName}
             onChange={event => {
@@ -101,6 +102,7 @@ export default class CreatePlaylist extends Component {
         </div>
         <button
           id="create-playlist-button"
+          aria-label="create-playlist"
           className="button"
           onClick={() =>
             this.createPlaylist(this.props.songPool, this.props.accessToken)

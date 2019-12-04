@@ -22,6 +22,7 @@ export default class SongPool extends Component {
               <div className="song-row" key={song.track.name}>
                 <button
                   className="remove-song-button"
+                  aria-label="remove-song"
                   onClick={() => {
                     this.props.removeSongFromPool(song);
                   }}
@@ -29,8 +30,6 @@ export default class SongPool extends Component {
                   ✖
                 </button>
                 <span className="song-title">{song.track.name}</span>
-                {/* {" - "}
-              <span className="song-artist">Artist Name 1</span> */}
               </div>
             );
           })}

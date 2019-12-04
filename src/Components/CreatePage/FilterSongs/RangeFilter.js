@@ -9,6 +9,7 @@ export default class RangeFilter extends Component {
             <div className="pretty p-svg p-curve">
               <input
                 type="checkbox"
+                aria-label="check-playlists"
                 checked={this.props.filterEnabled}
                 onChange={e => {
                   this.props.toggleFilter(e.target.checked);
@@ -49,6 +50,7 @@ export default class RangeFilter extends Component {
             onChange={e => {
               this.props.setValue(e.target.value);
             }}
+            aria-label="slider-filter"
             className="slider"
             disabled={!this.props.filterEnabled}
           />

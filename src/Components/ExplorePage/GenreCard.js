@@ -10,7 +10,7 @@ export default class GenreCard extends Component {
           <div className="image-wrapper">
             <img
               id={this.props.genreObject.genreAPI}
-              src={this.props.genreObject.topImg}
+              src={this.props.genreObject.img}
               alt={this.props.genreObject.alt}
             />
             <PlayPause
