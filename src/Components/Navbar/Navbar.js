@@ -7,7 +7,12 @@ export default class Navbar extends Component {
       <div id="top-bar">
         <div id="logo-wrapper">
           <img
-            src={process.env.PUBLIC_URL + "images/spotgen-logo.png"}
+            src={
+              process.env.PUBLIC_URL +
+              this.props.customSub +
+              "/" +
+              "images/spotgen-logo.png"
+            }
             alt="spotgen-logo"
           />
           <Link to="/explore" className="tab" activeClassName="selected">
@@ -22,7 +27,12 @@ export default class Navbar extends Component {
             {this.props.userData ? this.props.userData.display_name : "User"}
           </span>
           <img
-            src={process.env.PUBLIC_URL + "images/profile.svg"}
+            src={
+              process.env.PUBLIC_URL +
+              this.props.customSub +
+              "/" +
+              "images/profile.svg"
+            }
             alt="profile-icon"
           />
         </div>

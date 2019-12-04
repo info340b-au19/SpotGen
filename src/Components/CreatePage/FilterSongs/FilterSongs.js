@@ -14,7 +14,7 @@ export default class FilterSongs extends Component {
         </div>
         <p className="section-description">
           Select each checkbox to enable the corresponding filter.
-          <span class="br">
+          <span className="br">
             Adjust filters to fine tune what songs will be picked for your new
             playlist.
           </span>

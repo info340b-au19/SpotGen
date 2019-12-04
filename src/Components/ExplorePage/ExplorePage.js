@@ -47,6 +47,7 @@ export default class ExplorePage extends Component {
       genreObjects[i].id = index.id;
       genreObjects[i].img = index.album.images[0].url;
       genreObjects[i].alt = index.album.name;
+      genreObjects[i].name = index.name;
       genreObjects[i].previewUrl = index.preview_url;
       genreObjects[i].audio = new Audio(genreObjects[i].previewUrl);
     }
@@ -139,7 +140,7 @@ export default class ExplorePage extends Component {
   // Retrieves the ID of favorited song
   getLikedSongID(songName, savedSongs) {
     for (let songID in savedSongs) {
-      if (songName === savedSongs[songID].alt) {
+      if (songName === savedSongs[songID].name) {
         return songID;
       }
     }
@@ -149,7 +150,7 @@ export default class ExplorePage extends Component {
   // Checks if current song is in saved ones
   isSongInSavedSongs(song, savedSongs) {
     for (let songID in savedSongs) {
-      if (song.alt === savedSongs[songID].alt) {
+      if (song.name === savedSongs[songID].name) {
         return true;
       }
     }
@@ -167,7 +168,7 @@ export default class ExplorePage extends Component {
   render() {
     return (
       <div className="page">
-        <Navbar userData={this.state.userData} />
+        <Navbar userData={this.state.userData} customSub="" />
         <main>
           <div
             className={
