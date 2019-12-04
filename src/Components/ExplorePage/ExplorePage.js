@@ -45,11 +45,11 @@ export default class ExplorePage extends Component {
       genreObjects[i].genreSongs = genreAttributes.songsInGenre;
       let index = genreObjects[i].genreSongs[genreAttributes.randomIndex];
       genreObjects[i].id = index.id;
-
       genreObjects[i].img = index.album.images[0].url;
       genreObjects[i].alt = index.album.name;
       genreObjects[i].previewUrl = index.preview_url;
       genreObjects[i].audio = new Audio(genreObjects[i].previewUrl);
+      console.log(genreObjects);
     }
     this.setState({ genres: genreObjects, isLoadingGenres: false });
   }
@@ -61,6 +61,7 @@ export default class ExplorePage extends Component {
       genreObject.genreAPI
     );
     let randomIndex = shuffleSongs(songsInGenre);
+    console.log(randomIndex);
     return {
       songsInGenre: songsInGenre,
       randomIndex: randomIndex
