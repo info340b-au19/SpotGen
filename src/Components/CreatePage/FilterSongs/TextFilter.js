@@ -14,6 +14,7 @@ export default class TextFilter extends Component {
                 onChange={e => {
                   this.props.toggleFilter(e.target.checked);
                 }}
+                aria-label="text-filter-checkbox"
               />
               <div className=" state">
                 <svg className="svg svg-icon" viewBox="0 0 14 14">
@@ -42,6 +43,7 @@ export default class TextFilter extends Component {
         </label>
         <input
           className="text-input"
+          aria-label="input"
           type="text"
           placeholder={this.props.filterPlaceholder}
           onChange={e => {
