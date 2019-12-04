@@ -107,7 +107,7 @@ export default class ExplorePage extends Component {
       this.setState({ savedSongs: savedSongs });
       usersRef
         .child(spotifyID)
-        .child("likedSongs")
+        .child("savedSongs")
         .child(genreObject.id)
         .remove();
     } else {
@@ -116,27 +116,30 @@ export default class ExplorePage extends Component {
       this.setState({ savedSongs: savedSongs });
       usersRef
         .child(spotifyID)
-        .child("likedSongs")
+        .child("savedSongs")
         .child(genreObject.id)
         .set(genreObject);
     }
   }
 
   async getSavedSongs() {
-    let userLikedSongsRef = firebase
+    let usersavedSongsRef = firebase
       .database()
-      .ref("users/" + this.state.userData.id + "/likedSongs");
-    const snapshot = await userLikedSongsRef.once("value");
-    const likedSongs = snapshot.val();
-    return likedSongs;
+      .ref("users/" + this.state.userData.id + "/savedSongs");
+    const snapshot = await usersavedSongsRef.once("value");
+    const savedSongs = snapshot.val();
+    if (!savedSongs) {
+      return {};
+    }
+    return savedSongs;
   }
 
   getLikedSongID(songName, savedSongs) {
-    // let userLikedSongsRef = firebase
+    // let usersavedSongsRef = firebase
     //   .database()
-    //   .ref("users/" + this.state.userData.id + "/likedSongs");
-    // const snapshot = await userLikedSongsRef.once("value");
-    // const likedSongs = snapshot.val();
+    //   .ref("users/" + this.state.userData.id + "/savedSongs");
+    // const snapshot = await usersavedSongsRef.once("value");
+    // const savedSongs = snapshot.val();
     console.log(songName);
     console.log(savedSongs);
     for (let songID in savedSongs) {
