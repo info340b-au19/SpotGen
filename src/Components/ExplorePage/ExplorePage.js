@@ -14,24 +14,37 @@ export default class ExplorePage extends Component {
     this.state = {
       userData: {},
       genres: [],
-<<<<<<< HEAD
       currentlyPlayingGenre: null,
       isLoadingGenres: false,
       savedSongs: {}
-=======
-      currentlyPlayingGenre: null
->>>>>>> 4156c1eabebf126340f60a57224adca1471ac3d0
     };
   }
 
   // Sets the attributes of the genre objects
   async componentDidMount() {
     this.setState({ isLoadingGenres: true });
+
     let userData = await getUserData(this.props.accessToken);
+
     this.setState({ userData: userData });
 
-    let genreObjects = cardAttributes();
+    var a = performance.now();
+    await this.assignSongsToGenres();
+    var b = performance.now();
+    // alert("It took " + (b - a) + " time");
 
+    // Updates the state with appropriate information calculated from componentDidMount()
+    let savedSongs = await this.getSavedSongs();
+    this.setState({
+      isLoadingGenres: false,
+      savedSongs: savedSongs
+    });
+  }
+
+  async assignSongsToGenres() {
+    this.setState({ isLoadingGenres: true });
+
+    let genreObjects = cardAttributes();
     for (let i = 0; i < genreObjects.length; i++) {
       let genreAttributes = await this.getGenreAttributes(genreObjects[i]);
 
@@ -42,28 +55,16 @@ export default class ExplorePage extends Component {
       genreObjects[i].previewUrl = index.preview_url;
       genreObjects[i].audio = new Audio(genreObjects[i].previewUrl);
     }
-
-    // Updates the state with appropriate information calculated from componentDidMount()
-    let savedSongs = await this.getSavedSongs();
-    this.setState({
-      genres: genreObjects,
-      isLoadingGenres: false,
-      savedSongs: savedSongs
-    });
+    this.setState({ genres: genreObjects, isLoadingGenres: false });
   }
 
   async getGenreAttributes(genreObject) {
-    let songs = await getSong(genreObject.genreAPI, this.props.accessToken);
     let songsInGenre = await getAllSongs(
       this.props.accessToken,
       genreObject.genreAPI
     );
-    let randomIndex = await shuffleSongs(
-      genreObject.genreAPI,
-      this.props.accessToken
-    );
+    let randomIndex = shuffleSongs(songsInGenre);
     return {
-      songs: songs,
       songsInGenre: songsInGenre,
       randomIndex: randomIndex
     };
@@ -101,7 +102,6 @@ export default class ExplorePage extends Component {
     });
   }
 
-<<<<<<< HEAD
   async pressSaveSongButton(genreObject) {
     let usersRef = firebase.database().ref("users");
     let spotifyID = this.state.userData.id;
@@ -158,14 +158,13 @@ export default class ExplorePage extends Component {
       }
     }
     return false;
-=======
+  }
+
   updateShufflePlay() {
-    console.log(this.state.currentlyPlayingGenre);
-    console.log(this.state.genres);
+    this.setState({ isLoadingGenres: true });
     this.setState({ currentlyPlayingGenre: null });
-    console.log(this.state.currentlyPlayingGenre);
-    console.log(this.state.genres);
->>>>>>> 4156c1eabebf126340f60a57224adca1471ac3d0
+    this.assignSongsToGenres();
+    this.setState({ isLoadingGenres: false });
   }
 
   render() {
@@ -189,8 +188,12 @@ export default class ExplorePage extends Component {
           <ExplorePageActions
             randomize={() => {
               this.updateShufflePlay();
-              this.componentDidMount();
             }}
+            customClass={
+              this.state.isLoadingGenres
+                ? "hidden"
+                : "explore-page-action-buttons-wrapper"
+            }
           />
           <div
             className={

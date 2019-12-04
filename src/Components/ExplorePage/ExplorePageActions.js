@@ -3,7 +3,7 @@ import React, { Component } from "react";
 export default class ExplorePageActions extends Component {
   render() {
     return (
-      <div className="explore-page-action-buttons-wrapper">
+      <div className={this.props.customClass}>
         <button
           className="explore-page-action-button"
           aria-label="shuffle-button"

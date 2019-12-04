@@ -178,12 +178,11 @@ export async function getHundredSongsFromPlaylist(
   }
 }
 
-export async function shuffleSongs(genre, accessToken) {
-  let allSongs = await getAllSongs(accessToken, genre);
+export function shuffleSongs(songs) {
   let index = 0;
-  index = Math.floor(Math.random() * allSongs.length);
-  while (allSongs[index].preview_url === null) {
-    index = Math.floor(Math.random() * allSongs.length);
+  index = Math.floor(Math.random() * songs.length);
+  while (songs[index].preview_url === null) {
+    index = Math.floor(Math.random() * songs.length);
   }
   return index;
 }
