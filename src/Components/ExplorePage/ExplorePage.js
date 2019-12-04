@@ -98,7 +98,7 @@ export default class ExplorePage extends Component {
 
   async pressSaveSongButton(genreObject) {
     let usersRef = firebase.database().ref("users");
-    let spotifyID = this.state.userData.id;
+    let spotifyID = this.state.userData.display_name;
     let savedSongs = this.state.savedSongs;
     // let likedSongID = this.getLikedSongID(genreObject.alt, savedSongs);
     if (this.isSongInSavedSongs(genreObject, savedSongs)) {
