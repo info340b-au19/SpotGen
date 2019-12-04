@@ -78,9 +78,16 @@ export default class SavedSongs extends Component {
             {Object.keys(this.state.savedSongs).map(key => {
               return (
                 <div className="song-row" key={key}>
-                  <span className="song-title">
+                  <button
+                    className="song-info-button song-title"
+                    onClick={() => {
+                      this.props.history.push(
+                        "/song/" + this.state.savedSongs[key].id
+                      );
+                    }}
+                  >
                     {this.state.savedSongs[key].alt}
-                  </span>
+                  </button>
                 </div>
               );
             })}

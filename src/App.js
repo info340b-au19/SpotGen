@@ -7,6 +7,7 @@ import CreatePage from "./Components/CreatePage/CreatePage";
 
 import { hash } from "./Helper";
 import SavedSongs from "./Components/ExplorePage/SavedSongs";
+import SongInfo from "./Components/ExplorePage/SongInfo";
 
 export default class App extends Component {
   constructor() {
@@ -54,11 +55,22 @@ export default class App extends Component {
                   />
                 )}
               />
+
               <Route
                 exact
                 path="/saved"
                 render={routerProps => (
                   <SavedSongs
+                    {...routerProps}
+                    accessToken={this.state.accessToken}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/song/:songid"
+                render={routerProps => (
+                  <SongInfo
                     {...routerProps}
                     accessToken={this.state.accessToken}
                   />
