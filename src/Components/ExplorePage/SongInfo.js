@@ -86,7 +86,6 @@ export default class SongInfo extends Component {
           photos={
             this.state.songInfo ? [this.state.songInfo.album.images[0].url] : []
           }
-          price=""
           productName={this.state.songInfo ? this.state.songInfo.name : ""}
           description={
             this.state.songInfo

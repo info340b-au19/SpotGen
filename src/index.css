@@ -843,7 +843,7 @@ input:disabled {
 /* Saved Songs Page */
 #saved-songs-page {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
   width: 100vw;
@@ -854,7 +854,7 @@ input:disabled {
   border: 2px solid rgba(255, 255, 255, 0.3);
   width: 80%;
   max-width: 500px;
-  height: calc(85% - 36px);
+  height: calc(85% - 100px);
   border-radius: 8px;
   padding: 16px;
   display: flex;
@@ -883,8 +883,8 @@ input:disabled {
   width: 80%;
   max-width: 500px;
   position: relative;
-  margin-top: 36px;
   height: 64px;
+  margin-top: 72px;
 }
 
 .back-button {
@@ -904,7 +904,7 @@ input:disabled {
 
 .song-info-page {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
   height: 100vh;
@@ -928,18 +928,30 @@ input:disabled {
 
 .styles__product-card-name___3n1NI {
   font-family: "Source Sans Pro", sans-serif !important;
-
   color: white !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
 }
 
 .styles__product-card-description-box___gjZQu {
-  font-family: "Source Sans Pro", sans-serif !important;
-
   background-color: #3c3c3c !important;
+}
+
+.styles__product-card-description___2ngyd {
+  font-family: "Source Sans Pro", sans-serif !important;
+  font-size: 1em !important;
+  background-color: #3c3c3c !important;
+  letter-spacing: normal !important;
 }
 
 .styles__buy-button___-JjXR {
   background-image: linear-gradient(to bottom right, #00e66a, #00b252);
+  font-family: "Source Sans Pro", sans-serif !important;
+  font-size: 0.75em !important;
+  font-weight: 700;
+  background-color: #3c3c3c !important;
+  letter-spacing: normal !important;
 }
 
 .styles__buy-button___-JjXR:hover {
@@ -949,4 +961,5 @@ input:disabled {
 
 #song-info-page-top-wrapper {
   width: 300px;
+  margin-top: 72px;
 }
