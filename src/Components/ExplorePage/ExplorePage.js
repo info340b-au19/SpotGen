@@ -23,15 +23,9 @@ export default class ExplorePage extends Component {
   // Sets the attributes of the genre objects
   async componentDidMount() {
     this.setState({ isLoadingGenres: true });
-
     let userData = await getUserData(this.props.accessToken);
-
     this.setState({ userData: userData });
-
-    var a = performance.now();
     await this.assignSongsToGenres();
-    var b = performance.now();
-    // alert("It took " + (b - a) + " time");
 
     // Updates the state with appropriate information calculated from componentDidMount()
     let savedSongs = await this.getSavedSongs();
@@ -82,7 +76,6 @@ export default class ExplorePage extends Component {
 
   /* Creates DOM objects for our genre object cards */
   createGenreDOMObjects() {
-    console.log("Creating new ones");
     return this.state.genres.map(genreObject => {
       return (
         <GenreCard
