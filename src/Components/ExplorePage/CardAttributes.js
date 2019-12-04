@@ -27,15 +27,15 @@ export function cardAttributes() {
           virtuosic playing of banjos and guitars and high-pitched, close-harmony vocals.\
           It include vocal harmonies featuring two, three, or four parts, often featuring\
           a dissonant or modal sound in the highest voice"
+    },
+    {
+      genreAPI: "blues",
+      genreName: "Blues",
+      description:
+        "A music genre and musical form which was originated in the Deep South of the\
+          United States around the 1870s by African-Americans from roots in African\
+          musical traditions, African-American work songs, and spirituals."
     }
-    // {
-    //   genreAPI: "blues",
-    //   genreName: "Blues",
-    //   description:
-    //     "A music genre and musical form which was originated in the Deep South of the\
-    //       United States around the 1870s by African-Americans from roots in African\
-    //       musical traditions, African-American work songs, and spirituals."
-    // },
     // {
     //   genreAPI: "classical",
     //   genreName: "Classical",

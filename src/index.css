@@ -506,6 +506,10 @@ p {
   cursor: pointer;
 }
 
+.save-song-button-filled path {
+  fill-opacity: 1;
+}
+
 .save-song-button path {
   transition: all 0.16s ease-out;
 }

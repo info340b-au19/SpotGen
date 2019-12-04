@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import firebase from "firebase/app";
+import "firebase/database";
+
 import Navbar from "../Navbar/Navbar";
 import GenreCard from "./GenreCard";
 import ExplorePageActions from "./ExplorePageActions";
@@ -17,7 +20,8 @@ export default class ExplorePage extends Component {
       userData: {},
       genres: [],
       currentlyPlayingGenre: null,
-      isLoadingGenres: false
+      isLoadingGenres: false,
+      savedSongs: {}
     };
   }
 
@@ -41,9 +45,11 @@ export default class ExplorePage extends Component {
     }
 
     // Updates the state with appropriate information calculated from componentDidMount()
+    let savedSongs = await this.getSavedSongs();
     this.setState({
       genres: genreObjects,
-      isLoadingGenres: false
+      isLoadingGenres: false,
+      savedSongs: savedSongs
     });
   }
 
@@ -76,6 +82,7 @@ export default class ExplorePage extends Component {
 
   /* Creates DOM objects for our genre object cards */
   createGenreDOMObjects() {
+    console.log("Creating new ones");
     return this.state.genres.map(genreObject => {
       return (
         <GenreCard
@@ -85,9 +92,72 @@ export default class ExplorePage extends Component {
             this.updatePlaying(cardClicked);
           }}
           currentlyPlayingGenre={this.state.currentlyPlayingGenre}
+          pressSaveSongButton={songID => this.pressSaveSongButton(songID)}
+          songSaved={this.isSongInSavedSongs(
+            genreObject,
+            this.state.savedSongs
+          )}
         />
       );
     });
+  }
+
+  async pressSaveSongButton(genreObject) {
+    let usersRef = firebase.database().ref("users");
+    let spotifyID = this.state.userData.id;
+    let savedSongs = await this.getSavedSongs();
+    if (this.isSongInSavedSongs(genreObject, savedSongs)) {
+      // un save
+      let likedSongID = this.getLikedSongID(genreObject.alt, savedSongs);
+      usersRef
+        .child(spotifyID)
+        .child("likedSongs")
+        .child(likedSongID)
+        .remove();
+    } else {
+      //save
+      usersRef
+        .child(spotifyID)
+        .child("likedSongs")
+        .push(genreObject);
+    }
+    savedSongs = await this.getSavedSongs();
+    this.setState({ savedSongs: savedSongs });
+  }
+
+  async getSavedSongs() {
+    let userLikedSongsRef = firebase
+      .database()
+      .ref("users/" + this.state.userData.id + "/likedSongs");
+    const snapshot = await userLikedSongsRef.once("value");
+    const likedSongs = snapshot.val();
+    return likedSongs;
+  }
+
+  getLikedSongID(songName, savedSongs) {
+    // let userLikedSongsRef = firebase
+    //   .database()
+    //   .ref("users/" + this.state.userData.id + "/likedSongs");
+    // const snapshot = await userLikedSongsRef.once("value");
+    // const likedSongs = snapshot.val();
+    console.log(songName);
+    console.log(savedSongs);
+    for (let songID in savedSongs) {
+      if (songName === savedSongs[songID].alt) {
+        return songID;
+      }
+    }
+    return "Not found";
+  }
+
+  isSongInSavedSongs(song, savedSongs) {
+    for (let songID in savedSongs) {
+      if (song.alt === savedSongs[songID].alt) {
+        // console.log("Found a match");
+        return true;
+      }
+    }
+    return false;
   }
 
   render() {
