@@ -68,6 +68,19 @@ export default class SongInfo extends Component {
             <h1>Song Info</h1>
           </div>
         </div>
+        <div
+          className={
+            this.state.loadingSongInfo
+              ? "spinner-songs-wrapper spinner-genres"
+              : "hidden"
+          }
+        >
+          <div className="spinner-songs">
+            <div className="bounce1"></div>
+            <div className="bounce2"></div>
+            <div className="bounce3"></div>
+          </div>
+        </div>
         <ProductCard
           className="song-info-card"
           photos={
