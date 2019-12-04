@@ -85,7 +85,11 @@ export default class ExplorePage extends Component {
   }
 
   updateShufflePlay() {
+    console.log(this.state.currentlyPlayingGenre);
+    console.log(this.state.genres);
     this.setState({ currentlyPlayingGenre: null });
+    console.log(this.state.currentlyPlayingGenre);
+    console.log(this.state.genres);
   }
 
   render() {

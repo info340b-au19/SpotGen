@@ -6,6 +6,7 @@ export default class ExplorePageActions extends Component {
       <div className="explore-page-action-buttons-wrapper">
         <button
           className="explore-page-action-button"
+          aria-label="shuffle-button"
           onClick={() => {
             this.props.randomize();
           }}
