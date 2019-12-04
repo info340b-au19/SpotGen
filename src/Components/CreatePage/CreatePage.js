@@ -355,7 +355,7 @@ export default class CreatePage extends Component {
   render() {
     return (
       <div className="page">
-        <Navbar userData={this.state.userData} />
+        <Navbar userData={this.state.userData} customSub="" />
         <main id="create-page-main">
           <SelectPlaylists
             userPlaylists={this.state.userPlaylists}

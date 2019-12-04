@@ -871,13 +871,13 @@ input:disabled {
   align-items: center;
 }
 
-#saved-songs-page h1 {
+#saved-songs-title-wrapper h1 {
   font-size: 1.35rem;
 }
 
-#saved-songs-top-wrapper {
+.song-page-top-wrapper {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 80%;
@@ -906,6 +906,7 @@ input:disabled {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   height: 100vh;
   width: 100vw;
 }
@@ -917,8 +918,35 @@ input:disabled {
   text-decoration: underline;
   cursor: pointer;
   transition: all 0.16s ease-out;
+  text-align: left;
 }
 
-.song-info-button:hover {
-  /* filter: brightness(150%); */
+.song-info-card {
+  border-radius: 6px;
+  color: white;
+}
+
+.styles__product-card-name___3n1NI {
+  font-family: "Source Sans Pro", sans-serif !important;
+
+  color: white !important;
+}
+
+.styles__product-card-description-box___gjZQu {
+  font-family: "Source Sans Pro", sans-serif !important;
+
+  background-color: #3c3c3c !important;
+}
+
+.styles__buy-button___-JjXR {
+  background-image: linear-gradient(to bottom right, #00e66a, #00b252);
+}
+
+.styles__buy-button___-JjXR:hover {
+  filter: brightness(125%);
+  transform: scale(1.05);
+}
+
+#song-info-page-top-wrapper {
+  width: 300px;
 }

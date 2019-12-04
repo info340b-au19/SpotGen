@@ -25,11 +25,13 @@ export default class SavedSongs extends Component {
   }
 
   async getSavedSongs() {
+    console.log("Getting saved songs");
     let usersavedSongsRef = firebase
       .database()
       .ref("users/" + this.state.userData.id + "/savedSongs");
     const snapshot = await usersavedSongsRef.once("value");
     const savedSongs = snapshot.val();
+    console.log("Done getting saved songs");
     if (!savedSongs) {
       return {};
     }
@@ -39,8 +41,8 @@ export default class SavedSongs extends Component {
   render() {
     return (
       <div id="saved-songs-page">
-        <Navbar userData={this.state.userData} />
-        <div id="saved-songs-top-wrapper">
+        <Navbar userData={this.state.userData} customSub="" />
+        <div className="song-page-top-wrapper">
           <button
             className="back-button"
             aria-label="back to explore page button"
@@ -86,7 +88,7 @@ export default class SavedSongs extends Component {
                       );
                     }}
                   >
-                    {this.state.savedSongs[key].alt}
+                    {this.state.savedSongs[key].name}
                   </button>
                 </div>
               );
