@@ -25,10 +25,6 @@ export default class ExplorePage extends Component {
     this.setState({ isLoadingGenres: true });
     let userData = await getUserData(this.props.accessToken);
     this.setState({ userData: userData });
-<<<<<<< HEAD
-=======
-
->>>>>>> 86e5867bc21f83a9820769dab371ec69b6093ab8
     await this.assignSongsToGenres();
 
     let savedSongs = await this.getSavedSongs();
