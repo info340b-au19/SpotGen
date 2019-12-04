@@ -101,7 +101,7 @@ export default class ExplorePage extends Component {
   // Stores user information to Firebase database
   async pressSaveSongButton(genreObject) {
     let usersRef = firebase.database().ref("users");
-    let spotifyID = this.state.userData.display_name;
+    let spotifyID = this.state.userData.id;
     let savedSongs = this.state.savedSongs;
     if (this.isSongInSavedSongs(genreObject, savedSongs)) {
       // unsave
@@ -192,6 +192,7 @@ export default class ExplorePage extends Component {
                 ? "hidden"
                 : "explore-page-action-buttons-wrapper"
             }
+            history={this.props.history}
           />
           <div
             className={

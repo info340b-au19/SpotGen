@@ -5,6 +5,7 @@ export default class ExplorePageActions extends Component {
     return (
       <div className={this.props.customClass}>
         <button
+          id="shuffle-songs-button"
           className="explore-page-action-button"
           aria-label="shuffle-button"
           onClick={() => {
@@ -23,7 +24,13 @@ export default class ExplorePageActions extends Component {
           </svg>
           Shuffle Songs
         </button>
-        <button className="explore-page-action-button">
+        <button
+          id="view-saved-songs-button"
+          className="explore-page-action-button"
+          onClick={() => {
+            this.props.history.push("/saved");
+          }}
+        >
           <svg width="24" height="24">
             <rect width="24" height="24" fill="none" rx="0" ry="0" />
             <path

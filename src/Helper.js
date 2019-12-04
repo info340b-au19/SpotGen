@@ -1,5 +1,3 @@
-import CreatePlaylist from "./Components/CreatePage/CreatePlaylist/CreatePlaylist";
-
 /* -- Defines general helper methods -- */
 
 /* Helper function from: https://derickbailey.com/2014/09/21/calculating-standard-deviation-with-array-map-and-array-reduce-in-javascript/ */
@@ -55,6 +53,22 @@ export async function getUserData(accessToken) {
     }
     let userData = await data.json();
     return userData;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getSongInfo(accessToken, songID) {
+  try {
+    let url = new URL("https://api.spotify.com/v1/tracks/" + songID);
+    let data = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + accessToken
+      }
+    });
+    let songInfo = await data.json();
+    return songInfo;
   } catch (error) {
     console.error(error);
   }
