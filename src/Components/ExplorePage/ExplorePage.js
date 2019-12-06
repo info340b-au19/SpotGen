@@ -77,7 +77,12 @@ export default class ExplorePage extends Component {
     }
   }
 
-  /* Creates DOM objects for our genre object cards */
+  // Pause all songs
+  pauseAllSongs() {
+    this.setState({ currentlyPlayingGenre: null });
+  }
+
+  // Creates DOM objects for our genre object cards
   createGenreDOMObjects() {
     return this.state.genres.map(genreObject => {
       return (
@@ -86,6 +91,9 @@ export default class ExplorePage extends Component {
           genreObject={genreObject}
           updatePlaying={cardClicked => {
             this.updatePlaying(cardClicked);
+          }}
+          pauseAllSongs={() => {
+            this.pauseAllSongs();
           }}
           currentlyPlayingGenre={this.state.currentlyPlayingGenre}
           pressSaveSongButton={songID => this.pressSaveSongButton(songID)}
