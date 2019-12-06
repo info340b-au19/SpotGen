@@ -18,6 +18,7 @@ export default class SongPool extends Component {
         </div>
         <div className={this.props.isLoadingSongs ? "hidden" : ""}>
           {this.props.songPool.map(song => {
+            console.log(song);
             return (
               <div className="song-row" key={song.track.name}>
                 <button
