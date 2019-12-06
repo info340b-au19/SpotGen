@@ -45,6 +45,7 @@ export default class ExplorePage extends Component {
       genreObjects[i].genreSongs = genreAttributes.songsInGenre;
       let index = genreObjects[i].genreSongs[genreAttributes.randomIndex];
       genreObjects[i].id = index.id;
+      genreObjects[i].uri = index.uri;
 
       genreObjects[i].img = index.album.images[0].url;
       genreObjects[i].alt = index.album.name;
@@ -99,7 +100,7 @@ export default class ExplorePage extends Component {
     });
   }
 
-  // Stores user information to Firebase database
+  // Stores user information to Firebase database based on whether the song should be saved or not
   async pressSaveSongButton(genreObject) {
     let usersRef = firebase.database().ref("users");
     let spotifyID = this.state.userData.id;

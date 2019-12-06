@@ -29,7 +29,7 @@ export default class Login extends Component {
               )}&response_type=token&show_dialog=true`;
             }}
           >
-            Login to Spotify
+            Login With Spotify
           </button>
         </div>
       </div>

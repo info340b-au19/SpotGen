@@ -49,7 +49,7 @@ export default class GenreCard extends Component {
                   />
                 </svg>
               </button>
-              <span>{this.props.genreObject.name}</span>
+              <span className="song-title">{this.props.genreObject.name}</span>
             </div>
           </div>
         </div>

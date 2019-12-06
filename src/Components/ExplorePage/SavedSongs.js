@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import Navbar from "../Navbar/Navbar";
 import firebase from "firebase/app";
 import "firebase/database";
-import { getUserData } from "../../Helper";
+import notifier from "simple-react-notifications";
+
+import { getUserData, createPlaylist, addTracksToPlaylist } from "../../Helper";
 
 export default class SavedSongs extends Component {
   constructor() {
@@ -12,6 +14,22 @@ export default class SavedSongs extends Component {
       savedSongs: {},
       loadingSongs: false
     };
+    notifier.configure({
+      autoClose: 3000,
+      width: 375,
+      position: "bottom-center",
+      delay: 0,
+      closeOnClick: true,
+      pauseOnHover: true,
+      onlyLast: false,
+      rtl: false,
+      newestOnTop: true,
+      animation: {
+        in: "fadeIn",
+        out: "fadeOut",
+        duration: 400
+      }
+    });
   }
 
   async componentDidMount() {
@@ -24,18 +42,64 @@ export default class SavedSongs extends Component {
     });
   }
 
+  /* Gets saved songs from firebase */
   async getSavedSongs() {
-    console.log("Getting saved songs");
     let usersavedSongsRef = firebase
       .database()
       .ref("users/" + this.state.userData.id + "/savedSongs");
     const snapshot = await usersavedSongsRef.once("value");
     const savedSongs = snapshot.val();
-    console.log("Done getting saved songs");
     if (!savedSongs) {
       return {};
     }
     return savedSongs;
+  }
+
+  /* Create a playlist to the user's spotify account using the given saved songs */
+
+  async createPlaylist(songPool, accessToken) {
+    /* Create the playlist */
+    let parameters = {
+      name: "SpotGen Saved Songs",
+      public: false,
+      description: "Enjoy your new playlist made with Spotgen!"
+    };
+    let createdPlaylist = await createPlaylist(
+      this.state.userData.id,
+      parameters,
+      this.props.accessToken
+    );
+    let songPoolURIs = [];
+    for (let songID in songPool) {
+      songPoolURIs.push(songPool[songID].uri);
+    }
+
+    /* Add songs to the playlist */
+    for (let songIndex = 0; songIndex < songPoolURIs.length; songIndex += 100) {
+      /* Can only add 100 songs per request */
+      addTracksToPlaylist(
+        createdPlaylist,
+        songPoolURIs.slice(songIndex, songIndex + 100),
+        accessToken
+      );
+    }
+    notifier.success(
+      "Your playlist has been created and added to your Spotify account! Enjoy!"
+    );
+  }
+
+  /* Unsaves a song from database */
+  async unsaveSong(song) {
+    let usersRef = firebase.database().ref("users");
+    let spotifyID = this.state.userData.id;
+    let savedSongs = this.state.savedSongs;
+    delete savedSongs[song.id];
+    this.setState({ savedSongs: savedSongs });
+    usersRef
+      .child(spotifyID)
+      .child("savedSongs")
+      .child(song.id)
+      .remove();
   }
 
   render() {
@@ -81,6 +145,15 @@ export default class SavedSongs extends Component {
               return (
                 <div className="song-row" key={key}>
                   <button
+                    className="remove-song-button"
+                    aria-label="remove-song"
+                    onClick={() => {
+                      this.unsaveSong(this.state.savedSongs[key]);
+                    }}
+                  >
+                    ✖
+                  </button>
+                  <button
                     className="song-info-button song-title"
                     onClick={() => {
                       this.props.history.push(
@@ -95,6 +168,16 @@ export default class SavedSongs extends Component {
             })}
           </div>
         </div>
+        <button
+          id="create-saved-songs-playlist-button"
+          aria-label="create-playlist"
+          className="button"
+          onClick={() => {
+            this.createPlaylist(this.state.savedSongs, this.props.accessToken);
+          }}
+        >
+          Create Playlist
+        </button>
       </div>
     );
   }

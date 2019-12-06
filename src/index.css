@@ -63,8 +63,8 @@ body {
 }
 
 #login-card h2 {
-  font-weight: 400;
-  font-size: 1.3em;
+  font-weight: 300;
+  font-size: 1.2em;
   margin-top: 0px;
   margin-bottom: 24px;
 }
@@ -733,8 +733,8 @@ h3 {
 }
 
 .song-title {
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
 }
 
 .song-artist {
@@ -854,7 +854,7 @@ input:disabled {
   border: 2px solid rgba(255, 255, 255, 0.3);
   width: 80%;
   max-width: 500px;
-  height: calc(85% - 100px);
+  height: calc(85% - 200px);
   border-radius: 8px;
   padding: 16px;
   display: flex;
@@ -962,4 +962,10 @@ input:disabled {
 #song-info-page-top-wrapper {
   width: 300px;
   margin-top: 72px;
+}
+
+#create-saved-songs-playlist-button {
+  width: 80%;
+  max-width: 500px;
+  margin-top: 18px;
 }

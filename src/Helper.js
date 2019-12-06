@@ -189,6 +189,7 @@ export function shuffleSongs(songs) {
 }
 
 export async function createPlaylist(userID, parameters, accessToken) {
+  console.log(parameters);
   try {
     let createPlaylistURL =
       "https://api.spotify.com/v1/users/" + userID + "/playlists";
@@ -208,6 +209,7 @@ export async function createPlaylist(userID, parameters, accessToken) {
 }
 
 export async function addTracksToPlaylist(playlist, tracksToAdd, accessToken) {
+  // console.log(tracksToAdd);
   try {
     let addSongsToPlaylistURL =
       "https://api.spotify.com/v1/playlists/" + playlist.id + "/tracks";
