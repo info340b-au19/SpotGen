@@ -4,8 +4,7 @@ SpotGen is a music discovery and curation web application that is easily usable 
 beginner and experienced music listeners.
 The explore page allows the user to sample a variety of genres and listen to different songs, as well as randomizing and saving played songs.
 Besides of sampling different genres and songs,
-the create page allows the user to use existing playlists and creating new playlists
-based off them that will pragmatically render on Spotify.
+the create page allows the user to create new playlists using existing playlists that will pragmatically render on Spotify.
 
 Please visit our website at [https://spotgen.app/](https://spotgen.app/)
 
