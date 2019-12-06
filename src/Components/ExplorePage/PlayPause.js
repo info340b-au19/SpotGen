@@ -1,6 +1,26 @@
 import React, { Component } from "react";
 
 export default class PlayPause extends Component {
+  // Checks the current time by incrementing by each second
+  componentDidMount() {
+    this.interval = setInterval(() => this.pauseIfDone(), 1000);
+  }
+
+  // Clears the time interval
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  // Pause audio and display play button once audio is finished playing
+  pauseIfDone() {
+    if (
+      this.props.genreObject.audio.currentTime >=
+      this.props.genreObject.audio.duration
+    ) {
+      this.props.pauseAllSongs();
+    }
+  }
+
   // Plays or pauses the audio as state changes
   componentDidUpdate() {
     if (this.props.currentlyPlayingGenre === null) {

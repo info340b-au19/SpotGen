@@ -18,6 +18,9 @@ export default class GenreCard extends Component {
               updatePlaying={cardClicked => {
                 this.props.updatePlaying(cardClicked);
               }}
+              pauseAllSongs={() => {
+                this.props.pauseAllSongs();
+              }}
               currentlyPlayingGenre={this.props.currentlyPlayingGenre}
             />
           </div>
