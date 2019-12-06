@@ -518,9 +518,9 @@ p {
   transition: all 0.16s ease-out;
 }
 
-.save-song-button:hover path {
+/* .save-song-button:hover path {
   fill-opacity: 1;
-}
+} */
 
 .explore-page-action-buttons-wrapper {
   display: flex;
